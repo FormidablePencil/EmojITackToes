@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Row, Col, Item, GameContainer, HorizontalLine, VerticalLine, StandardText } from '../styles/stylesglobal'
-import { Dimensions } from "react-native";
+import { Row, Col, Item, GameContainer, HorizontalLine, VerticalLine, StandardText, CharacterBackGround } from '../styles/stylesglobal'
+import { Dimensions, View } from "react-native";
 import { useSelector } from 'react-redux';
+
 const screenWidth = Math.round(Dimensions.get('window').width);
 
-const Game = ({ sq, setSq, gameOver, setGameOver, squaresFilled, setSquaresFilled, playerOneTurn, setPlayerOneTurn }) => {
+const Board = ({ sq, setSq, gameOver, setGameOver, squaresFilled, setSquaresFilled, playerOneTurn, setPlayerOneTurn }) => {
 
    const handleOnPress = (boxPressed, col) => {
+      console.log(gameOver, 'gameOver')
       if (gameOver) return
       if (sq[col][boxPressed] === null) {
          // console.log(squaresFilled, 'squaresFilled')
@@ -70,25 +72,31 @@ const ColComp = ({ first, second, third, handleOnPress, col }) => {
 
    return (
       <Col>
-         <Item onPress={() => handleOnPress('sq0', col)}>
-            <StandardText>
-               {firstBox}
-            </StandardText>
+         <Item onPress={() => handleOnPress('sq0', col)} style={{ tintColor: 'blue' }}>
+            <CharacterBackGround style={{ backgroundColor: 'red', borderRadius: 100, height: 70, width: 70, justifyContent: 'center', alignItems: 'center' }}>
+               <StandardText>
+                  {firstBox}
+               </StandardText>
+            </CharacterBackGround>
          </Item>
          <VerticalLine />
          <Item onPress={() => handleOnPress('sq1', col)}>
-            <StandardText>
-               {secondBox}
-            </StandardText>
+            <CharacterBackGround>
+               <StandardText>
+                  {secondBox}
+               </StandardText>
+            </CharacterBackGround>
          </Item>
          <VerticalLine />
          <Item onPress={() => handleOnPress('sq2', col)}>
-            <StandardText>
-               {thirdBox}
-            </StandardText>
+            <CharacterBackGround style={{ backgroundColor: 'red', borderRadius: 100, height: 70, width: 70, justifyContent: 'center', alignItems: 'center' }}>
+               <StandardText>
+                  {thirdBox}
+               </StandardText>
+            </CharacterBackGround>
          </Item>
       </Col>
    )
 }
 
-export default Game
+export default Board

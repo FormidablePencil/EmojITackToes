@@ -18,7 +18,6 @@ export const GameContainer = styled.View`
 `;
 export const Container = styled.View`
   justify-content: center;
-  flex: 1;
   background-color: #5C343B;
 `;
 
@@ -54,7 +53,15 @@ export const Score = styled.View`
   border-radius: 20px;
 `;
 export const TextPlayer = styled.Text`
-  background-color: ${props => props.active ? 'rgba(255,	255,	0, .8)': 'transparent'};
-  color: ${props => props.active ? 'black' : 'white' };
+  background-color: ${props => props.active ? 'rgba(255,	255,	0, .8)' : 'transparent'};
+  color: ${props => props.active ? 'black' : 'white'};
   padding: 5px;
+`;
+export const CharacterBackGround = styled.View`
+  background-color: red;
+  border-radius: 100px;
+  height: 70px;
+  width: 70px;
+  justify-content: center;
+  align-items: center;
 `;
