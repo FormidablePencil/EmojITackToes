@@ -3,9 +3,10 @@ import { Text, StatusBar } from 'react-native';
 import * as Font from 'expo-font' //fonts
 import TickTackToeScreen from './src/screens/TickTackToeScreen';
 import { Provider } from 'react-redux'
-import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
+import { Provider as PaperProvider } from 'react-native-paper'
 import configureStore from './src/store';
 import { TickTackToeTheme } from './src/styles/theming';
+
 
 //app theme is the theme provided by the Boring app this is the standalone app
 export default function App({ AppTheme }) {
@@ -26,16 +27,14 @@ export default function App({ AppTheme }) {
     loadFonts()
   }, [])
 
-  // console.log(DefaultTheme)
   return (
     <Provider store={store}>
       <PaperProvider theme={AppTheme ? AppTheme : TickTackToeTheme}>
-      <StatusBar backgroundColor={TickTackToeTheme.colors.statusBar} />
+        <StatusBar backgroundColor={TickTackToeTheme.colors.statusBar} />
         {fontLoaded ?
           <TickTackToeScreen />
           : <Text>Loading...</Text>
         }
-        {/* <TestBit /> */}
       </PaperProvider>
     </Provider>
   );

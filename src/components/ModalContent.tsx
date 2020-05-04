@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, BackHandler, LayoutAnimation } from 'react-native'
-import { Button, withTheme, Title, Subheading, TouchableRipple } from 'react-native-paper'
+import { View, TextInput, ImageBackground, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, BackHandler, LayoutAnimation, ScrollView } from 'react-native'
+import { Button, withTheme, Title, Text, Subheading, TouchableRipple, useTheme } from 'react-native-paper'
 import styled from 'styled-components';
-import { TickTackToeThemeTypes } from '../styles/theming'
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 import { useSelector, useDispatch } from 'react-redux';
-import { SymbolChoicesTypes } from '../reducers/symbolChoicesReducer';
-import { ScoresTypes, ScoresCompTypes, Players } from './modalComp/TypesAndInterface';
+import { playerCharacterSettingsTypes } from '../reducers/playerCharacterSettingsReducer';
+import { ScoresTypes, ScoresCompTypes, Players } from '../TypesTypeScript/TypesAndInterface';
 import { WHOLE_NEW_PLAYER_CHARACTERS } from '../actions/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import ScoresAndEmojiSecection from './modalComp/ScoresAndEmojiSecection';
 
-const ModalContent = ({ gameOver, startGame, theme, score }) => {
-  const symbolChoices = useSelector((state: any) => state.symbolChoices)
-  const [controlledInputs, setControlledInputs] = useState<SymbolChoicesTypes>(symbolChoices)
+
+const ModalContent = ({ gameOver, startGame, score }) => {
+  const playerCharacterSettings = useSelector((state: any) => state.playerCharacterSettings)
+  const [controlledInputs, setControlledInputs] = useState<playerCharacterSettingsTypes>(playerCharacterSettings)
   const [selectedPlayerToChooseCharacter, setSelectedPlayerToChooseCharacter] = useState<Players>(null)
   const [showEmojiSelector, setShowEmojiSelector] = useState(false)
   const [changingEmoji, setChangingEmoji] = useState(true)
   const [keyboardPresent, setKeyboardPresent] = useState(false)
   const dispatch = useDispatch()
+  const theme = useTheme()
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => setKeyboardPresent(true))
@@ -32,12 +33,11 @@ const ModalContent = ({ gameOver, startGame, theme, score }) => {
   const onPressHandler = () => {
     Keyboard.dismiss()
   }
-  
+
   const onEmojiSelectHandler = (emoji) => {
-    console.log(typeof emoji)
-    setControlledInputs({ ...controlledInputs, [selectedPlayerToChooseCharacter + 1]: emoji })
+    setControlledInputs({ ...controlledInputs, playerCharacter: { ...controlledInputs.playerCharacter, [selectedPlayerToChooseCharacter + 1]: emoji } })
   }
-  
+
   const onPressHandlerStart = () => {
     dispatch({ type: WHOLE_NEW_PLAYER_CHARACTERS, payload: controlledInputs })
     startGame()
@@ -48,53 +48,101 @@ const ModalContent = ({ gameOver, startGame, theme, score }) => {
   //right now fix keyboard
   return (
     <TouchableWithoutFeedback onPress={onPressHandler}>
-      <AlignAllContainer>
-        <ModalContainerLinearGradient theme={theme} colors={['#037BB2', '#DE59AB']}>
-          <KeyboardAvoidingView style={{ height: '100%' }} keyboardVerticalOffset={-100} behavior='padding'>
+      <AlignAllContainer style={{ width: '90%', alignSelf: 'center' }}>
+        <ImageBackground
+          style={{
+            borderRadius: 40,
+            height: '90%',
+            width: '100%',
+            overflow: 'hidden',
+            // elevation: 20,
+          }}
+          source={require('../assets/images/smiley-1041796_1920.jpg')}
+        >
+          <ModalContainerLinearGradient theme={theme} colors={['rgba(203,29,131,.8)', 'rgba(47,6,122,1)']}>
+            <KeyboardAvoidingView style={{ height: '100%' }} keyboardVerticalOffset={120} behavior='padding'>
 
-            {selectedPlayerToChooseCharacter === Players.p1 || selectedPlayerToChooseCharacter === Players.p2 ?
-              <FlexContainer style={{ margin: 20, flex: 2 }}>
-                <View style={{ backgroundColor: 'white', width: '90%', height: '90%' }}>
-                  <EmojiSelector
-                    showSectionTitles={false}
-                    showTabs={true}
-                    category={Categories.emotion}
-                    onEmojiSelected={emoji => onEmojiSelectHandler(emoji)}
-                  // showSectionTitles={false}
-                  />
-                </View>
-              </FlexContainer>
-              :
-              <FlexContainer style={{ margin: 20, flex: 1 }}>
-                <Title>Tick Tack Toe</Title>
-              </FlexContainer>
-            }
+              {selectedPlayerToChooseCharacter === Players.p1 || selectedPlayerToChooseCharacter === Players.p2 ?
+                <FlexContainer style={{ marginHorizontal: 40, marginVertical: 20, flex: 5 }}>
+                  <View style={{ width: '100%', height: '100%' }}>
+                    <EmojiSelector
+                      tabBottomBoarderColor={'lightgrey'}
+                      emojiSelectorContainerOverride={{ backgroundColor: theme.colors.accent, borderRadius: 10, paddingTop: 5 }}
+                      theme={theme.colors.primary}
+                      searchBarBgColor={'#C8FFF8'}
+                      showSectionTitles={false}
+                      showTabs={true}
+                      category={Categories.emotion}
+                      onEmojiSelected={emoji => onEmojiSelectHandler(emoji)}
+                    />
 
-            <FlexContainer style={{ flex: 1, justifyContent: 'flex-start' }}>
-              <ScoresAndEmojiSecection
-                selectedPlayerToChooseCharacter={selectedPlayerToChooseCharacter}
-                setSelectedPlayerToChooseCharacter={setSelectedPlayerToChooseCharacter}
-                controlledInputs={controlledInputs}
-                setControlledInputs={setControlledInputs}
-                setChangingEmoji={setChangingEmoji}
-                score={score}
-                changingEmoji={changingEmoji}
-                setShowEmojiSelector={setShowEmojiSelector} />
-            </FlexContainer>
-
-            <FlexContainer style={{ flex: 1 }}>
-              {!keyboardPresent &&
-                <Button onPress={(() => onPressHandlerStart())} mode='contained'>Start</Button>
+                  </View>
+                </FlexContainer>
+                :
+                <FlexContainer style={{ margin: 20, flex: 1 }}>
+                  <Text style={{
+                    fontSize: 30, color: "white",
+                    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                    textShadowOffset: {
+                      width: -1,
+                      height: 1,
+                    },
+                    textShadowRadius: 10,
+                  }}>Emoji Tack Toe</Text>
+                </FlexContainer>
               }
 
-            </FlexContainer>
-          </KeyboardAvoidingView>
-        </ModalContainerLinearGradient>
+
+              <FlexContainer style={{ flex: .4, justifyContent: 'flex-start', marginBottom: 50 }}>
+                <ScoresAndEmojiSecection
+                  selectedPlayerToChooseCharacter={selectedPlayerToChooseCharacter}
+                  setSelectedPlayerToChooseCharacter={setSelectedPlayerToChooseCharacter}
+                  controlledInputs={controlledInputs}
+                  setControlledInputs={setControlledInputs}
+                  setChangingEmoji={setChangingEmoji}
+                  score={score}
+                  changingEmoji={changingEmoji}
+                  setShowEmojiSelector={setShowEmojiSelector} />
+              </FlexContainer>
+
+              <View style={{ zIndex: 33, height: 100, alignItems: 'center', justifyContent: "center" }}>
+                {/* <ScrollView style={{ backgroundColor: 'pink', width: '100%', height: 400 }}>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                  <Text style={{ height: 20, width: 30 }}>sdsd</Text>
+                </ScrollView> */}
+                {/* //* scrolll view doesn't work cause the it in a touchable element */}
+              </View>
+
+              <FlexContainer style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 20 }}>
+                {!keyboardPresent &&
+                  <Button color={theme.colors.primary} onPress={(() => onPressHandlerStart())} style={{ paddingHorizontal: 30 }}
+                    labelStyle={{ color: 'white' }} mode='contained'>Start</Button>
+                }
+
+              </FlexContainer>
+            </KeyboardAvoidingView>
+          </ModalContainerLinearGradient>
+        </ImageBackground>
       </AlignAllContainer>
     </TouchableWithoutFeedback>
   )
 }
 
+
+const ScrollViewContainer = styled.View`
+  height: 40px;
+  width: 50px
+`;
 
 const FlexContainer = styled.View`
   align-items: center;   justify-content: space-evenly;
@@ -104,8 +152,10 @@ const AlignAllContainer = styled.View`
   align-items: center;
 `;
 const ModalContainerLinearGradient = styled(LinearGradient)`
-  align-items: center; background-color: ${props => props.theme.colors.background};
-  border-radius: 3px; height: 95%; justify-content: space-evenly; width: 80%;
+  border-width: .8px;
+  overflow: hidden;
+  border-color: ${props => props.theme.colors.accent};
+  border-radius: 20px;
 `;
 
-export default withTheme(ModalContent)
+export default ModalContent

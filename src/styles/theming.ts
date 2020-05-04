@@ -15,10 +15,10 @@ export const TickTackToeTheme: TickTackToeThemeTypes = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    accent: '#9942B9',
-    primary: '#37539B',
-    background: '#5C343B',
-    statusBar: '#342023',
+    primary: 'rgba(215,66,131,1.0)',
+    accent: 'rgba(122,223,203,1.0)',
+    background: '#356B94',
+    statusBar: '#1D1236',
   },
   fonts: {
     ...DefaultTheme.fonts,
@@ -28,5 +28,5 @@ export const TickTackToeTheme: TickTackToeThemeTypes = {
     bold: { fontFamily: 'LemonadaBold' },
     semiBold: { fontFamily: 'LemonadaSemiBold' },
   },
-  roundness: 12,
+  roundness: 6,
 }

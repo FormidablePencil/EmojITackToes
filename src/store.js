@@ -1,9 +1,9 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import symbolChoicesReducer from './reducers/symbolChoicesReducer'
+import playerCharacterSettingsReducer from './reducers/playerCharacterSettingsReducer'
 
 const rootReducer = combineReducers({
-  symbolChoices: symbolChoicesReducer,
+  playerCharacterSettings: playerCharacterSettingsReducer,
 })
 
 const initialState = {}

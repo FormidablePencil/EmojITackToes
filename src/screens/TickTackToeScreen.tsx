@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Provider, Portal, Text, Title, Button, TouchableRipple } from 'react-native-paper'
+import { Modal, Provider, Portal, Text, Title, Button, TouchableRipple, useTheme } from 'react-native-paper'
 import { View, Dimensions, LayoutAnimation, Image } from 'react-native'
 import Board from '../components/Board'
-import { Container, TopView, StandardText, Score, TextPlayer } from '../styles/stylesglobal'
-import { useDispatch } from 'react-redux'
+import { TopView, Score } from '../styles/stylesglobal'
+import { useDispatch, useSelector } from 'react-redux'
 import ModalContent from '../components/ModalContent'
-import { gameLogic } from '../logic/gameLogic'
-import { ScoresTypes, ModalContents } from '../components/modalComp/TypesAndInterface'
+import { ScoresTypes, ModalContents, GameBoardInterface, WinnerSqsTypes } from '../TypesTypeScript/TypesAndInterface'
 import styled from 'styled-components'
 import ImageOverlay from "react-native-image-overlay";
 import { AnimatedEmoji } from 'react-native-animated-emoji';
 import EmojiBlizard from '../components/EmojiBlizard'
+import { gameLogic } from '../logic/gameLogic'
+import defaultIcon from 'react-native-paper/lib/typescript/src/components/MaterialCommunityIcon'
+import GameOverOverlay from '../components/GameOverOverlay'
+import { LinearGradient } from 'expo-linear-gradient'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const TickTackToeScreen = () => {
-   const dispatch = useDispatch()
+   const { playerCharacter } = useSelector((state: any) => state.playerCharacterSettings)
+   const theme = useTheme()
+   const defaultWonInfo = { playerWon: null, cols: [null], sqs: [null], direction: null }
+   const [wonInfo, setWonInfo] = useState<WinnerSqsTypes>(defaultWonInfo)
    const [gameOver, setGameOver] = useState(false)
    const [modalOpen, setModalOpen] = useState(false)
    const [squaresFilled, setSquaresFilled] = useState(0)
@@ -25,13 +31,11 @@ const TickTackToeScreen = () => {
       { sq0: null, sq1: null, sq2: null, },
       { sq0: null, sq1: null, sq2: null, },
    ]
-   const [sq, setSq] = useState(initialSqs)
-   const initialScores = {
-      p1: 0,
-      p2: 0
-   }
+   const [sq, setSq] = useState<GameBoardInterface>(initialSqs)
+   const initialScores = { p1: 0, p2: 0 }
    const [showInModal, setShowInModal] = useState<ModalContents>(ModalContents.GameMenu)
    const [score, setScore] = useState<ScoresTypes>(initialScores)
+
 
    useEffect(() => {
       setShowInModal(ModalContents.GameOver)
@@ -40,42 +44,54 @@ const TickTackToeScreen = () => {
    }, [gameOver])
 
    const startGame = async () => {
-      setModalOpen(false)
+      setWonInfo(defaultWonInfo)
       setSq(initialSqs)
+      setModalOpen(false)
+      setShowInModal(ModalContents.none)
       setTimeout(() => {
          setGameOver(false)
          setSquaresFilled(0)
       }, 300)
    }
 
-   // console.log(gameOver, 'gameOver')
-   // console.log(gameOver)
+   console.log(score);
+
    useEffect(() => {
-      const playerWon = gameLogic(sq)
-      // console.log(playerWon, 'playerWon')
+      const playerWon = gameLogic({ sq })
+      if (playerWon) setWonInfo(playerWon)
       if (playerWon) {
-         //add one point to player who wins 
-         setScore({ ...score, [playerWon]: score[playerWon] + 1 })
-         setGameOver(true)
+         console.log(playerWon);
+         setScore({ ...score, [playerWon.playerWon]: score[playerWon.playerWon] + 1 }) //@ useGameLogic
+         setGameOver(true)  //@ useGameLogic
       }
    }, [sq])
 
    return (
-      <Container style={{ height: SCREEN_HEIGHT }}>
+      <ContainerLinearGradient colors={['#561B79', '#492C9A', '#456DAB']} start={[.9, 1]} theme={theme} height={SCREEN_HEIGHT}>
 
-         <TopView>
-            {/* <Image  style={{tintColor: 'rgba(50,108,46,.30)', flex: 1}} source={require('../assets/images/gear-option.png')} /> */}
-            <Score>
-               <StandardText>{score.p1}</StandardText>
-               <TextPlayer active={playerOneTurn === false}>player 1</TextPlayer>
-            </Score>
-            <Score>
-               <StandardText>{score.p2}</StandardText>
-               <TextPlayer active={playerOneTurn === true}>player 2</TextPlayer>
-            </Score>
-         </TopView>
+         {showInModal !== ModalContents.GameMenu &&
+            <TopView>
+               <Score>
+                  <StandardText>{score.p1}</StandardText>
+                  <PlayerEmojiContainer theme={theme} active={playerOneTurn === false}>
+                     <TextPlayer>{playerCharacter[1]}</TextPlayer>
+                  </PlayerEmojiContainer>
+               </Score>
+               <Score>
+                  <StandardText>{score.p2}</StandardText>
+                  <PlayerEmojiContainer theme={theme} active={playerOneTurn}>
+                     <TextPlayer>{playerCharacter[2]}</TextPlayer>
+                  </PlayerEmojiContainer>
+               </Score>
+            </TopView>
+         }
+
+         {/* <PlayerWinnerHeaderContainer theme={theme}>
+            <PlayerWinnerHeaderStyled style={{zIndex: 50, position: 'absolute'}}>Player 1 Won</PlayerWinnerHeaderStyled>
+         </PlayerWinnerHeaderContainer> */}
 
          <Board
+            wonInfo={wonInfo}
             sq={sq}
             setSq={setSq}
             playerOneTurn={playerOneTurn}
@@ -85,101 +101,105 @@ const TickTackToeScreen = () => {
             squaresFilled={squaresFilled}
             setSquaresFilled={setSquaresFilled}
          />
+         <View style={{ flex: .4 }}></View>
 
-         {/* 
-         <AnimatedEmoji
-            index={'emoji.key'} // index to identity emoji component
-            style={{ bottom: 200 }} // start bottom position
-            name={'sweat_smile'} // emoji name
-            size={30} // font size
-            duration={4000} // ms
-         //  onAnimationCompleted={this.onAnimationCompleted} // completion handler
-         /> */}
-
-         <View style={{ position: 'absolute', height: '100%' }}>
-            {/* <EmojiBlizard /> */}
+         <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
+            {gameOver && showInModal === ModalContents.GameOver ?
+               <>
+                  <GameOverOverlay
+                     setShowInModal={setShowInModal}
+                     startGame={startGame}
+                  />
+                  <EmojiBlizard />
+               </>
+               : null
+            }
          </View>
 
-         <Provider>
-            <Portal>
-               <Modal visible={modalOpen}>
-                  {showInModal === ModalContents.GameOver ?
-                     <GameOverOverlay setShowInModal={setShowInModal} startGame={startGame} />
-                     :
-                     <ModalContent
-                        score={score}
-                        gameOver={gameOver}
-                        startGame={startGame}
-                     />
-                  }
-               </Modal>
-            </Portal>
-         </Provider>
+         {/* <Provider>
+            <Portal> */}
+         <Modal
+            dismissable={false} visible={modalOpen && showInModal === ModalContents.GameMenu ? true : false}>
+            {showInModal === ModalContents.GameMenu &&
+               <ModalContent
+                  score={score}
+                  gameOver={gameOver}
+                  startGame={startGame}
+               />
+            }
+         </Modal>
+         {/* </Portal>
+         </Provider> */}
 
 
-      </Container>
+      </ContainerLinearGradient>
    )
 }
 
-// import React from 'react'
-// import { View, Text } from 'react-native'
-
-const GameOverOverlay = ({ setShowInModal, startGame }) => {
-   //@ animation emoji blizard here
-   //@ test to see if theme works and what's up with title not using the right font
-
-   enum Action {
-      changeCharacter,
-      playAgain
-   }
-   const onPressHandler = (action) => {
-      if (action === Action.changeCharacter) {
-         setShowInModal(ModalContents.GameMenu)
-      } else if (action === Action.playAgain) {
-         startGame()
+const PlayerEmojiContainer = styled<any>(View)`
+   height: 60px;
+   width:  60px;
+   border-radius: 10px;
+   border-color: white;
+   justify-content: center;
+   align-items: center;
+   border-width: .8px;
+${({ theme, active }) => {
+      console.log(active);
+      if (theme && active) {
+         if (theme.colors) {
+            let color = theme.colors.primary
+            color = color.replace("1.0)", ".4)");
+            // return color
+            return [
+               `background-color: ${color};`,
+            ]
+         }
+      } else {
+         return [
+            `border-color: transparent`
+         ]
       }
-   }
-
-   return (
-      <ContainerAligning>
-         <Text style={{ fontSize: 50, color: 'white', backgroundColor: 'red', position: 'absolute', top: '30%' }}>Player 1 Won</Text>
-
-         <JustifyCol>
-            {/* //@ color theme */}
-            <TouchableRipple
-               /* theme={theme} */
-               onPress={() => onPressHandler(Action.changeCharacter)}
-            >
-               <View style={{ flexDirection: 'column' }}>
-                  <Text>Select</Text>
-                  <Text>character</Text>
-               </View>
-            </TouchableRipple>
-            <Button
-               onPress={() => onPressHandler(Action.playAgain)}
-            >
-               Play again
-            </Button>
-         </JustifyCol>
-      </ContainerAligning>
-   )
-}
-
-const ContainerAligning = styled.View`
-   height: 100%;
+   }}
+      `;
+export const StandardText = styled(Text)`
+   color: white;
+   font-size: 40px;
+   justify-content: center;
    align-items: center;
-   justify-content: space-around;
 `;
-const JustifyCol = styled.View`
-   align-items: center;
-   flex-direction: row;
-   flex: 1;
-   justify-content: space-around;
+
+const PlayerWinnerHeaderStyled = styled(Text)`
+   textShadowColor: 'rgba(0, 0, 0, 0.75)';
+   textShadowOffset: {
+      width: -1px;
+      height: 1px;
+   };
+   textShadowRadius: 10px;
+   elevation: 10;
+   font-size: 30px;
+   color: white;
+   position: absolute;
+   align-self: center;
+   z-index: 30;
+`;
+const PlayerWinnerHeaderContainer = styled(View)`
+   /* background-color: #3BC0A5; */
+   background-color: ${ props => props.theme.colors.accent};
+   height: 100px;
    width: 100%;
-`
-
-
-// export default GameOverOverlay
-
+   margin: 20px 0px;
+   align-items: center;
+   justify-content: center;
+`;
+export const TextPlayer = styled(Text)`
+   /* color: ${props => props.active ? 'black' : 'white'}; */
+   font-size: 30px;
+`;
+export const ContainerLinearGradient = styled(LinearGradient)`
+   justify-content: space-around;
+   /* background-color: ${props => props.theme.colors.background}; */
+   height: ${props => props.height}px;
+`;
 
 export default TickTackToeScreen
