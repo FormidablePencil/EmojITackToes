@@ -27,7 +27,7 @@ const ScoresAndEmojiSecection = ({
   }
 
   return (
-    <ScoreContainer>
+    <ScoreContainer style={{ top: selectedPlayerToChooseCharacter === null ? -30 : 0 }}>
       <PlayerContainer>
         {selectedPlayerToChooseCharacter === null ?
           <TextInput
@@ -52,17 +52,19 @@ const ScoresAndEmojiSecection = ({
             </Text>
           </TouchableRippleStyled>
         }
-        <Text
-          style={{
-            textAlign: 'center', fontSize: 40, color: 'white',
-            textShadowColor: 'rgba(0, 0, 0, 0.75)',
-            textShadowOffset: {
-              width: -1,
-              height: 1,
-            },
-            textShadowRadius: 10,
-          }}
-        >{score.p1}</Text>
+        {selectedPlayerToChooseCharacter === null &&
+          <Text
+            style={{
+              textAlign: 'center', fontSize: 40, color: 'white',
+              textShadowColor: 'rgba(0, 0, 0, 0.75)',
+              textShadowOffset: {
+                width: -1,
+                height: 1,
+              },
+              textShadowRadius: 10,
+            }}
+          >{score.p1}</Text>
+        }
 
       </PlayerContainer>
 
@@ -104,17 +106,19 @@ const ScoresAndEmojiSecection = ({
             </Text>
           </TouchableRippleStyled>
         }
-        <Text
-          style={{
-            textAlign: 'center', fontSize: 40, color: 'white',
-            textShadowColor: 'rgba(0, 0, 0, 0.75)',
-            textShadowOffset: {
-              width: -1,
-              height: 1,
-            },
-            textShadowRadius: 10,
-          }}
-        >{score.p2}</Text>
+        {selectedPlayerToChooseCharacter === null &&
+          <Text
+            style={{
+              textAlign: 'center', fontSize: 40, color: 'white',
+              textShadowColor: 'rgba(0, 0, 0, 0.75)',
+              textShadowOffset: {
+                width: -1,
+                height: 1,
+              },
+              textShadowRadius: 10,
+            }}
+          >{score.p2}</Text>
+        }
 
       </PlayerContainer>
     </ScoreContainer>

@@ -14,6 +14,7 @@ import { gameLogic } from '../logic/gameLogic'
 import defaultIcon from 'react-native-paper/lib/typescript/src/components/MaterialCommunityIcon'
 import GameOverOverlay from '../components/GameOverOverlay'
 import { LinearGradient } from 'expo-linear-gradient'
+import AnimationOptions from '../components/AnimationOptions'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -36,14 +37,17 @@ const TickTackToeScreen = () => {
    const [showInModal, setShowInModal] = useState<ModalContents>(ModalContents.GameMenu)
    const [score, setScore] = useState<ScoresTypes>(initialScores)
 
+   const restartScore = () => {
+      setScore(initialScores)
+   }
 
    useEffect(() => {
       setShowInModal(ModalContents.GameOver)
-      //@ run animation here
       if (gameOver) setTimeout(() => { setModalOpen(true) }, 1000)
    }, [gameOver])
 
    const startGame = async () => {
+      console.log(333)
       setWonInfo(defaultWonInfo)
       setSq(initialSqs)
       setModalOpen(false)
@@ -54,42 +58,39 @@ const TickTackToeScreen = () => {
       }, 300)
    }
 
-   console.log(score);
-
    useEffect(() => {
       const playerWon = gameLogic({ sq })
       if (playerWon) setWonInfo(playerWon)
       if (playerWon) {
-         console.log(playerWon);
-         setScore({ ...score, [playerWon.playerWon]: score[playerWon.playerWon] + 1 }) //@ useGameLogic
-         setGameOver(true)  //@ useGameLogic
+         setScore({ ...score, [playerWon.playerWon]: score[playerWon.playerWon] + 1 })
+         setGameOver(true)
       }
    }, [sq])
 
+   const PlayerScore = ({ transparent, score, active, playerCharacter }) =>
+      <Score>
+         <StandardText transparent={transparent}>{score}</StandardText>
+         <PlayerEmojiContainer transparent={transparent} theme={theme} active={active}>
+            <TextPlayer>{playerCharacter}</TextPlayer>
+         </PlayerEmojiContainer>
+      </Score>
+
    return (
-      <ContainerLinearGradient colors={['#561B79', '#492C9A', '#456DAB']} start={[.9, 1]} theme={theme} height={SCREEN_HEIGHT}>
-
-         {showInModal !== ModalContents.GameMenu &&
-            <TopView>
-               <Score>
-                  <StandardText>{score.p1}</StandardText>
-                  <PlayerEmojiContainer theme={theme} active={playerOneTurn === false}>
-                     <TextPlayer>{playerCharacter[1]}</TextPlayer>
-                  </PlayerEmojiContainer>
-               </Score>
-               <Score>
-                  <StandardText>{score.p2}</StandardText>
-                  <PlayerEmojiContainer theme={theme} active={playerOneTurn}>
-                     <TextPlayer>{playerCharacter[2]}</TextPlayer>
-                  </PlayerEmojiContainer>
-               </Score>
-            </TopView>
-         }
-
-         {/* <PlayerWinnerHeaderContainer theme={theme}>
-            <PlayerWinnerHeaderStyled style={{zIndex: 50, position: 'absolute'}}>Player 1 Won</PlayerWinnerHeaderStyled>
-         </PlayerWinnerHeaderContainer> */}
-
+      <ContainerLinearGradient colors={['#492C9A', '#456DAB']} start={[.1, .5]} theme={theme} height={SCREEN_HEIGHT}>
+         <TopView>
+            <PlayerScore
+               transparent={showInModal === ModalContents.GameMenu}
+               score={score.p1}
+               active={playerOneTurn === true}
+               playerCharacter={showInModal !== ModalContents.GameMenu && playerCharacter[1]}
+            />
+            <PlayerScore
+               transparent={showInModal === ModalContents.GameMenu}
+               score={score.p2}
+               active={playerOneTurn === false}
+               playerCharacter={showInModal !== ModalContents.GameMenu && playerCharacter[2]}
+            />
+         </TopView>
          <Board
             wonInfo={wonInfo}
             sq={sq}
@@ -102,7 +103,6 @@ const TickTackToeScreen = () => {
             setSquaresFilled={setSquaresFilled}
          />
          <View style={{ flex: .4 }}></View>
-
          <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
             {gameOver && showInModal === ModalContents.GameOver ?
                <>
@@ -110,60 +110,57 @@ const TickTackToeScreen = () => {
                      setShowInModal={setShowInModal}
                      startGame={startGame}
                   />
-                  <EmojiBlizard />
                </>
                : null
             }
          </View>
-
-         {/* <Provider>
-            <Portal> */}
          <Modal
-            dismissable={false} visible={modalOpen && showInModal === ModalContents.GameMenu ? true : false}>
-            {showInModal === ModalContents.GameMenu &&
+            dismissable={false} visible={modalOpen && showInModal === ModalContents.GameMenu || showInModal === ModalContents.animationSettings ? true : false}>
+            {showInModal === ModalContents.GameMenu ?
                <ModalContent
+                  setShowInModal={setShowInModal}
+                  restartScore={restartScore}
                   score={score}
                   gameOver={gameOver}
                   startGame={startGame}
                />
+               : (showInModal === ModalContents.animationSettings) &&
+               <>
+                  <AnimationOptions setShowInModal={setShowInModal} startGame={startGame} />
+               </>
             }
          </Modal>
-         {/* </Portal>
-         </Provider> */}
-
-
       </ContainerLinearGradient>
    )
 }
 
 const PlayerEmojiContainer = styled<any>(View)`
-   height: 60px;
-   width:  60px;
-   border-radius: 10px;
-   border-color: white;
-   justify-content: center;
-   align-items: center;
-   border-width: .8px;
-${({ theme, active }) => {
-      console.log(active);
-      if (theme && active) {
-         if (theme.colors) {
-            let color = theme.colors.primary
-            color = color.replace("1.0)", ".4)");
-            // return color
-            return [
-               `background-color: ${color};`,
-            ]
-         }
-      } else {
-         return [
-            `border-color: transparent`
-         ]
-      }
-   }}
+         height: 60px;
+         width:  60px;
+         border-radius: 10px;
+         border-color: white;
+         justify-content: center;
+         align-items: center;
+         border-width: .8px;
+${({ theme, active, transparent }) => {
+               if (theme && active && !transparent) {
+                  if (theme.colors) {
+                     let color = theme.colors.primary
+                     color = color.replace("1.0)", ".4)");
+                     // return color
+                     return [
+                        `background-color: ${color};`,
+                     ]
+                  }
+               } else {
+                  return [
+                     `border-color: transparent`
+                  ]
+               }
+            }}
       `;
-export const StandardText = styled(Text)`
-   color: white;
+export const StandardText = styled<any>(Text)`
+   color: ${props => props.transparent ? 'transparent' : 'white'};
    font-size: 40px;
    justify-content: center;
    align-items: center;
@@ -172,7 +169,7 @@ export const StandardText = styled(Text)`
 const PlayerWinnerHeaderStyled = styled(Text)`
    textShadowColor: 'rgba(0, 0, 0, 0.75)';
    textShadowOffset: {
-      width: -1px;
+                  width: -1px;
       height: 1px;
    };
    textShadowRadius: 10px;
@@ -185,19 +182,19 @@ const PlayerWinnerHeaderStyled = styled(Text)`
 `;
 const PlayerWinnerHeaderContainer = styled(View)`
    /* background-color: #3BC0A5; */
-   background-color: ${ props => props.theme.colors.accent};
+   background-color: ${props => props.theme.colors.accent};
    height: 100px;
    width: 100%;
    margin: 20px 0px;
    align-items: center;
    justify-content: center;
 `;
-export const TextPlayer = styled(Text)`
-   /* color: ${props => props.active ? 'black' : 'white'}; */
+export const TextPlayer = styled<any>(Text)`
+   color: ${props => props.transparent ? 'transparent' : 'white'};
    font-size: 30px;
 `;
-export const ContainerLinearGradient = styled(LinearGradient)`
-   justify-content: space-around;
+export const ContainerLinearGradient = styled<any>(LinearGradient)`
+                  justify-content: space-around;
    /* background-color: ${props => props.theme.colors.background}; */
    height: ${props => props.height}px;
 `;

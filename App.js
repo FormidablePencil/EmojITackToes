@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { Provider as PaperProvider } from 'react-native-paper'
 import configureStore from './src/store';
 import { TickTackToeTheme } from './src/styles/theming';
-
+import StackNavigator from './src/navigators/StackNavigator'
 
 //app theme is the theme provided by the Boring app this is the standalone app
 export default function App({ AppTheme }) {
@@ -32,7 +32,7 @@ export default function App({ AppTheme }) {
       <PaperProvider theme={AppTheme ? AppTheme : TickTackToeTheme}>
         <StatusBar backgroundColor={TickTackToeTheme.colors.statusBar} />
         {fontLoaded ?
-          <TickTackToeScreen />
+          <StackNavigator />
           : <Text>Loading...</Text>
         }
       </PaperProvider>

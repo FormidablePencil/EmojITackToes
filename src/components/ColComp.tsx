@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import playWiningAnimation from '../useHooks/playWiningAnimation'
+import usePlayWiningAnimation from '../useHooks/usePlayWiningAnimation'
 import { sqTypes, ColCompTypes } from './../TypesTypeScript/TypesAndInterface'
 import * as Animatable from 'react-native-animatable';
 import { Col, Item, VerticalLine } from '../styles/stylesglobal'
 import styled from 'styled-components';
 import { Text } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import usePlayOnPressAnimation from '../useHooks/usePlayOnPressAnimation';
 
 
 const ColComp = ({
@@ -25,20 +26,19 @@ const ColComp = ({
   const sq2Ref = useRef(null)
   const theme = useTheme()
 
-  playWiningAnimation({ wonInfo, col, sq0Ref, sq1Ref, sq2Ref, winningSqare })
-
+  usePlayWiningAnimation({ wonInfo, col, sq0Ref, sq1Ref, sq2Ref, winningSqare })
+  const { executeAnimation } = usePlayOnPressAnimation({ sq0Ref, sq1Ref, sq2Ref })
 
   const handleOnPress = (whatSquarePressed, inWhatCol) => {
     handleOnPressSq(whatSquarePressed, inWhatCol)
-    if (whatSquarePressed === 'sq0') sq0Ref.current.rotate()
-    else if (whatSquarePressed === 'sq1') sq1Ref.current.rotate()
-    else if (whatSquarePressed === 'sq2') sq2Ref.current.rotate()
+    executeAnimation(whatSquarePressed)
   }
+  // console.log(animationSetting);
 
   return (
     <Col>
       <Item onPress={() => handleOnPress('sq0', col)} style={{ tintColor: 'blue' }}>
-        <StandardTextAnimated ref={sq0Ref} animation={"rotate"}
+        <StandardTextAnimated ref={sq0Ref} animation={"flipInX"}
           iterationCount={1}
           useNativeDriver={true}>
           {first ? playerCharacter[first === sqTypes.p1 ? 1 : 2] : null}
@@ -48,7 +48,7 @@ const ColComp = ({
       <Item onPress={() => handleOnPress('sq1', col)}>
         <StandardTextAnimated
           ref={sq1Ref}
-          animation={"rotate"}
+          animation={"pulse"}
           iterationCount={1}
           useNativeDriver={true}
         >
@@ -59,7 +59,7 @@ const ColComp = ({
       <Item onPress={() => handleOnPress('sq2', col)}>
         <StandardTextAnimated
           ref={sq2Ref}
-          animation={"rotate"}
+          animation={"pulse"}
           iterationCount={1}
           useNativeDriver={true}
         >

@@ -2,7 +2,7 @@ import { playerCharacterSettingsTypes } from "../../reducers/playerCharacterSett
 
 export interface ScoresTypes { p1: number; p2: number }
 export enum Players { p1, p2 }
-export enum ModalContents { GameOver, GameMenu, none }
+export enum ModalContents { GameOver, GameMenu, none, animationSettings }
 
 export interface ScoresCompTypes {
   setSelectedPlayerToChooseCharacter
