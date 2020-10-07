@@ -6,7 +6,7 @@ Emoji-Tack-Toes was a fun little idea worth manifesting into existence. It's sel
 
 Demo video: https://youtu.be/RHMmuPUvPyU
 
-<img src="https://i.ibb.co/N79YKzM/Screenshot-20200629-225639-Emogi-Tack-Toes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/Dzz7d3B/Screenshot-20200629-225621-Emogi-Tack-Toes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/rvdK92p/Screenshot-20200629-225612-Emogi-Tack-Toes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/xh3dnx3/Screenshot-20200629-225606-Emogi-Tack-Toes.jpg" width="200" title="app image">
+<img src="https://i.ibb.co/N79YKzM/Screenshot-20200629-225639-Emogi-Tack-Toes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/Dzz7d3B/Screenshot-20200629-225621-Emogi-Tack-Toes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/xh3dnx3/Screenshot-20200629-225606-Emogi-Tack-Toes.jpg" width="200" title="app image">
 
 ## Technologies utilized
 
