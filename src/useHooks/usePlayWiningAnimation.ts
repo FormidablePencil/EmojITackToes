@@ -41,7 +41,6 @@ const usePlayWiningAnimation = ({ wonInfo, col, sq0Ref, sq1Ref, sq2Ref, winningS
         }, 2000)
       }
     } else {
-      console.log('object')
       for (let i = 0; i < 3; i++) {
         if (wonInfo.cols.filter(item => item === col)[0] !== undefined) {
           if (winningSqare[i] === `sq0`) {

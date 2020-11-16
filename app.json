@@ -3,7 +3,6 @@
     "name": "Emogi Tack Toes",
     "slug": "TickTackToe",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
