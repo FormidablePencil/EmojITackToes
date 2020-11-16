@@ -37,7 +37,8 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
     dismissKeyboard,
     goToAuth,
     restartScore,
-    animationSettings
+    animationSettings,
+    navFindMatch,
   }
 
 
@@ -47,6 +48,11 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
 
   const onPressHandler = (action) => {
     switch (action) {
+      case onPress.navFindMatch:
+        navigation.navigate('findMatch')
+        console.log('kkkk');
+        break
+
       case onPress.dismissKeyboard:
         Keyboard.dismiss()
         break
@@ -71,6 +77,14 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
   }
   //make player 1 & 2 controlled and hook uo emojiSelector to the controlled input to save as that
   //right now fix keyboard
+
+  const NavigateToFindMatch = () =>
+    <TouchableRipple
+      style={{ height: 30, width: 100, backgroundColor: 'white', position: "absolute", alignSelf: 'center', bottom: 20 }}
+      onPress={() => onPressHandler(onPress.navFindMatch)}>
+      <Text>Find match</Text>
+    </TouchableRipple>
+
   return (
     <TouchableWithoutFeedback onPress={onPressHandler}>
       <AlignAllContainer style={{ width: '90%', alignSelf: 'center' }}>
@@ -99,6 +113,8 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
                   </Text>
                 </Button>
               } */}
+              <NavigateToFindMatch />
+
 
               {selectedPlayerToChooseCharacter === Players.p1 || selectedPlayerToChooseCharacter === Players.p2 ?
                 <FlexContainer style={{ marginHorizontal: 40, marginVertical: 20, flex: 5 }}>
@@ -114,7 +130,6 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
                       category={Categories.emotion}
                       onEmojiSelected={emoji => onEmojiSelectHandler(emoji)}
                     />
-
                   </View>
                 </FlexContainer>
                 :

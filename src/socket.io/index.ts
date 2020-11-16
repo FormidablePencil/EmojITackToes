@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import socketIoClient from 'socket.io-client';
+import socketIoControls, { commandsSocketIo } from './socketIoControls';
 
+/* make it so that one could host and enter a game */
 let socket
 
 const useSocketIo = () => {
@@ -27,8 +29,12 @@ const useSocketIo = () => {
     setSocketIoData({ chatMsg: msg });
   }
 
-  return { sendMessage, socketIoData, setSocketIoData }
+  const dispatchCommand = ({ command, payload }: dispatchCommandT) =>
+    socketIoControls({ command, payload, socket, setSocketIoData })
+
+  return { dispatchCommand }
 }
 
+export interface dispatchCommandT { command: commandsSocketIo, payload?: any }
 
 export default useSocketIo

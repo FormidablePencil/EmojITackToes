@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { Animated, TouchableOpacity } from 'react-native'
-import {Text, View} from 'react-native'
+import { Animated, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View } from 'react-native'
 
 export const Col = styled(View)`
   flex-direction: row;
@@ -20,11 +20,11 @@ export const GameContainer = styled(View)`
 `;
 export const VerticalLine = styled(View)`
   width: 3px;
-  background-color: ${({theme}) => theme.colors ? theme.colors.accent : 'white'};
+  background-color: ${({ theme }) => theme.colors ? theme.colors.accent : 'white'};
 `;
 export const HorizontalLine = styled(View)`
   height: 3px;
-  background-color: ${({theme}) => theme.colors ? theme.colors.accent : 'white'};
+  background-color: ${({ theme }) => theme.colors ? theme.colors.accent : 'white'};
 `;
 export const BottomView = styled(View)`
   flex: 1; 
@@ -50,3 +50,17 @@ const CharacterBackGround = styled(View)`
   align-items: center;
 `;
 export const CharacterBackGroundAnimated = Animated.createAnimatedComponent(CharacterBackGround)
+
+export const reusableStyles = StyleSheet.create({
+  regBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#536aa1',
+    borderWidth: 3,
+    borderRadius: 6,
+    backgroundColor: 'rgb(77, 60, 204)',
+    width: 150,
+    height: 50,
+    margin: 20,
+  }
+})
