@@ -4,18 +4,21 @@ import playerCharacterSettingsReducer from './reducers/playerCharacterSettingsRe
 import authDataReducer from './reducers/authDataReducer'
 import animationSettingReducer from './reducers/animationSettingReducer'
 import multiplayerReducer, { multiplayerT } from './reducers/multiplayerReducer'
+import allAvailableLobbiesReducer, { lobbyDataT } from './reducers/allAvailableLobbiesReducer'
 
 export interface rootT {
   playerCharacterSettings: any
   authData: any
   animationSetting: any
-  multiplayer: multiplayerT
+  multiplayer: multiplayerT,
+  allAvailableLobbies: lobbyDataT[]
 }
 const rootReducer = combineReducers<rootT>({
   playerCharacterSettings: playerCharacterSettingsReducer,
   authData: authDataReducer,
   animationSetting: animationSettingReducer,
   multiplayer: multiplayerReducer,
+  allAvailableLobbies: allAvailableLobbiesReducer,
 })
 
 const initialState = {}

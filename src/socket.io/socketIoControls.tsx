@@ -1,5 +1,5 @@
-import { socket } from ".";
-import { ERROR_MULTIPLAYER, JOINED_LOBBY, LOBBY_HOSTED, QUIT_LOBBY } from "../actions/types";
+import { socket } from "./useSocketIo";
+import { QUIT_LOBBY } from "../actions/types";
 
 export enum commandsSocketIo {
   makeMove,
@@ -8,18 +8,15 @@ export enum commandsSocketIo {
   selectAnim,
   hostGame,
   joinGame,
+  getAllLobbies,
 }
 
-const socketIoControls = (command, payload) => async dispatch => {
-  let type
+// socketIoControls not mongodb fetching/querying. refractor!
+const socketIoControls = (command, payload?) => async dispatch => {
+
   switch (command) {
     case commandsSocketIo.makeMove:
       socket.emit(payload.lobbyId, { move: payload.move, character: payload.character });
-      break;
-
-    case commandsSocketIo.quit:
-      dispatch({ type: QUIT_LOBBY })
-
       break;
 
     case commandsSocketIo.selectEmoji:
@@ -28,29 +25,24 @@ const socketIoControls = (command, payload) => async dispatch => {
     case commandsSocketIo.selectAnim:
       break;
 
-    case commandsSocketIo.hostGame:
-      const hostRes = await fetch('')
-      const hostPayload = await hostRes.json()
-      if (payload.status === 202)
-        type = LOBBY_HOSTED
-      else
-        type = ERROR_MULTIPLAYER
-      dispatch({ type, payload: hostPayload })
+    case commandsSocketIo.quit:
+      dispatch({ type: QUIT_LOBBY })
       break;
 
-    case commandsSocketIo.joinGame:
-      const resJoin = await fetch('')
-      const joinPayload = await resJoin.json()
-      if (joinPayload.status === 202)
-        type = JOINED_LOBBY
-      else
-        type = ERROR_MULTIPLAYER
-      dispatch({ type, payload: joinPayload })
-      break;
+    // case commandsSocketIo.getAllLobbies:
+    // break;
+
+    // case commandsSocketIo.hostGame:
+    //   break;
+
+    // case commandsSocketIo.joinGame:
+    //   break;
 
     default:
       break;
   }
 }
+
+
 
 export default socketIoControls

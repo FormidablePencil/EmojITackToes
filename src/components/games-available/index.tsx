@@ -1,39 +1,28 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import socketIoControls, { commandsSocketIo } from '../../socket.io/socketIoControls';
+import { rootT } from '../../store';
 import { reusableStyles } from '../../styles/stylesglobal';
 
-const staticGamesAvaiable = [
-  { host: 'Daniel', id: 2323 },
-  { host: 'Peter', id: 2312 },
-  { host: 'Peter', id: 5312 },
-  { host: 'Peter', id: 73122 },
-  { host: 'Peter', id: 63122 },
-  { host: 'Peter', id: 201223 },
-  { host: 'Peter', id: 9312 },
-  { host: 'Peter', id: 20112 },
-  { host: 'Peter', id: 93112 },
-  { host: 'Peter', id: 1122212 },
-  { host: 'Peter', id: 9311212 },
-]
 
 function GamesAvailable() {
   const dispatch = useDispatch()
+  const username = useSelector((state: rootT) => state.multiplayer.username)
+  const allAvailableLobbies = useSelector((state: rootT) => state.allAvailableLobbies)
 
   const onClickHandler = (item) =>
-    dispatch(socketIoControls(commandsSocketIo.joinGame, item.id))
-
+    dispatch(socketIoControls(commandsSocketIo.joinGame, { username, lobbyId: item.id }))
 
   return (
     <ScrollView style={styles.scrollView} scrollEnabled={true}>
       <View style={styles.container}>
-        {staticGamesAvaiable.map(item =>
+        {allAvailableLobbies.map(lobbyData =>
           <TouchableOpacity
-            key={item.id}
+            key={lobbyData._id}
             style={reusableStyles.regBtn}
-            onPress={() => onClickHandler(item)}
+            onPress={() => onClickHandler(lobbyData)}
           >
             <Text style={styles.text}>item.host</Text>
           </TouchableOpacity>

@@ -6,11 +6,10 @@ import { rootT } from '../store';
 export let socket
 
 const useSocketIo = () => {
-  const { socketIoData, enterLobby, error } = useSelector((state: rootT) => state.multiplayer)
-  // redux
+  const { username, socketIoData, enterLobby, error } = useSelector((state: rootT) => state.multiplayer)
 
   useEffect(() => {
-
+    console.log(socketIoData, 'listening to socketIoData')
   }, [socketIoData])
 
   useEffect(() => {

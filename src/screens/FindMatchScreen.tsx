@@ -1,20 +1,34 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import GamesAvailable from '../components/games-available';
 import { reusableStyles } from '../styles/stylesglobal';
 import socketIoControls, { commandsSocketIo } from '../socket.io/socketIoControls'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { rootT } from '../store';
+import useCheckIfMatchFound from '../useHooks/useCheckIfMatchFound';
+import { TextInput } from 'react-native-paper';
+import { UPDATE_USERNAME } from '../actions/types';
 
 const FindMatchScreen = () => {
+  useCheckIfMatchFound()
   return (
     <View style={styles.container}>
       <NavigateBack />
+      <RefreshLobbies />
+      <InputUsername />
       <HostGame />
       <GamesAvailable />
     </View>
   )
+}
+
+const RefreshLobbies = () => {
+  
+  <TouchableOpacity onPress={}>
+    <Text>Refresh</Text>
+  </TouchableOpacity>
 }
 
 const NavigateBack = () => {
@@ -31,11 +45,27 @@ const NavigateBack = () => {
   )
 }
 
-const HostGame = () => {
+const InputUsername = () => {
+  const username = useSelector((state: rootT) => state.multiplayer.username)
   const dispatch = useDispatch()
+  const onChangeTextHandler = (payload) => dispatch({ type: UPDATE_USERNAME, payload })
+  return (
+    <TextInput
+      accessibilityStates=''
+      label="Email"
+      value={username}
+      onChangeText={value => onChangeTextHandler(value)}
+    />
 
-  const onClickHandler = () =>
-    dispatch(socketIoControls({ command: commandsSocketIo.hostGame }))
+  )
+}
+
+const HostGame = () => {
+  const username = useSelector((state: rootT) => state.multiplayer.username)
+  const dispatch: any = useDispatch()
+
+  const onClickHandler = async () =>
+    await dispatch(socketIoControls(commandsSocketIo.hostGame, username))
 
   return (
     <View style={styles.containerHostGame}>
