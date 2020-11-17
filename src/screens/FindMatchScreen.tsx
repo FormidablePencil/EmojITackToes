@@ -3,18 +3,16 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import GamesAvailable from '../components/games-available';
-import useSocketIo, { dispatchCommandT } from '../socket.io';
 import { reusableStyles } from '../styles/stylesglobal';
-import { commandsSocketIo } from '../socket.io/socketIoControls'
+import socketIoControls, { commandsSocketIo } from '../socket.io/socketIoControls'
+import { useDispatch } from 'react-redux';
 
 const FindMatchScreen = () => {
-  const { dispatchCommand } = useSocketIo()
-
   return (
     <View style={styles.container}>
       <NavigateBack />
-      <HostGame dispatchCommand={dispatchCommand} />
-      <GamesAvailable dispatchCommand={dispatchCommand} />
+      <HostGame />
+      <GamesAvailable />
     </View>
   )
 }
@@ -33,15 +31,22 @@ const NavigateBack = () => {
   )
 }
 
-const HostGame = ({ dispatchCommand }:
-  { dispatchCommand: (item: dispatchCommandT) => void }) =>
-  <View style={styles.containerHostGame}>
-    <TouchableOpacity
-      style={{ ...reusableStyles.regBtn, ...styles.btnHost }}
-      onPress={() => dispatchCommand({ command: commandsSocketIo.hostGame })}>
-      <Text style={styles.text}>Host</Text>
-    </TouchableOpacity>
-  </View>
+const HostGame = () => {
+  const dispatch = useDispatch()
+
+  const onClickHandler = () =>
+    dispatch(socketIoControls({ command: commandsSocketIo.hostGame }))
+
+  return (
+    <View style={styles.containerHostGame}>
+      <TouchableOpacity
+        style={{ ...reusableStyles.regBtn, ...styles.btnHost }}
+        onPress={() => onClickHandler()}>
+        <Text style={styles.text}>Host</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 
 const styles = StyleSheet.create({

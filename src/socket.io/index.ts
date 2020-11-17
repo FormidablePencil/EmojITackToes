@@ -1,12 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import socketIoClient from 'socket.io-client';
-import socketIoControls, { commandsSocketIo } from './socketIoControls';
+import { rootT } from '../store';
 
-/* make it so that one could host and enter a game */
-let socket
+export let socket
 
 const useSocketIo = () => {
-  const [socketIoData, setSocketIoData] = useState({ chatMsg: '' })
+  const { socketIoData, enterLobby, error } = useSelector((state: rootT) => state.multiplayer)
+  // redux
+
+  useEffect(() => {
+
+  }, [socketIoData])
 
   useEffect(() => {
     // configurations
@@ -14,27 +19,16 @@ const useSocketIo = () => {
       transports: ['websocket'], jsonp: false
     });
     socket.connect();
-    socket.on('connect', () => {
-      console.log('connected to socket server');
+
+    // listeners
+    socket.on('multiplayer', msg => {
+      console.log(msg, 'multiplayer')
     });
-    // listener
-    socket.on("chat message", msg => {
-      console.log(msg, 'from server')
-      setSocketIoData({ chatMsg: msg })
+    socket.on(socketIoData.roomId, payload => {
+      console.log(payload, 'from server')
     })
-  }, [])
+  }, [enterLobby])
 
-  const sendMessage = (msg = 'hello') => {
-    socket.emit('chat message', msg);
-    setSocketIoData({ chatMsg: msg });
-  }
-
-  const dispatchCommand = ({ command, payload }: dispatchCommandT) =>
-    socketIoControls({ command, payload, socket, setSocketIoData })
-
-  return { dispatchCommand }
 }
-
-export interface dispatchCommandT { command: commandsSocketIo, payload?: any }
 
 export default useSocketIo

@@ -1,8 +1,8 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { dispatchCommandT } from '../../socket.io';
-import { commandsSocketIo } from '../../socket.io/socketIoControls';
+import { useDispatch } from 'react-redux';
+import socketIoControls, { commandsSocketIo } from '../../socket.io/socketIoControls';
 import { reusableStyles } from '../../styles/stylesglobal';
 
 const staticGamesAvaiable = [
@@ -19,28 +19,29 @@ const staticGamesAvaiable = [
   { host: 'Peter', id: 9311212 },
 ]
 
-function GamesAvailable({ dispatchCommand }) {
+function GamesAvailable() {
+  const dispatch = useDispatch()
+
+  const onClickHandler = (item) =>
+    dispatch(socketIoControls(commandsSocketIo.joinGame, item.id))
+
 
   return (
     <ScrollView style={styles.scrollView} scrollEnabled={true}>
       <View style={styles.container}>
-        <RenderGames dispatchCommand={dispatchCommand} />
+        {staticGamesAvaiable.map(item =>
+          <TouchableOpacity
+            key={item.id}
+            style={reusableStyles.regBtn}
+            onPress={() => onClickHandler(item)}
+          >
+            <Text style={styles.text}>item.host</Text>
+          </TouchableOpacity>
+        )}
       </View>
-    </ScrollView>
+    </ScrollView >
   )
 }
-
-const RenderGames = ({ dispatchCommand }:
-  { dispatchCommand: (item: dispatchCommandT) => void }): any =>
-  staticGamesAvaiable.map(item =>
-    <TouchableOpacity
-      key={item.id}
-      style={reusableStyles.regBtn}
-      onPress={() => dispatchCommand({ command: commandsSocketIo.joinGame, payload: item.id })}
-    >
-      <Text style={styles.text}>item.host</Text>
-    </TouchableOpacity>
-  )
 
 
 const styles = StyleSheet.create({

@@ -3,16 +3,24 @@ import thunk from 'redux-thunk'
 import playerCharacterSettingsReducer from './reducers/playerCharacterSettingsReducer'
 import authDataReducer from './reducers/authDataReducer'
 import animationSettingReducer from './reducers/animationSettingReducer'
+import multiplayerReducer, { multiplayerT } from './reducers/multiplayerReducer'
 
-const rootReducer = combineReducers({
+export interface rootT {
+  playerCharacterSettings: any
+  authData: any
+  animationSetting: any
+  multiplayer: multiplayerT
+}
+const rootReducer = combineReducers<rootT>({
   playerCharacterSettings: playerCharacterSettingsReducer,
   authData: authDataReducer,
-  animationSetting: animationSettingReducer  
+  animationSetting: animationSettingReducer,
+  multiplayer: multiplayerReducer,
 })
 
 const initialState = {}
 
-const middleware = [thunk] 
+const middleware = [thunk]
 
 const configureStore = () => createStore(rootReducer, initialState, applyMiddleware(...middleware))
 
