@@ -15,10 +15,19 @@ import defaultIcon from 'react-native-paper/lib/typescript/src/components/Materi
 import GameOverOverlay from '../components/GameOverOverlay'
 import { LinearGradient } from 'expo-linear-gradient'
 import AnimationOptions from '../components/AnimationOptions'
+import useLobby from '../hooks/useLobby'
+import multiplayerMove from '../hooks/useMultiplayerMove'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
+export interface initialSqsT { sq0: any, sq1: any, sq2: any, }
+const initialSqs: initialSqsT[] = [
+   { sq0: null, sq1: null, sq2: null, },
+   { sq0: null, sq1: null, sq2: null, },
+   { sq0: null, sq1: null, sq2: null, },
+]
 
 const TickTackToeScreen = () => {
+   useLobby()
    const { playerCharacter } = useSelector((state: any) => state.playerCharacterSettings)
    const theme = useTheme()
    const defaultWonInfo = { playerWon: null, cols: [null], sqs: [null], direction: null }
@@ -27,11 +36,6 @@ const TickTackToeScreen = () => {
    const [modalOpen, setModalOpen] = useState(false)
    const [squaresFilled, setSquaresFilled] = useState(0)
    const [playerOneTurn, setPlayerOneTurn] = useState(false)
-   const initialSqs = [
-      { sq0: null, sq1: null, sq2: null, },
-      { sq0: null, sq1: null, sq2: null, },
-      { sq0: null, sq1: null, sq2: null, },
-   ]
    const [sq, setSq] = useState<GameBoardInterface>(initialSqs)
    const initialScores = { p1: 0, p2: 0 }
    const [showInModal, setShowInModal] = useState<ModalContents>(ModalContents.GameMenu)
@@ -40,6 +44,9 @@ const TickTackToeScreen = () => {
    const restartScore = () => {
       setScore(initialScores)
    }
+
+   multiplayerMove({ sq })
+
 
    useEffect(() => {
       setShowInModal(ModalContents.GameOver)
@@ -143,21 +150,21 @@ const PlayerEmojiContainer = styled<any>(View)`
          align-items: center;
          border-width: .8px;
 ${({ theme, active, transparent }) => {
-               if (theme && active && !transparent) {
-                  if (theme.colors) {
-                     let color = theme.colors.primary
-                     color = color.replace("1.0)", ".4)");
-                     // return color
-                     return [
-                        `background-color: ${color};`,
-                     ]
-                  }
-               } else {
-                  return [
-                     `border-color: transparent`
-                  ]
-               }
-            }}
+      if (theme && active && !transparent) {
+         if (theme.colors) {
+            let color = theme.colors.primary
+            color = color.replace("1.0)", ".4)");
+            // return color
+            return [
+               `background-color: ${color};`,
+            ]
+         }
+      } else {
+         return [
+            `border-color: transparent`
+         ]
+      }
+   }}
       `;
 export const StandardText = styled<any>(Text)`
    color: ${props => props.transparent ? 'transparent' : 'white'};

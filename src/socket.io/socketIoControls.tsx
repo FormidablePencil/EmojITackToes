@@ -1,5 +1,5 @@
 import { socket } from "./useSocketIo";
-import { QUIT_LOBBY } from "../actions/types";
+import { LEAVE_LOBBY } from "../actions/types";
 
 export enum commandsSocketIo {
   makeMove,
@@ -26,7 +26,7 @@ const socketIoControls = (command, payload?) => async dispatch => {
       break;
 
     case commandsSocketIo.quit:
-      dispatch({ type: QUIT_LOBBY })
+      dispatch({ type: LEAVE_LOBBY })
       break;
 
     // case commandsSocketIo.getAllLobbies:

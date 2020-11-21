@@ -1,23 +1,25 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import GamesAvailable from '../components/games-available';
 import { reusableStyles } from '../styles/stylesglobal';
-import socketIoControls, { commandsSocketIo } from '../socket.io/socketIoControls'
 import { useDispatch, useSelector } from 'react-redux';
 import { rootT } from '../store';
-import useCheckIfMatchFound from '../useHooks/useCheckIfMatchFound';
 import { TextInput } from 'react-native-paper';
-import { UPDATE_USERNAME } from '../actions/types';
+import { LEAVE_LOBBY, UPDATE_USERNAME } from '../actions/types';
+import getAllLobbies from '../actions/multiplayer/getAllLobbies';
+import hostGame from '../actions/multiplayer/hostGame';
+import useLobby from '../hooks/useLobby';
 
 const FindMatchScreen = () => {
-  useCheckIfMatchFound()
+  useLobby()
+  
   return (
     <View style={styles.container}>
       <NavigateBack />
-      <RefreshLobbies />
       <InputUsername />
+      <RefreshLobbies />
       <HostGame />
       <GamesAvailable />
     </View>
@@ -25,10 +27,14 @@ const FindMatchScreen = () => {
 }
 
 const RefreshLobbies = () => {
-  
-  <TouchableOpacity onPress={}>
-    <Text>Refresh</Text>
-  </TouchableOpacity>
+  const dispatch = useDispatch()
+  const onPressHandler = () => dispatch(getAllLobbies())
+
+  return (
+    <TouchableOpacity style={styles.refreshBtn} onPress={onPressHandler}>
+      <Text>Refresh</Text>
+    </TouchableOpacity>
+  )
 }
 
 const NavigateBack = () => {
@@ -62,17 +68,24 @@ const InputUsername = () => {
 
 const HostGame = () => {
   const username = useSelector((state: rootT) => state.multiplayer.username)
+  const host = useSelector((state: rootT) => state.multiplayer.socketIoData.host)
+
   const dispatch: any = useDispatch()
 
-  const onClickHandler = async () =>
-    await dispatch(socketIoControls(commandsSocketIo.hostGame, username))
+  const onClickHandler = async () => {
+    host.id
+      ? cancelHosting()
+      : await dispatch(hostGame(username))
+  }
+
+  const cancelHosting = () => dispatch({ type: LEAVE_LOBBY })
 
   return (
     <View style={styles.containerHostGame}>
       <TouchableOpacity
         style={{ ...reusableStyles.regBtn, ...styles.btnHost }}
         onPress={() => onClickHandler()}>
-        <Text style={styles.text}>Host</Text>
+        <Text style={styles.text}>{host.id ? 'LEAVE LOBBY' : 'HOST LOBBY'}</Text>
       </TouchableOpacity>
     </View>
   )
@@ -107,6 +120,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white'
+  },
+  refreshBtn: {
+    backgroundColor: 'grey',
+    height: 50,
+    width: 50,
   }
 })
 

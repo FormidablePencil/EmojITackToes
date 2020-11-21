@@ -49,18 +49,18 @@ export const registerAction = (controlledInputs: ControlledInputsTypes) => async
   const fetchedData = await fetch('http://10.0.0.6:4003/auth/register', request)
   const { accessToken, refreshToken, message, username, email } = await fetchedData.json()
   if (accessToken && refreshToken) {
-    console.log("logged in")
+    // console.log("logged in")
     dispatch({ type: REGISTERED, payload: { accessToken, refreshToken, username, email } })
     return { type: AuthActionResponses.successfully_registered }
   } else {
-    console.log("00")
-    console.log(message)
+    // console.log("00")
+    // console.log(message)
     if (message === serverAuthResponses.user_exists_by_username) {
-      console.log("1")
+      // console.log("1")
       return { type: AuthActionResponses.user_exists_by_email }
     }
     if (message === serverAuthResponses.user_exists_by_email) {
-      console.log("2")
+      // console.log("2")
       return { type: AuthActionResponses.user_exists_by_email }
     }
   }

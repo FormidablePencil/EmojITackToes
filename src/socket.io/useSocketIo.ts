@@ -1,17 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import socketIoClient from 'socket.io-client';
+import { JOINED_LOBBY } from '../actions/types';
 import { rootT } from '../store';
 
 export let socket
 
 const useSocketIo = () => {
   const { username, socketIoData, enterLobby, error } = useSelector((state: rootT) => state.multiplayer)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    console.log(socketIoData, 'listening to socketIoData')
-  }, [socketIoData])
-
+  // executes whether lobbyId changes
   useEffect(() => {
     // configurations
     socket = socketIoClient('http://10.0.0.7:4005', {
@@ -23,10 +23,31 @@ const useSocketIo = () => {
     socket.on('multiplayer', msg => {
       console.log(msg, 'multiplayer')
     });
-    socket.on(socketIoData.roomId, payload => {
-      console.log(payload, 'from server')
+    socket.on(socketIoData.lobbyId, payload => {
+      console.log('well')
+
+      if (payload.action === 'match up')
+      dispatch({ type: JOINED_LOBBY, payload: payload.lobbyData })
+      else if (payload.action === 'move'){
+        console.log(payload.boardgame)
+      }
+
+      // console.log(payload.gameRoom === socketIoData, 'response from lobby')
+      // console.log(payload.gameRoom, 'response from lobby')
+
+      // socket.emit('multiplayer',
+      //   `{
+      //   payloada: {
+      //     lobbyId: joinPayload.lobbyId
+      //   },
+      //   move: 'host player turn...'
+      //   }`)
     })
-  }, [enterLobby])
+
+    // cleanup
+    return () => socket.disconnect()
+
+  }, [socketIoData.lobbyId])
 
 }
 

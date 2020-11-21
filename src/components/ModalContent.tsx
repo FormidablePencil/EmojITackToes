@@ -50,7 +50,7 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
     switch (action) {
       case onPress.navFindMatch:
         navigation.navigate('findMatch')
-        console.log('kkkk');
+        // console.log('kkkk');
         break
 
       case onPress.dismissKeyboard:

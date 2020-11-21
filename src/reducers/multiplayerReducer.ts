@@ -1,8 +1,8 @@
-import { ERROR_MULTIPLAYER, JOINED_LOBBY, LOBBY_HOSTED, QUIT_LOBBY, UPDATE_USERNAME } from "../actions/types"
+import { ERROR_MULTIPLAYER, JOINED_LOBBY, LOBBY_HOSTED, LEAVE_LOBBY, UPDATE_USERNAME, MATCH_FOUND } from "../actions/types"
 
 export interface multiplayerT {
   socketIoData: {
-    roomId: string,
+    lobbyId: string,
     host: {
       id: string, username: string
     },
@@ -16,7 +16,7 @@ export interface multiplayerT {
 }
 
 export const defaultSocketIdData = {
-  roomId: 'global chatroom',
+  lobbyId: 'global chatroom',
   host: {
     id: '', username: ''
   },
@@ -42,9 +42,10 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, socketIoData: { ...defaultSocketIdData, ...payload } }
 
     case JOINED_LOBBY:
-      return { ...state, error: payload }
+    case MATCH_FOUND:
+      return { ...state, socketIoData: payload }
 
-    case QUIT_LOBBY:
+    case LEAVE_LOBBY:
       return { ...state, socketIoData: defaultSocketIdData }
 
     case ERROR_MULTIPLAYER:

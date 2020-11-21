@@ -20,6 +20,6 @@ export const fetchUserDataAction = (authData) => async (dispatch) => {
     dispatch({ type: FETCHED_USER_DATA, payload: userData })
     return mainApiResponses.successfully_retrieved_user_data
   } else {
-    console.log(message)
+    // console.log(message)
   }
 }

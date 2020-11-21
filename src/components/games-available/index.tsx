@@ -2,18 +2,17 @@ import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
-import socketIoControls, { commandsSocketIo } from '../../socket.io/socketIoControls';
+import joinGame from '../../actions/multiplayer/joinGame';
 import { rootT } from '../../store';
 import { reusableStyles } from '../../styles/stylesglobal';
-
 
 function GamesAvailable() {
   const dispatch = useDispatch()
   const username = useSelector((state: rootT) => state.multiplayer.username)
   const allAvailableLobbies = useSelector((state: rootT) => state.allAvailableLobbies)
 
-  const onClickHandler = (item) =>
-    dispatch(socketIoControls(commandsSocketIo.joinGame, { username, lobbyId: item.id }))
+  const onClickHandler = (lobbyId) =>
+    dispatch(joinGame({ username, lobbyId }))
 
   return (
     <ScrollView style={styles.scrollView} scrollEnabled={true}>
@@ -22,9 +21,9 @@ function GamesAvailable() {
           <TouchableOpacity
             key={lobbyData._id}
             style={reusableStyles.regBtn}
-            onPress={() => onClickHandler(lobbyData)}
+            onPress={() => onClickHandler(lobbyData.lobbyId)}
           >
-            <Text style={styles.text}>item.host</Text>
+            <Text style={styles.text}>{lobbyData.host.username}</Text>
           </TouchableOpacity>
         )}
       </View>
