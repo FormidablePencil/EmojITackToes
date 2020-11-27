@@ -1,24 +1,37 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { initialSqsT } from "../screens/TickTackToeScreen"
 import { socket } from "../socket.io/useSocketIo"
 import { rootT } from "../store"
+import { GameBoardInterface } from "../TypesTypeScript/TypesAndInterface"
 
-const useMultiplayerMove = ({ sq }: { sq: initialSqsT[] }) => {
+const useMultiplayerMove = ({ sq, setSq }: { sq: GameBoardInterface, setSq }) => {
   const socketIoData = useSelector((state: rootT) => state.multiplayer.socketIoData)
+  const gameboard = useSelector((state: rootT) => state.multiplayer.gameboard)
+  const [initialRender, setInitialRender] = useState(false)
 
   useEffect(() => {
-    console.log(sq, 'sqsqsqsqsq')
-    // console.log(sq.filter(square => square.sq0 || square.sq1 || square.sq2)[0])
-    // if (sq.filter(square => square)[0]) {
-    //   console.log('initial render')
-    // }
-    // socket.emit('multiplayer', {
-    //   lobbyData: { lobbyId: socketIoData.lobbyId },
-    //   boardgame: sq,
-    //   action: 'match up',
-    // })
-  }, [sq])
+    setSq(gameboard)
+  }, [gameboard])
+
+  useEffect(() => {
+    /* I don't want to socket.emit to other player gameboard (e.g sq) hasn't changed */
+    if (gameboard === sq)
+      return
+    if (!initialRender) {
+      console.log(sq, 'sqarw')
+      for (let col = 0; col < 3; col++) {
+        if (sq[col].sq0 || sq[col].sq1 || sq[col].sq2) {
+          setInitialRender(true)
+        }
+      }
+    } else {
+      socket.emit('multiplayer', {
+        lobbyData: { lobbyId: socketIoData.lobbyId },
+        boardgame: sq,
+        action: 'move',
+      })
+    }
+  }, [sq, initialRender])
 }
 
 export default useMultiplayerMove

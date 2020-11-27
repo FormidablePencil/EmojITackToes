@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Provider, Portal, Text, Title, Button, TouchableRipple, useTheme } from 'react-native-paper'
-import { View, Dimensions, LayoutAnimation, Image } from 'react-native'
+import { Modal, Text, useTheme } from 'react-native-paper'
+import { View, Dimensions } from 'react-native'
 import Board from '../components/Board'
 import { TopView, Score } from '../styles/stylesglobal'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import ModalContent from '../components/ModalContent'
 import { ScoresTypes, ModalContents, GameBoardInterface, WinnerSqsTypes } from '../TypesTypeScript/TypesAndInterface'
 import styled from 'styled-components'
-import ImageOverlay from "react-native-image-overlay";
-import { AnimatedEmoji } from 'react-native-animated-emoji';
-import EmojiBlizard from '../components/EmojiBlizard'
 import { gameLogic } from '../logic/gameLogic'
-import defaultIcon from 'react-native-paper/lib/typescript/src/components/MaterialCommunityIcon'
 import GameOverOverlay from '../components/GameOverOverlay'
 import { LinearGradient } from 'expo-linear-gradient'
 import AnimationOptions from '../components/AnimationOptions'
@@ -19,12 +15,11 @@ import useLobby from '../hooks/useLobby'
 import multiplayerMove from '../hooks/useMultiplayerMove'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
-export interface initialSqsT { sq0: any, sq1: any, sq2: any, }
-const initialSqs: initialSqsT[] = [
-   { sq0: null, sq1: null, sq2: null, },
-   { sq0: null, sq1: null, sq2: null, },
-   { sq0: null, sq1: null, sq2: null, },
-]
+export const initialSqs: GameBoardInterface = {
+   0: { sq0: null, sq1: null, sq2: null, },
+   1: { sq0: null, sq1: null, sq2: null, },
+   2: { sq0: null, sq1: null, sq2: null, },
+}
 
 const TickTackToeScreen = () => {
    useLobby()
@@ -45,7 +40,7 @@ const TickTackToeScreen = () => {
       setScore(initialScores)
    }
 
-   multiplayerMove({ sq })
+   multiplayerMove({ sq, setSq })
 
 
    useEffect(() => {

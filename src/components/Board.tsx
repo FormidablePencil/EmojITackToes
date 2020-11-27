@@ -20,7 +20,6 @@ const Board = ({
    const theme = useTheme()
 
    const handleOnPressSq = (boxPressed, col) => {
-
       if (gameOver) return
       if (sq[col][boxPressed] === null) {
          setSq({ ...sq, [col]: { ...sq[col], [boxPressed]: playerOneTurn ? sqTypes.p1 : sqTypes.p2 } })

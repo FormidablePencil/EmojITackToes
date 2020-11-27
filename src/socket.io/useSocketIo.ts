@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import socketIoClient from 'socket.io-client';
-import { JOINED_LOBBY } from '../actions/types';
+import { JOINED_LOBBY, UPATE_GAMEBOARD_MULTIPLAYER } from '../actions/types';
 import { rootT } from '../store';
 
 export let socket
@@ -27,9 +27,9 @@ const useSocketIo = () => {
       console.log('well')
 
       if (payload.action === 'match up')
-      dispatch({ type: JOINED_LOBBY, payload: payload.lobbyData })
-      else if (payload.action === 'move'){
-        console.log(payload.boardgame)
+        dispatch({ type: JOINED_LOBBY, payload: payload.lobbyData })
+      else if (payload.action === 'move') {
+        dispatch({ type: UPATE_GAMEBOARD_MULTIPLAYER, payload: payload.boardgame })
       }
 
       // console.log(payload.gameRoom === socketIoData, 'response from lobby')

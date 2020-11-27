@@ -28,10 +28,8 @@ export enum WinningDirection {
   vertical = 'vertical'
 }
 
-export interface GameBoardInterface {
-  // SqTypes.winner
-  [index: number]: { sq0: sqTypes, sq1: sqTypes, sq2: sqTypes, },
-}
+export interface GameBoardInterface { 0: gameBoardCol, 1: gameBoardCol, 2: gameBoardCol }
+interface gameBoardCol { sq0: sqTypes, sq1: sqTypes, sq2: sqTypes }
 
 export interface WinnerSqsTypes {
   playerWon: string | null,
