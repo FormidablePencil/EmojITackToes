@@ -78,7 +78,7 @@ const TickTackToeScreen = () => {
       </Score>
 
    return (
-      <ContainerLinearGradient colors={['#492C9A', '#456DAB']} start={[.1, .5]} theme={theme} height={SCREEN_HEIGHT}>
+      <BgLinearGradient theme={theme}>
          <TopView>
             <PlayerScore
                transparent={showInModal === ModalContents.GameMenu}
@@ -132,7 +132,7 @@ const TickTackToeScreen = () => {
                </>
             }
          </Modal>
-      </ContainerLinearGradient>
+      </BgLinearGradient>
    )
 }
 
@@ -195,10 +195,21 @@ export const TextPlayer = styled<any>(Text)`
    color: ${props => props.transparent ? 'transparent' : 'white'};
    font-size: 30px;
 `;
-export const ContainerLinearGradient = styled<any>(LinearGradient)`
-                  justify-content: space-around;
-   /* background-color: ${props => props.theme.colors.background}; */
-   height: ${props => props.height}px;
-`;
+
+export const BgLinearGradient = ({ children }: any, ...props) =>
+   <LinearGradient
+      {...props}
+      colors={['#492C9A', '#456DAB']}
+      start={[.1, .5]}
+      style={{
+         justifyContent: 'space-around',
+         /* background-color: ${props => props.theme.colors.background}; */
+         flex: 1,
+      }}
+   >
+      {children}</LinearGradient>
+
+// export const BgLinearGradient = styled<any>(LinearGradient)`
+// `;
 
 export default TickTackToeScreen

@@ -57,10 +57,18 @@ export const reusableStyles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#536aa1',
     borderWidth: 3,
+    elevation: 5,
     borderRadius: 6,
     backgroundColor: 'rgb(77, 60, 204)',
-    width: 150,
-    height: 50,
-    margin: 20,
+    width: 250,
+    height: 60,
+    margin: 15,
+  },
+  regText: {
+    color: '#d1faf0',
+  },
+  totallyCenter: {
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 })
