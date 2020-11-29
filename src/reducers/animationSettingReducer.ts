@@ -1,4 +1,5 @@
 import { RESET_ANIMATION_SETTING, SET_ANIMATION_SETTING } from "../actions/types"
+import { saveLocallyAnimationSetting } from "../hooks/useLocalStorage"
 
 const initialState = 'bounceIn'
 
@@ -26,9 +27,11 @@ export default (state = initialState, { type, payload }) => {
   switch (type) {
 
     case SET_ANIMATION_SETTING:
+      saveLocallyAnimationSetting(initialState)
       return payload
 
     case RESET_ANIMATION_SETTING:
+      saveLocallyAnimationSetting(initialState)
       return initialState
 
     default:

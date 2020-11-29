@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js add -D @types/unique-names-generator
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js remove @bit/formidablepencil.react-native-reusables.asyncStorageMethods
 
 PATH: 
   /Users/dennisaleksandrov/Downloads/google-cloud-sdk/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin
@@ -14,17 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2funique-names-generator: Not found
-      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:66988:18)
-      at Request.self.callback (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:140749:22)
-      at Request.emit (events.js:223:5)
-      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:141721:10)
-      at Request.emit (events.js:223:5)
-      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:141643:12)
-      at Object.onceWrapper (events.js:312:28)
-      at IncomingMessage.emit (events.js:228:7)
-      at endReadableNT (_stream_readable.js:1185:12)
-      at processTicksAndRejections (internal/process/task_queues.js:81:21)
+  Error: ENOENT: no such file or directory, lstat '/Users/dennisaleksandrov/Documents/code/apps/EmojITackToes/node_modules/@bit/formidablepencil.react-native-reusables.async-storage-methods/node_modules/@react-native-community/cli-server-api/node_modules'
 
 npm manifest: 
   {
@@ -39,6 +29,7 @@ npm manifest:
       "tsc": "tsc"
     },
     "dependencies": {
+      "@bit/formidablepencil.react-native-reusables.async-storage-methods": "file:./components/async-storage-methods",
       "@react-native-community/masked-view": "0.1.10",
       "@react-navigation/native": "^5.2.3",
       "@react-navigation/stack": "^5.2.18",
@@ -50,6 +41,7 @@ npm manifest:
       "install": "^0.13.0",
       "npm": "^6.14.4",
       "password-validator": "^5.0.3",
+      "random-fruits-name": "^1.4.0",
       "react": "16.13.1",
       "react-dom": "16.13.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
@@ -71,8 +63,7 @@ npm manifest:
       "redux": "^4.0.5",
       "redux-thunk": "^2.3.0",
       "socket.io-client": "^3.0.1",
-      "styled-components": "^5.1.0",
-      "unique-names-generator": "^4.3.1"
+      "styled-components": "^5.1.0"
     },
     "devDependencies": {
       "@babel/core": "^7.0.0",
@@ -91,7 +82,11 @@ npm manifest:
       "typescript": "~3.9.2"
     },
     "peerDependencies": {
-      "expo": "~36.0.0"
+      "@types/react": "~16.9.35",
+      "expo": "~36.0.0",
+      "react": "16.13.1",
+      "react-dom": "16.13.1",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz"
     },
     "private": true,
     "bit": {
@@ -6811,6 +6806,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/qw/-/qw-1.0.1.tgz#efbfdc740f9ad054304426acb183412cc8b996d4"
     integrity sha1-77/cdA+a0FQwRCassYNBLMi5ltQ=
   
+  random-fruits-name@^1.4.0:
+    version "1.4.0"
+    resolved "https://registry.yarnpkg.com/random-fruits-name/-/random-fruits-name-1.4.0.tgz#140c32cd70cb21f12333d7650aabf1329ae36ac2"
+    integrity sha512-Q/o5jvUp/5DCVsS7yX0uhWUw8ak29UrWeFMNI2qKJbB0VjfkOdCPTfNev8uPMHKZy+PzsuUK0kTAsjvSxTnzGA==
+  
   range-parser@~1.2.1:
     version "1.2.1"
     resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
@@ -8387,11 +8387,6 @@ Lockfile:
     integrity sha512-Vmp0jIp2ln35UTXuryvjzkjGdRyf9b2lTXuSYUiPmzRcl3FDtYqAwOnTJkAngD9SWhnoJzDbTKwaOrZ+STtxNQ==
     dependencies:
       unique-slug "^2.0.0"
-  
-  unique-names-generator@^4.3.1:
-    version "4.3.1"
-    resolved "https://registry.yarnpkg.com/unique-names-generator/-/unique-names-generator-4.3.1.tgz#f61ec2290b2f865894af01afb40f3e1043bb8fa2"
-    integrity sha512-oxkKrDXbwx6I5M963SdfmMH2t8n1OIfYyzoJ25BmDeETlyWAZjTbMXwIEMiQDex4lkD2pqe+9gxDJQAB2IOfDg==
   
   unique-slug@^2.0.0:
     version "2.0.2"

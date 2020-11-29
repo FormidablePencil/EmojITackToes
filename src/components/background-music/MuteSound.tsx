@@ -12,7 +12,6 @@ const MuteSound = () => {
   const dispatch = useDispatch()
   const onClickMute = () => dispatch({ type: TOGGLE_MUTE })
 
-
   return (
     <View style={styles.iconPosition}>
       <TouchableOpacity onPress={onClickMute}>
