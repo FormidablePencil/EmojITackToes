@@ -3,7 +3,7 @@ import { Modal, Text, useTheme } from 'react-native-paper'
 import { View, Dimensions } from 'react-native'
 import Board from '../components/board'
 import { TopView, Score } from '../styles/stylesglobal'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ModalContent from '../components/ModalContent'
 import { ScoresTypes, ModalContents, GameBoardInterface, WinnerSqsTypes } from '../TypesTypeScript/TypesAndInterface'
 import styled from 'styled-components'
@@ -12,9 +12,10 @@ import GameOverOverlay from '../components/GameOverOverlay'
 import { LinearGradient } from 'expo-linear-gradient'
 import AnimationOptions from '../components/AnimationOptions'
 import useLobby from '../hooks/useLobby'
-import multiplayerMove from '../hooks/useMultiplayerMove'
 import PageWrapper from '../layouts/PageWrapper'
 import { useNavigation } from '@react-navigation/native'
+import { STATE_NEW_GAME } from '../actions/types'
+import { rootT } from '../store'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 export const initialSqs: GameBoardInterface = {
@@ -34,18 +35,16 @@ const TickTackToeScreen = () => {
    const [modalOpen, setModalOpen] = useState(false)
    const [squaresFilled, setSquaresFilled] = useState(0)
    const [playerOneTurn, setPlayerOneTurn] = useState(false)
-   const [sq, setSq] = useState<GameBoardInterface>(initialSqs)
    const initialScores = { p1: 0, p2: 0 }
    const [showInModal, setShowInModal] = useState<ModalContents>(ModalContents.GameMenu)
    const [score, setScore] = useState<ScoresTypes>(initialScores)
+   const gameboard = useSelector((state: rootT) => state.gameboard)
+   const dispatch = useDispatch()
 
    const restartScore = () => {
       setScore(initialScores)
    }
-
-   multiplayerMove({ sq, setSq })
-
-
+   
    useEffect(() => {
       setShowInModal(ModalContents.GameOver)
       if (gameOver) setTimeout(() => { setModalOpen(true) }, 1000)
@@ -54,7 +53,7 @@ const TickTackToeScreen = () => {
    const startGame = async () => {
       console.log(333)
       setWonInfo(defaultWonInfo)
-      setSq(initialSqs)
+      dispatch({ type: STATE_NEW_GAME })
       setModalOpen(false)
       setShowInModal(ModalContents.none)
       setTimeout(() => {
@@ -64,13 +63,13 @@ const TickTackToeScreen = () => {
    }
 
    useEffect(() => {
-      const playerWon = gameLogic({ sq })
+      const playerWon = gameLogic({ gameboard })
       if (playerWon) setWonInfo(playerWon)
       if (playerWon) {
          setScore({ ...score, [playerWon.playerWon]: score[playerWon.playerWon] + 1 })
          setGameOver(true)
       }
-   }, [sq])
+   }, [gameboard])
 
    const onPressTopLeftIcon = () => navigation.navigate('menu')
 
@@ -100,8 +99,6 @@ const TickTackToeScreen = () => {
          </TopView>
          <Board
             wonInfo={wonInfo}
-            sq={sq}
-            setSq={setSq}
             playerOneTurn={playerOneTurn}
             setPlayerOneTurn={setPlayerOneTurn}
             gameOver={gameOver}

@@ -2,13 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import socketIoClient from 'socket.io-client';
-import { JOINED_LOBBY, UPATE_GAMEBOARD_MULTIPLAYER } from '../actions/types';
+import { CLIENT_TURN, JOINED_LOBBY, UPDATE_GAME_BOARD } from '../actions/types';
 import { rootT } from '../store';
+import { sqTypes } from '../TypesTypeScript/TypesAndInterface';
 
 export let socket
 
 const useSocketIo = () => {
-  const { username, socketIoData, enterLobby, error } = useSelector((state: rootT) => state.multiplayer)
+  const { username, socketIoData, enterLobby, error, clientIsHost } = useSelector((state: rootT) => state.multiplayer)
   const dispatch = useDispatch()
 
   const connectToSocketIo = () => {
@@ -25,11 +26,33 @@ const useSocketIo = () => {
 
   const connectToLobby = () => {
     socket.on(socketIoData.lobbyId, payload => {
-      if (payload.action === 'match up')
-        dispatch({ type: JOINED_LOBBY, payload: payload.lobbyData })
-      else if (payload.action === 'move') {
-        console.log('what is going on')
-        dispatch({ type: UPATE_GAMEBOARD_MULTIPLAYER, payload: payload.move })
+      switch (true) {
+
+        case payload.action === 'match up':
+          dispatch({ type: JOINED_LOBBY, payload: payload.lobbyData })
+          break;
+
+        case payload.action === 'move':
+          dispatch({
+            type: UPDATE_GAME_BOARD,
+            payload: {
+              col: payload.move.col,
+              boxPressed: payload.move.boxPressed,
+              player: clientIsHost ? sqTypes.p1 : sqTypes.p2,
+            },
+          })
+          dispatch({ type: CLIENT_TURN })
+          break;
+
+        case payload.action === 'character changed':
+          dispatch({
+            playerCharacter: payload.playerCharacter,
+            animation: payload.animation
+          })
+          break;
+
+        default:
+          break;
       }
     })
   }

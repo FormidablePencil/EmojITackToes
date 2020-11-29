@@ -13,8 +13,6 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 
 const Board = ({
    wonInfo,
-   sq,
-   setSq,
    gameOver,
    setGameOver,
    squaresFilled,
@@ -22,9 +20,10 @@ const Board = ({
    playerOneTurn,
    setPlayerOneTurn }: BoardTypes) => {
    const theme = useTheme()
-
+   const gameboard = useSelector((state: rootT) => state.gameboard)
+   
    const { handleOnPressSq } = useGameControlCenter(
-      { gameOver, setSq, sq, playerOneTurn, sqTypes, setPlayerOneTurn, squaresFilled, setSquaresFilled, setGameOver }
+      { gameOver, playerOneTurn, sqTypes, setPlayerOneTurn, squaresFilled, setSquaresFilled, setGameOver }
    )
 
    return (
@@ -34,27 +33,27 @@ const Board = ({
                gameOver={gameOver}
                wonInfo={wonInfo}
                winningSqare={wonInfo.cols.filter(col => col === 0)[0] === 0 ? wonInfo.sqs : []}
-               first={sq[0].sq0 !== null ? sq[0].sq0 : null}
-               second={sq[0].sq1 !== null ? sq[0].sq1 : null}
-               third={sq[0].sq2 !== null ? sq[0].sq2 : null}
+               first={gameboard[0].sq0 !== null ? gameboard[0].sq0 : null}
+               second={gameboard[0].sq1 !== null ? gameboard[0].sq1 : null}
+               third={gameboard[0].sq2 !== null ? gameboard[0].sq2 : null}
                handleOnPressSq={handleOnPressSq} col={0} />
             <HorizontalLine theme={theme} />
             <ColComp
                gameOver={gameOver}
                wonInfo={wonInfo}
                winningSqare={wonInfo.cols.filter(col => col === 1)[0] === 1 ? wonInfo.sqs : []}
-               first={sq[1].sq0 !== null ? sq[1].sq0 : null}
-               second={sq[1].sq1 !== null ? sq[1].sq1 : null}
-               third={sq[1].sq2 !== null ? sq[1].sq2 : null}
+               first={gameboard[1].sq0 !== null ? gameboard[1].sq0 : null}
+               second={gameboard[1].sq1 !== null ? gameboard[1].sq1 : null}
+               third={gameboard[1].sq2 !== null ? gameboard[1].sq2 : null}
                handleOnPressSq={handleOnPressSq} col={1} />
             <HorizontalLine theme={theme} />
             <ColComp
                gameOver={gameOver}
                wonInfo={wonInfo}
                winningSqare={wonInfo.cols.filter(col => col === 2)[0] === 2 ? wonInfo.sqs : []}
-               first={sq[2].sq0 !== null ? sq[2].sq0 : null}
-               second={sq[2].sq1 !== null ? sq[2].sq1 : null}
-               third={sq[2].sq2 !== null ? sq[2].sq2 : null}
+               first={gameboard[2].sq0 !== null ? gameboard[2].sq0 : null}
+               second={gameboard[2].sq1 !== null ? gameboard[2].sq1 : null}
+               third={gameboard[2].sq2 !== null ? gameboard[2].sq2 : null}
                handleOnPressSq={handleOnPressSq} col={2} />
          </Row>
       </GameContainer>

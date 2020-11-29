@@ -1,6 +1,4 @@
-import { ERROR_MULTIPLAYER, JOINED_LOBBY, LOBBY_HOSTED, LEAVE_LOBBY, UPDATE_USERNAME, MATCH_FOUND, UPATE_GAMEBOARD_MULTIPLAYER } from "../actions/types"
-import { initialSqs } from "../screens/TickTackToeScreen"
-import { GameBoardInterface } from "../TypesTypeScript/TypesAndInterface"
+import { ERROR_MULTIPLAYER, JOINED_LOBBY, LOBBY_HOSTED, LEAVE_LOBBY, UPDATE_USERNAME, MATCH_FOUND, CLIENT_TURN, END_CLIENT_TURN } from "../actions/types"
 
 export interface multiplayerT {
   socketIoData: {
@@ -17,7 +15,6 @@ export interface multiplayerT {
   enterLobby: boolean,
   error: null,
   username: string,
-  gameboard: GameBoardInterface,
   isClientTurn: boolean,
 }
 
@@ -38,7 +35,6 @@ const initialState: multiplayerT = {
   enterLobby: false,
   error: null,
   username: '',
-  gameboard: initialSqs,
   isClientTurn: false,
 }
 
@@ -49,7 +45,6 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, username: payload }
 
     case LOBBY_HOSTED:
-      console.log(payload.initialTurnIsHost)
       return {
         ...state,
         socketIoData: { ...defaultSocketIdData, ...payload },
@@ -65,14 +60,17 @@ export default (state = initialState, { type, payload }) => {
       }
 
     case LEAVE_LOBBY:
-      return { ...state, socketIoData: defaultSocketIdData, gameboard: initialSqs, clientIsHost: false }
+      return { ...state, socketIoData: defaultSocketIdData, clientIsHost: false }
 
-    case UPATE_GAMEBOARD_MULTIPLAYER:
-      console.log(payload, 'move?')
-      return { ...state, gameboard: { ...state.gameboard, [payload.col]: payload.boxPressed } }
 
     case ERROR_MULTIPLAYER:
       return { ...state, error: payload }
+
+    case END_CLIENT_TURN:
+      return { ...state, isClientTurn: false }
+
+    case CLIENT_TURN:
+      return { ...state, isClientTurn: true }
 
     default:
       return state

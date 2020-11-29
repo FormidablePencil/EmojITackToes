@@ -1,4 +1,4 @@
-import { CHANGE_P1_CHARACTER, CHANGE_P2_CHARACTER, WHOLE_NEW_PLAYER_CHARACTERS } from "../actions/types"
+import { CHANGE_P1_CHARACTER, CHANGE_P2_CHARACTER, UPDATE_CHARACTER_AND_ANIM, WHOLE_NEW_PLAYER_CHARACTERS } from "../actions/types"
 
 export interface playerCharacterSettingsTypes {
    playerCharacter: {
@@ -11,8 +11,8 @@ export interface playerCharacterSettingsTypes {
    }
 }
 const initialState: playerCharacterSettingsTypes = {
-   playerCharacter: { 1: '🐷', 2: '🐵' },
-   animation: { 1: 'rotate', 2: 'rotate' }
+   playerCharacter: { 1: '🐷', 2: '🐵' },/* //! characters must be saved and pulled from local storage */
+   animation: { 1: 'rotate', 2: 'rotate' },
 }
 
 
@@ -21,6 +21,14 @@ export default (state = initialState, { type, payload }) => {
 
       case WHOLE_NEW_PLAYER_CHARACTERS:
          return payload
+
+      case UPDATE_CHARACTER_AND_ANIM:
+         /* player, playerCharacter, animation */
+         return {
+            ...state,
+            playerCharacter: { ...state.playerCharacter, [payload.player]: payload.playerCharacter },
+            animation: { ...state.animation, [payload.player]: payload.animation },
+         }
 
       default:
          return state

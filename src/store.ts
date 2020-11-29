@@ -6,8 +6,11 @@ import animationSettingReducer from './reducers/animationSettingReducer'
 import multiplayerReducer, { multiplayerT } from './reducers/multiplayerReducer'
 import allAvailableLobbiesReducer, { lobbyDataT } from './reducers/allAvailableLobbiesReducer'
 import muteReducer from './reducers/muteReducer'
+import gameboardReducer from './reducers/gameboardReducer'
+import { GameBoardInterface } from './TypesTypeScript/TypesAndInterface'
 
 export interface rootT {
+  gameboard: GameBoardInterface
   playerCharacterSettings: any
   authData: any
   animationSetting: any
@@ -16,6 +19,7 @@ export interface rootT {
   mute: boolean,
 }
 const rootReducer = combineReducers<rootT>({
+  gameboard: gameboardReducer,
   playerCharacterSettings: playerCharacterSettingsReducer,
   authData: authDataReducer,
   animationSetting: animationSettingReducer,
