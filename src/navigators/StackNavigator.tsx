@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-import TickTackToeScreen from '../screens/TickTackToeScreen';
+import TickTackToeScreen from '../screens/tick-tack-toe-page';
 import { NavigationContainer } from '@react-navigation/native';
 import useSocketIo from '../socket.io/useSocketIo';
 import FindMatchScreen from '../screens/find-match-page';

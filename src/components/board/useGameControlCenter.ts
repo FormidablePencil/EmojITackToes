@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { END_CLIENT_TURN, UPDATE_GAME_BOARD } from "../../actions/types"
 import useCheckIfOnlineGame from "../../hooks/useCheckIfOnlineGame"
+import socketIoCommands from "../../socket.io/socketIoCommandCenter"
 import { socket } from "../../socket.io/useSocketIo"
 import { rootT } from "../../store"
 
@@ -49,13 +50,8 @@ const useGameControlCenter = (
       }
    }
 
-   const sendMoveMadeToOtherPlayer = ({ boxPressed, col }) => {
-      socket.emit('multiplayer', {
-         action: 'move',
-         lobbyData: { lobbyId: socketIoData.lobbyId },
-         move: { boxPressed, col },
-      })
-   }
+   const sendMoveMadeToOtherPlayer = ({ boxPressed, col }) =>
+      socketIoCommands.makeMove({ lobbyId: socketIoData.lobbyId, boxPressed, col })
 
    const makeMoveInGameBoard = ({ boxPressed, col }) => {
       if (ifOnlineGame) {
@@ -65,7 +61,8 @@ const useGameControlCenter = (
             dispatch({ type: END_CLIENT_TURN })
          }
       } else {
-         // changeGameboard({ boxPressed, col })
+         /* //! local mode */
+         // changeGameboard({ boxPressed, col }) 
       }
    }
 

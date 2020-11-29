@@ -1,3 +1,4 @@
+import socketIoCommands from "../../socket.io/socketIoCommandCenter";
 import { socket } from "../../socket.io/useSocketIo";
 import { ERROR_MULTIPLAYER, JOINED_LOBBY } from "../types";
 
@@ -19,7 +20,7 @@ const joinGame = ({ username, lobbyId }) => async dispatch => {
 
   if (resJoin.status === 200) {
     type = JOINED_LOBBY
-    socket.emit('multiplayer', { lobbyData: joinPayload, action: 'match up' })
+    socketIoCommands.matchUp({ lobbyData: joinPayload })
   }
   else type = ERROR_MULTIPLAYER
 

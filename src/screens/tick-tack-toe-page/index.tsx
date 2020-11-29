@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Text, useTheme } from 'react-native-paper'
+import { Text, useTheme } from 'react-native-paper'
 import { View, Dimensions } from 'react-native'
-import Board from '../components/board'
-import { TopView, Score } from '../styles/stylesglobal'
+import Board from '../../components/board'
+import { TopView, Score } from '../../styles/stylesglobal'
 import { useDispatch, useSelector } from 'react-redux'
-import ModalContent from '../components/ModalContent'
-import { ScoresTypes, ModalContents, GameBoardInterface, WinnerSqsTypes } from '../TypesTypeScript/TypesAndInterface'
+import ModalContent from '../../components/ModalContent'
+import { ScoresTypes, ModalContents, GameBoardInterface, WinnerSqsTypes } from '../../TypesTypeScript/TypesAndInterface'
 import styled from 'styled-components'
-import { gameLogic } from '../components/board/gameLogic'
-import GameOverOverlay from '../components/GameOverOverlay'
+import { gameLogic } from '../../components/board/gameLogic'
+import GameOverOverlay from '../../components/GameOverOverlay'
 import { LinearGradient } from 'expo-linear-gradient'
-import AnimationOptions from '../components/AnimationOptions'
-import useLobby from '../hooks/useLobby'
-import PageWrapper from '../layouts/PageWrapper'
+import useLobby from '../../hooks/useLobby'
+import PageWrapper from '../../layouts/PageWrapper'
 import { useNavigation } from '@react-navigation/native'
-import { STATE_NEW_GAME } from '../actions/types'
-import { rootT } from '../store'
+import { STATE_NEW_GAME } from '../../actions/types'
+import { rootT } from '../../store'
+import MenuModal from './components/MenuModal'
+import PlayerScores from './components/PlayerScores'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 export const initialSqs: GameBoardInterface = {
@@ -27,7 +28,6 @@ export const initialSqs: GameBoardInterface = {
 const TickTackToeScreen = () => {
    useLobby()
    const { playerCharacter } = useSelector((state: any) => state.playerCharacterSettings)
-   const theme = useTheme()
    const navigation = useNavigation()
    const defaultWonInfo = { playerWon: null, cols: [null], sqs: [null], direction: null }
    const [wonInfo, setWonInfo] = useState<WinnerSqsTypes>(defaultWonInfo)
@@ -44,14 +44,13 @@ const TickTackToeScreen = () => {
    const restartScore = () => {
       setScore(initialScores)
    }
-   
+
    useEffect(() => {
       setShowInModal(ModalContents.GameOver)
       if (gameOver) setTimeout(() => { setModalOpen(true) }, 1000)
    }, [gameOver])
 
    const startGame = async () => {
-      console.log(333)
       setWonInfo(defaultWonInfo)
       dispatch({ type: STATE_NEW_GAME })
       setModalOpen(false)
@@ -73,30 +72,18 @@ const TickTackToeScreen = () => {
 
    const onPressTopLeftIcon = () => navigation.navigate('menu')
 
-   const PlayerScore = ({ transparent, score, active, playerCharacter }) =>
-      <Score>
-         <StandardText transparent={transparent}>{score}</StandardText>
-         <PlayerEmojiContainer transparent={transparent} theme={theme} active={active}>
-            <TextPlayer>{playerCharacter}</TextPlayer>
-         </PlayerEmojiContainer>
-      </Score>
 
    return (
       <PageWrapper icon='menu' onPressTopLeftIcon={onPressTopLeftIcon}>
-         <TopView>
-            <PlayerScore
-               transparent={showInModal === ModalContents.GameMenu}
-               score={score.p1}
-               active={playerOneTurn === true}
-               playerCharacter={showInModal !== ModalContents.GameMenu && playerCharacter[1]}
-            />
-            <PlayerScore
-               transparent={showInModal === ModalContents.GameMenu}
-               score={score.p2}
-               active={playerOneTurn === false}
-               playerCharacter={showInModal !== ModalContents.GameMenu && playerCharacter[2]}
-            />
-         </TopView>
+
+         <PlayerScores
+            ModalContents={ModalContents}
+            showInModal={showInModal}
+            score={score}
+            playerOneTurn={playerOneTurn}
+            playerCharacter={playerCharacter}
+         />
+
          <Board
             wonInfo={wonInfo}
             playerOneTurn={playerOneTurn}
@@ -106,63 +93,30 @@ const TickTackToeScreen = () => {
             squaresFilled={squaresFilled}
             setSquaresFilled={setSquaresFilled}
          />
+
          <View style={{ flex: .4 }}></View>
+
          <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
-            {gameOver && showInModal === ModalContents.GameOver ?
-               <>
-                  <GameOverOverlay
-                     setShowInModal={setShowInModal}
-                     startGame={startGame}
-                  />
-               </>
-               : null
+            {gameOver && showInModal === ModalContents.GameOver &&
+               <GameOverOverlay setShowInModal={setShowInModal} startGame={startGame} />
             }
          </View>
-         <Modal
-            dismissable={false} visible={modalOpen && showInModal === ModalContents.GameMenu || showInModal === ModalContents.animationSettings ? true : false}>
-            {showInModal === ModalContents.GameMenu ?
-               <ModalContent
-                  setShowInModal={setShowInModal}
-                  restartScore={restartScore}
-                  score={score}
-                  gameOver={gameOver}
-                  startGame={startGame}
-               />
-               : (showInModal === ModalContents.animationSettings) &&
-               <>
-                  <AnimationOptions setShowInModal={setShowInModal} startGame={startGame} />
-               </>
-            }
-         </Modal>
-      </PageWrapper>
+
+         <MenuModal
+            modalOpen={modalOpen}
+            showInModal={showInModal}
+            ModalContents={ModalContents}
+            setShowInModal={setShowInModal}
+            restartScore={restartScore}
+            score={score}
+            gameOver={gameOver}
+            startGame={startGame}
+         />
+      </PageWrapper >
    )
 }
 
-const PlayerEmojiContainer = styled<any>(View)`
-         height: 60px;
-         width:  60px;
-         border-radius: 10px;
-         border-color: white;
-         justify-content: center;
-         align-items: center;
-         border-width: .8px;
-${({ theme, active, transparent }) => {
-      if (theme && active && !transparent) {
-         if (theme.colors) {
-            let color = theme.colors.primary
-            color = color.replace("1.0)", ".4)");
-            // return color
-            return [
-               `background-color: ${color};`,
-            ]
-         }
-      } else {
-         return [
-            `border-color: transparent`
-         ]
-      }
-   }}
-      `;
+
 export const StandardText = styled<any>(Text)`
    color: ${props => props.transparent ? 'transparent' : 'white'};
    font-size: 40px;

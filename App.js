@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Text, StatusBar } from 'react-native';
 import * as Font from 'expo-font' //fonts
-import TickTackToeScreen from './src/screens/TickTackToeScreen';
 import { Provider } from 'react-redux'
 import { Button, Provider as PaperProvider } from 'react-native-paper'
 import configureStore from './src/store';
 import { TickTackToeTheme } from './src/styles/theming';
 import StackNavigator from './src/navigators/StackNavigator'
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LogBox } from 'react-native'
 
 LogBox.ignoreLogs([

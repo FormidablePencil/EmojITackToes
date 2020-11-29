@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { TouchableRipple } from 'react-native-paper';
 import { reusableStyles } from '../styles/stylesglobal'
-import { BgLinearGradient } from './TickTackToeScreen';
+import { BgLinearGradient } from './tick-tack-toe-page';
 
 function MenuScreen() {
   const navigation = useNavigation()
