@@ -4,7 +4,7 @@ import { View, Dimensions } from 'react-native'
 import Board from '../../components/board'
 import { TopView, Score } from '../../styles/stylesglobal'
 import { useDispatch, useSelector } from 'react-redux'
-import ModalContent from '../../components/ModalContent'
+import ModalContent from '../../components/modalComp/modal-content'
 import { ScoresTypes, ModalContents, GameBoardInterface, WinnerSqsTypes } from '../../TypesTypeScript/TypesAndInterface'
 import styled from 'styled-components'
 import { gameLogic } from '../../components/board/gameLogic'
@@ -17,6 +17,7 @@ import { STATE_NEW_GAME } from '../../actions/types'
 import { rootT } from '../../store'
 import MenuModal from './components/MenuModal'
 import PlayerScores from './components/PlayerScores'
+import useCheckIfOnlineGame from '../../hooks/useCheckIfOnlineGame'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 export const initialSqs: GameBoardInterface = {
@@ -40,6 +41,15 @@ const TickTackToeScreen = () => {
    const [score, setScore] = useState<ScoresTypes>(initialScores)
    const gameboard = useSelector((state: rootT) => state.gameboard)
    const dispatch = useDispatch()
+   const ifOnlineGame = useCheckIfOnlineGame()
+
+   // useReadyUp()
+   const readyUp = useSelector((state: rootT) => state.multiplayer.readyUp)
+   const opposingPlayerReadyUp = useSelector((state: rootT) => state.multiplayer.opposingPlayerReadyUp)
+   useEffect(() => {
+      if (ifOnlineGame && readyUp && opposingPlayerReadyUp) startGame()
+   }, [readyUp, opposingPlayerReadyUp])
+
 
    const restartScore = () => {
       setScore(initialScores)
@@ -70,11 +80,11 @@ const TickTackToeScreen = () => {
       }
    }, [gameboard])
 
-   const onPressTopLeftIcon = () => navigation.navigate('menu')
+   const onPressTopRightIcon = () => navigation.navigate('menu')
 
 
    return (
-      <PageWrapper icon='menu' onPressTopLeftIcon={onPressTopLeftIcon}>
+      <PageWrapper icon='menu' onPressTopRightIcon={onPressTopRightIcon}>
 
          <PlayerScores
             ModalContents={ModalContents}
@@ -112,7 +122,7 @@ const TickTackToeScreen = () => {
             gameOver={gameOver}
             startGame={startGame}
          />
-      </PageWrapper >
+      </PageWrapper>
    )
 }
 

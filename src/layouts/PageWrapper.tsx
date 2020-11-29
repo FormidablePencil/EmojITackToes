@@ -1,15 +1,20 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import { Text } from 'react-native-paper'
 import { Feather } from '@expo/vector-icons';
 import { BgLinearGradient } from '../screens/tick-tack-toe-page';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { reusableStyles } from '../styles/stylesglobal';
 
-const PageWrapper = ({ children, onPressTopLeftIcon, icon }) => {
+const PageWrapper = ({ children, onPressTopRightIcon, icon }: { children, onPressTopRightIcon, icon?}) => {
 
   const Icon = () =>
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPressTopLeftIcon}>
-        <Feather name={icon} size={32} color="white" />
+      <TouchableOpacity onPress={onPressTopRightIcon}>
+        {icon ?
+          <Feather name={icon} size={32} color="white" />
+          : <Text style={reusableStyles.regText}>Quit</Text>
+        }
       </TouchableOpacity>
     </View>
 

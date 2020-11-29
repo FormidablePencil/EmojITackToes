@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import socketIoClient from 'socket.io-client';
-import { CLIENT_TURN, JOINED_LOBBY, UPDATE_GAME_BOARD } from '../actions/types';
+import { CLIENT_TURN, JOINED_LOBBY, OPPOSING_PLAYER_READY_UP, READY_UP, UPDATE_CHARACTER, UPDATE_GAME_BOARD } from '../actions/types';
 import { rootT } from '../store';
 import { sqTypes } from '../TypesTypeScript/TypesAndInterface';
 
@@ -24,7 +24,7 @@ const useSocketIo = () => {
     });
   }
 
-  const connectToLobby = () => {
+  const gameLobby = () => {
     socket.on(socketIoData.lobbyId, payload => {
       switch (true) {
 
@@ -46,9 +46,13 @@ const useSocketIo = () => {
 
         case payload.action === 'character changed':
           dispatch({
-            playerCharacter: payload.playerCharacter,
-            animation: payload.animation
+            type: UPDATE_CHARACTER,
+            payload: { emoji: payload.emoji, player: clientIsHost ? 1 : 2 },
           })
+          break;
+
+        case payload.action === 'ready up':
+          dispatch({ type: OPPOSING_PLAYER_READY_UP })
           break;
 
         default:
@@ -64,7 +68,7 @@ const useSocketIo = () => {
 
   useEffect(() => {
     if (socketIoData.lobbyId)
-      connectToLobby()
+      gameLobby()
   }, [socketIoData.lobbyId])
 }
 

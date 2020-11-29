@@ -3,18 +3,32 @@ import { ModalContents } from "./../TypesTypeScript/TypesAndInterface"
 import { View } from 'react-native'
 import { TouchableRipple, withTheme, Text } from 'react-native-paper'
 import styled from 'styled-components'
+import { ReadyUpTxt } from '../reusables/ReadyUpTxt'
+import useCheckIfOnlineGame from '../hooks/useCheckIfOnlineGame'
+import { useDispatch, useSelector } from 'react-redux'
+import socketIoCommands from '../socket.io/socketIoCommandCenter'
+import { rootT } from '../store'
+import { READY_UP } from '../actions/types'
 
 const GameOverOverlay = ({ setShowInModal, startGame, theme }) => {
+  const isOnlineGame = useCheckIfOnlineGame()
+  const dispatch = useDispatch()
+  const lobbyId = useSelector((state: rootT) => state.multiplayer.socketIoData.lobbyId)
 
   enum Action {
     goToSelectCharacter,
-    playAgain
+    readyUp
   }
   const onPressHandler = (action) => {
     if (action === Action.goToSelectCharacter) {
       setShowInModal(ModalContents.GameMenu)
-    } else if (action === Action.playAgain) {
-      startGame()
+    } else if (action === Action.readyUp) {
+      if (isOnlineGame) {
+        socketIoCommands.readyUp(lobbyId)
+        dispatch({ type: READY_UP })
+      } else {
+        startGame()
+      }
     }
   }
 
@@ -33,9 +47,11 @@ const GameOverOverlay = ({ setShowInModal, startGame, theme }) => {
           </TouchableRippleStyled>
           <TouchableRippleStyled
             theme={theme}
-            onPress={() => onPressHandler(Action.playAgain)}
+            onPress={() => onPressHandler(Action.readyUp)}
           >
-            <TextStyled>Play again</TextStyled>
+            <TextStyled>
+              <ReadyUpTxt />
+            </TextStyled>
           </TouchableRippleStyled>
         </BtnContainer>
       </JustifyCol>
@@ -55,7 +71,7 @@ const TouchableRippleStyled = styled(TouchableRipple)`
     let color = props.theme.colors.primary
     const transparentColor = color.replace("1.0)", ".9)");
     return transparentColor
-    }};
+  }};
   border-radius: 10px;
   padding: 5px 20px;
   justify-content: center;

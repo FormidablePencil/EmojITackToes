@@ -62,7 +62,7 @@ const useGameControlCenter = (
          }
       } else {
          /* //! local mode */
-         // changeGameboard({ boxPressed, col }) 
+         changeGameboard({ boxPressed, col }) 
       }
    }
 

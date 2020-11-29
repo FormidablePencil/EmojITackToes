@@ -7,12 +7,14 @@ import FindMatchScreen from '../screens/find-match-page';
 import MenuScreen from '../screens/MenuScreen';
 import MuteSound from '../components/background-music/MuteSound';
 import useMusicBackground from '../hooks/useMusicBackground';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
   useSocketIo()
   useMusicBackground()
+  useLocalStorage()
 
   return (
     <NavigationContainer>

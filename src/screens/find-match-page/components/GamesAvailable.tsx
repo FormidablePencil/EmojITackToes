@@ -5,11 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import joinGame from '../../../actions/multiplayer/joinGame';
 import { rootT } from '../../../store';
 import { reusableStyles } from '../../../styles/stylesglobal';
+import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator'
 
 function GamesAvailable() {
   const dispatch = useDispatch()
   const username = useSelector((state: rootT) => state.multiplayer.username)
   const allAvailableLobbies = useSelector((state: rootT) => state.allAvailableLobbies)
+  const lobbyId = useSelector((state: rootT) => state.multiplayer.socketIoData.lobbyId)
 
   const onClickHandler = (lobbyId) =>
     dispatch(joinGame({ username, lobbyId }))
@@ -17,15 +19,18 @@ function GamesAvailable() {
   return (
     <ScrollView style={styles.scrollView} scrollEnabled={true}>
       <View style={styles.container}>
-        {allAvailableLobbies.map(lobbyData =>
-          <TouchableOpacity
-            key={lobbyData._id}
-            style={reusableStyles.regBtn}
-            onPress={() => onClickHandler(lobbyData.lobbyId)}
-          >
-            <Text style={reusableStyles.regText}>{lobbyData.host.username}</Text>
-          </TouchableOpacity>
-        )}
+        {allAvailableLobbies.map(lobbyData => {
+          if (lobbyData.lobbyId === lobbyId) return null
+          return (
+            <TouchableOpacity
+              key={lobbyData._id}
+              style={reusableStyles.regBtn}
+              onPress={() => onClickHandler(lobbyData.lobbyId)}
+            >
+              <Text style={reusableStyles.regText}>{lobbyData.host.username}</Text>
+            </TouchableOpacity>
+          )
+        })}
       </View>
     </ScrollView >
   )

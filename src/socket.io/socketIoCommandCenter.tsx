@@ -10,6 +10,28 @@ const socketIoCommands = {
       lobbyData: { lobbyId },
       move: { boxPressed: boxPressed, col },
     })
+  },
+  characterSelected: (emoji, player, lobbyId) => {
+    socket.emit('multiplayer', {
+      lobbyData: {lobbyId},
+      emoji,
+      player,
+      action: 'character changed'
+    })
+  },
+
+
+  readyUp: (lobbyId) => {
+    socket.emit('multiplayer', {
+      lobbyData:{lobbyId},
+      action: 'ready up'
+    })
+  },
+  quitGame: (lobbyId) => {
+    socket.emit('multiplayer', {
+      lobbyData: {lobbyId},
+      action: 'ready up'
+    })
   }
 }
 

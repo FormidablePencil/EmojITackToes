@@ -4,16 +4,23 @@ import { Button, withTheme, Title, Text, Subheading, TouchableRipple, useTheme, 
 import styled from 'styled-components';
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 import { useSelector, useDispatch } from 'react-redux';
-import { playerCharacterSettingsTypes } from '../reducers/playerCharacterSettingsReducer';
-import { ScoresTypes, ScoresCompTypes, Players, ModalContents } from '../TypesTypeScript/TypesAndInterface';
-import { WHOLE_NEW_PLAYER_CHARACTERS, REST_AUTH_DATA } from '../actions/types';
+import { playerCharacterSettingsTypes } from '../../../reducers/playerCharacterSettingsReducer';
+import { ScoresTypes, ScoresCompTypes, Players, ModalContents } from '../../../TypesTypeScript/TypesAndInterface';
+import { WHOLE_NEW_PLAYER_CHARACTERS, REST_AUTH_DATA, READY_UP } from '../../../actions/types';
 import { LinearGradient } from 'expo-linear-gradient';
-import ScoresAndEmojiSecection from './modalComp/ScoresAndEmojiSecection';
+import ScoresAndEmojiSecection from '../ScoresAndEmojiSecection';
 import { useNavigation } from '@react-navigation/native'
+import ActionButtons from './ActionButtons';
+import EmojiSelection from './EmojiSelection'
+import useCheckIfOnlineGame from '../../../hooks/useCheckIfOnlineGame';
+import socketIoCommands from '../../../socket.io/socketIoCommandCenter';
+import { rootT } from '../../../store';
 
 
 const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal }) => {
-  const playerCharacterSettings = useSelector((state: any) => state.playerCharacterSettings)
+  const playerCharacterSettings = useSelector((state: rootT) => state.playerCharacterSettings)
+  const clientIsHost = useSelector((state: rootT) => state.multiplayer.clientIsHost)
+  const lobbyId = useSelector((state: rootT) => state.multiplayer.socketIoData.lobbyId)
   const [controlledInputs, setControlledInputs] = useState<playerCharacterSettingsTypes>(playerCharacterSettings)
   const [selectedPlayerToChooseCharacter, setSelectedPlayerToChooseCharacter] = useState<Players>(null)
   const [showEmojiSelector, setShowEmojiSelector] = useState(false)
@@ -22,6 +29,7 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
   const dispatch = useDispatch()
   const theme = useTheme()
   const navigation = useNavigation()
+  const isOnlineGame = useCheckIfOnlineGame()
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => setKeyboardPresent(true))
@@ -43,7 +51,18 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
 
 
   const onEmojiSelectHandler = (emoji) => {
-    setControlledInputs({ ...controlledInputs, playerCharacter: { ...controlledInputs.playerCharacter, [selectedPlayerToChooseCharacter + 1]: emoji } })
+    if (isOnlineGame)
+      if (clientIsHost && selectedPlayerToChooseCharacter === Players.p1
+        || !clientIsHost && selectedPlayerToChooseCharacter === Players.p2) {
+        socketIoCommands.characterSelected(emoji, clientIsHost ? 1 : 2, lobbyId)
+      }
+    setControlledInputs({
+      ...controlledInputs,
+      playerCharacter: {
+        ...controlledInputs.playerCharacter,
+        [selectedPlayerToChooseCharacter + 1]: emoji
+      }
+    })
   }
 
   const onPressHandler = (action) => {
@@ -58,8 +77,13 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
         break
 
       case onPress.startGame:
-        dispatch({ type: WHOLE_NEW_PLAYER_CHARACTERS, payload: controlledInputs })
-        startGame()
+        if (isOnlineGame) {
+          socketIoCommands.readyUp(lobbyId)
+          dispatch({ type: READY_UP })
+        } else {
+          dispatch({ type: WHOLE_NEW_PLAYER_CHARACTERS, payload: controlledInputs })
+          startGame()
+        }
         break
       case onPress.restartScore:
         restartScore()
@@ -78,13 +102,6 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
   //make player 1 & 2 controlled and hook uo emojiSelector to the controlled input to save as that
   //right now fix keyboard
 
-  const NavigateToFindMatch = () =>
-    <TouchableRipple
-      style={{ height: 30, width: 100, backgroundColor: 'white', position: "absolute", alignSelf: 'center', bottom: 20 }}
-      onPress={() => onPressHandler(onPress.navFindMatch)}>
-      <Text>Find match</Text>
-    </TouchableRipple>
-
   return (
     <TouchableWithoutFeedback onPress={onPressHandler}>
       <AlignAllContainer style={{ width: '90%', alignSelf: 'center' }}>
@@ -96,7 +113,7 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
             overflow: 'hidden',
             // elevation: 20,
           }}
-          source={require('../assets/images/smiley-1041796_1920.jpg')}
+          source={require('../../../assets/images/smiley-1041796_1920.jpg')}
         >
           <ModalContainerLinearGradient theme={theme} colors={['rgba(203,29,131,.8)', 'rgba(47,6,122,1)']}>
             <KeyboardAvoidingView style={{ height: '100%' }} keyboardVerticalOffset={120} behavior='padding'>
@@ -113,38 +130,13 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
                   </Text>
                 </Button>
               } */}
-              <NavigateToFindMatch />
 
-
-              {selectedPlayerToChooseCharacter === Players.p1 || selectedPlayerToChooseCharacter === Players.p2 ?
-                <FlexContainer style={{ marginHorizontal: 40, marginVertical: 20, flex: 5 }}>
-                  <View style={{ width: '100%', height: '100%' }}>
-                    <EmojiSelector
-                      tabBottomBoarderColor={'lightgrey'}
-                      emojiSelectorContainerOverride={{ backgroundColor: theme.colors.accent, borderRadius: 10, paddingTop: 5 }}
-                      theme={theme.colors.primary}
-                      showSearchBar={false}
-                      searchBarBgColor={'#C8FFF8'}
-                      showSectionTitles={false}
-                      showTabs={true}
-                      category={Categories.emotion}
-                      onEmojiSelected={emoji => onEmojiSelectHandler(emoji)}
-                    />
-                  </View>
-                </FlexContainer>
-                :
-                <FlexContainer style={{ margin: 50, flex: 1 }}>
-                  <Text style={{
-                    fontSize: 25, color: "white",
-                    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-                    textShadowOffset: {
-                      width: -1,
-                      height: 1,
-                    },
-                    textShadowRadius: 10,
-                  }}>Emoji Tack Toe</Text>
-                </FlexContainer>
-              }
+              <EmojiSelection
+                selectedPlayerToChooseCharacter={selectedPlayerToChooseCharacter}
+                Players={Players}
+                onEmojiSelectHandler={onEmojiSelectHandler}
+                Categories={Categories}
+              />
 
 
               <FlexContainer style={{ flex: 2, justifyContent: 'flex-start', marginBottom: 50 }}>
@@ -162,40 +154,14 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
               {/* <View style={{ zIndex: 33, height: 100, alignItems: 'center', justifyContent: "center" }}>
               </View> */}
 
-              <FlexContainer style={{ flex: 2, justifyContent: 'flex-start' }}>
-                {!keyboardPresent &&
-                  <>
-                    <View style={{ flexDirection: 'row' }}>
-                      <Button
-                        style={{ top: -30, flex: 1, marginHorizontal: 10 }}
-                        mode="contained"
-                      >{selectedPlayerToChooseCharacter !== null && score.p1}</Button>
-                      <Button
-                        color={theme.colors.primary}
-                        onPress={(() => onPressHandler(onPress.startGame))}
-                        style={{ width: 150, top: -30 }}
-                        labelStyle={{ color: 'white' }} mode='contained'>Start</Button>
-                      <Button
-                        style={{ top: -30, flex: 1, marginHorizontal: 10 }}
-                        mode="contained"
-                      >{selectedPlayerToChooseCharacter !== null && score.p2}</Button>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                      <Button
-                        color={theme.colors.primary}
-                        onPress={(() => onPressHandler(onPress.restartScore))}
-                        style={{ top: -30, marginTop: 10, marginRight: 10 }}
-                        labelStyle={{ color: 'white' }} mode='contained'>Restart</Button>
-                      <Button
-                        color={theme.colors.primary}
-                        onPress={(() => onPressHandler(onPress.animationSettings))}
-                        style={{ top: -30, marginTop: 10 }}
-                        labelStyle={{ color: 'white' }} mode='contained'>animation</Button>
-                    </View>
-                  </>
-                }
+              <ActionButtons
+                selectedPlayerToChooseCharacter={selectedPlayerToChooseCharacter}
+                keyboardPresent={keyboardPresent}
+                onPressHandler={onPressHandler}
+                onPress={onPress}
+                score={score}
+              />
 
-              </FlexContainer>
             </KeyboardAvoidingView>
           </ModalContainerLinearGradient>
         </ImageBackground>

@@ -1,7 +1,9 @@
 import React from 'react'
 import { View } from 'react-native';
+import { useSelector } from 'react-redux';
 import styled, { useTheme } from 'styled-components';
 import { StandardText, TextPlayer } from '..';
+import { rootT } from '../../../store';
 import { TopView, Score } from '../../../styles/stylesglobal'
 
 function PlayerScores({
@@ -11,18 +13,21 @@ function PlayerScores({
   playerOneTurn,
   playerCharacter,
 }) {
+  const isClientTurn = useSelector((state: rootT) => state.multiplayer.isClientTurn)
+  const clientIsHost = useSelector((state: rootT) => state.multiplayer.clientIsHost)
+
   return (
     <TopView>
       <PlayerScore
         transparent={showInModal === ModalContents.GameMenu}
         score={score.p1}
-        active={playerOneTurn === true}
+        active={!clientIsHost && isClientTurn || clientIsHost && !isClientTurn}
         playerCharacter={showInModal !== ModalContents.GameMenu && playerCharacter[1]}
-      />
+        />
       <PlayerScore
         transparent={showInModal === ModalContents.GameMenu}
         score={score.p2}
-        active={playerOneTurn === false}
+        active={clientIsHost && isClientTurn || !clientIsHost && !isClientTurn}
         playerCharacter={showInModal !== ModalContents.GameMenu && playerCharacter[2]}
       />
     </TopView>

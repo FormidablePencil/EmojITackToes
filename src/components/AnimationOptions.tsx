@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, ImageBackground } from 'react-native'
 import { useTheme, Button } from 'react-native-paper'
-import { AlignAllContainer, ModalContainerLinearGradient } from './ModalContent'
+import { AlignAllContainer, ModalContainerLinearGradient } from './modalComp/modal-content'
 import { ModalContents } from '../TypesTypeScript/TypesAndInterface'
 import { Animations } from '../reducers/animationSettingReducer'
 import { ScrollView } from 'react-native-gesture-handler'

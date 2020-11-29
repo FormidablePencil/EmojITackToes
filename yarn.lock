@@ -6704,6 +6704,11 @@ qw@~1.0.1:
   resolved "https://registry.yarnpkg.com/qw/-/qw-1.0.1.tgz#efbfdc740f9ad054304426acb183412cc8b996d4"
   integrity sha1-77/cdA+a0FQwRCassYNBLMi5ltQ=
 
+random-fruits-name@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/random-fruits-name/-/random-fruits-name-1.4.0.tgz#140c32cd70cb21f12333d7650aabf1329ae36ac2"
+  integrity sha512-Q/o5jvUp/5DCVsS7yX0uhWUw8ak29UrWeFMNI2qKJbB0VjfkOdCPTfNev8uPMHKZy+PzsuUK0kTAsjvSxTnzGA==
+
 range-parser@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"

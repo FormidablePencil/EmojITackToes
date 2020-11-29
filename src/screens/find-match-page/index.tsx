@@ -13,12 +13,11 @@ const FindMatchScreen = () => {
   const navigation = useNavigation()
   useLobby()
 
-  const onPressTopLeftIcon = () => navigation.navigate('menu')
+  const onPressTopRightIcon = () => navigation.navigate('menu')
 
   return (
-    <PageWrapper icon='menu' onPressTopLeftIcon={onPressTopLeftIcon}>
+    <PageWrapper icon='menu' onPressTopRightIcon={onPressTopRightIcon}>
       <View style={styles.container}>
-        {/* <NavigateBack /> */}
         <InputUsername />
         <GamesAvailable />
         <View style={styles.btnGroup}>

@@ -1,4 +1,4 @@
-import { ERROR_MULTIPLAYER, JOINED_LOBBY, LOBBY_HOSTED, LEAVE_LOBBY, UPDATE_USERNAME, MATCH_FOUND, CLIENT_TURN, END_CLIENT_TURN } from "../actions/types"
+import { ERROR_MULTIPLAYER, JOINED_LOBBY, LOBBY_HOSTED, LEAVE_LOBBY, UPDATE_USERNAME, MATCH_FOUND, CLIENT_TURN, END_CLIENT_TURN, READY_UP, ROUND_OVER, START_ROUND, OPPOSING_PLAYER_READY_UP, STATE_NEW_GAME } from "../actions/types"
 
 export interface multiplayerT {
   socketIoData: {
@@ -16,6 +16,8 @@ export interface multiplayerT {
   error: null,
   username: string,
   isClientTurn: boolean,
+  readyUp: boolean,
+  opposingPlayerReadyUp: boolean,
 }
 
 export const defaultSocketIdData = {
@@ -34,8 +36,10 @@ const initialState: multiplayerT = {
   socketIoData: defaultSocketIdData,
   enterLobby: false,
   error: null,
-  username: '',
+  username: 'Player',
   isClientTurn: false,
+  readyUp: false,
+  opposingPlayerReadyUp: false,
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -57,6 +61,7 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         socketIoData: payload,
         isClientTurn: clientGoesFirst({ clientIsHost: state.clientIsHost, initialTurnIsHost: payload.initialTurnIsHost }),
+        readyUp: false,
       }
 
     case LEAVE_LOBBY:
@@ -71,6 +76,16 @@ export default (state = initialState, { type, payload }) => {
 
     case CLIENT_TURN:
       return { ...state, isClientTurn: true }
+
+    case READY_UP:
+      return { ...state, readyUp: true }
+
+    case OPPOSING_PLAYER_READY_UP:
+      return { ...state, opposingPlayerReadyUp: true }
+
+    case ROUND_OVER:
+    case STATE_NEW_GAME:
+      return { ...state, readyUp: false, opposingPlayerReadyUp: false }
 
     default:
       return state

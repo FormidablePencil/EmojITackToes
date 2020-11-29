@@ -1,8 +1,6 @@
 import { RESET_ANIMATION_SETTING, SET_ANIMATION_SETTING } from "../actions/types"
 
-const initialState = {
-
-}
+const initialState = 'bounceIn'
 
 export enum Animations {
   bounce = 'bounce',
