@@ -5,22 +5,20 @@ import { rootT } from "../store";
 
 const useMusicBackground = () => {
   const mute = useSelector((state: rootT) => state.mute)
-  const [playTrack, setPlayTrack] = useState(true)
   const track = useRef(new Audio.Sound()).current
 
   const initialStatus = {
     rate: 1.0,
     shouldCorrectPitch: false,
     volume: 1.0,
-    isMuted: mute,
+    isMuted: false,
     isLooping: true,
-    shouldPlay: playTrack,
+    shouldPlay: true,
   };
 
   useEffect(() => {
     (async () => {
-      await track.loadAsync(require('../assets/track.mp3'), initialStatus,)
-      console.log(track, 'track exists');
+      if (!mute) await track.loadAsync(require('../assets/track.mp3'), initialStatus,)
     })()
     return async () => await track.unloadAsync()
   }, [])
@@ -28,6 +26,7 @@ const useMusicBackground = () => {
 
   useEffect(() => {
     (async () => {
+      /* getting unresolved promise because if the track is unloadAsync() already then doing it is very much pointless */
       if (mute) await track.unloadAsync()
       else await track.loadAsync(require('../assets/track.mp3'), initialStatus,)
     })()

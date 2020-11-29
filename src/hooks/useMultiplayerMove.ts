@@ -10,28 +10,25 @@ const useMultiplayerMove = ({ sq, setSq }: { sq: GameBoardInterface, setSq }) =>
   const [initialRender, setInitialRender] = useState(false)
 
   useEffect(() => {
+    console.log(gameboard)
     setSq(gameboard)
   }, [gameboard])
 
-  useEffect(() => {
-    /* I don't want to socket.emit to other player gameboard (e.g sq) hasn't changed */
-    if (gameboard === sq)
-      return
-    if (!initialRender) {
-      console.log(sq, 'sqarw')
-      for (let col = 0; col < 3; col++) {
-        if (sq[col].sq0 || sq[col].sq1 || sq[col].sq2) {
-          setInitialRender(true)
-        }
-      }
-    } else {
-      socket.emit('multiplayer', {
-        lobbyData: { lobbyId: socketIoData.lobbyId },
-        boardgame: sq,
-        action: 'move',
-      })
-    }
-  }, [sq, initialRender])
+
+  // useEffect(() => {
+  //   /* I don't want to socket.emit to other player gameboard (e.g sq) hasn't changed */
+  //   if (gameboard === sq)
+  //     return
+  //   if (!initialRender) {
+  //     console.log(sq, 'sqarw')
+  //     for (let col = 0; col < 3; col++) {
+  //       if (sq[col].sq0 || sq[col].sq1 || sq[col].sq2) {
+  //         setInitialRender(true)
+  //       }
+  //     }
+  //   } else {
+  //   }
+  // }, [sq, initialRender])
 }
 
 export default useMultiplayerMove

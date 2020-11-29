@@ -1,4 +1,4 @@
-import { WinningDirection, WinnerSqsTypes } from "../TypesTypeScript/TypesAndInterface"
+import { WinningDirection, WinnerSqsTypes } from "../../TypesTypeScript/TypesAndInterface"
 
 export const gameLogic = ({ sq }) => {
    const playerOne = ['p1', 'p2']

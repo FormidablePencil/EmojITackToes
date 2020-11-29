@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Text, useTheme } from 'react-native-paper'
 import { View, Dimensions } from 'react-native'
-import Board from '../components/Board'
+import Board from '../components/board'
 import { TopView, Score } from '../styles/stylesglobal'
 import { useSelector } from 'react-redux'
 import ModalContent from '../components/ModalContent'
 import { ScoresTypes, ModalContents, GameBoardInterface, WinnerSqsTypes } from '../TypesTypeScript/TypesAndInterface'
 import styled from 'styled-components'
-import { gameLogic } from '../logic/gameLogic'
+import { gameLogic } from '../components/board/gameLogic'
 import GameOverOverlay from '../components/GameOverOverlay'
 import { LinearGradient } from 'expo-linear-gradient'
 import AnimationOptions from '../components/AnimationOptions'
 import useLobby from '../hooks/useLobby'
 import multiplayerMove from '../hooks/useMultiplayerMove'
+import PageWrapper from '../layouts/PageWrapper'
+import { useNavigation } from '@react-navigation/native'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 export const initialSqs: GameBoardInterface = {
@@ -25,6 +27,7 @@ const TickTackToeScreen = () => {
    useLobby()
    const { playerCharacter } = useSelector((state: any) => state.playerCharacterSettings)
    const theme = useTheme()
+   const navigation = useNavigation()
    const defaultWonInfo = { playerWon: null, cols: [null], sqs: [null], direction: null }
    const [wonInfo, setWonInfo] = useState<WinnerSqsTypes>(defaultWonInfo)
    const [gameOver, setGameOver] = useState(false)
@@ -69,6 +72,8 @@ const TickTackToeScreen = () => {
       }
    }, [sq])
 
+   const onPressTopLeftIcon = () => navigation.navigate('menu')
+
    const PlayerScore = ({ transparent, score, active, playerCharacter }) =>
       <Score>
          <StandardText transparent={transparent}>{score}</StandardText>
@@ -78,7 +83,7 @@ const TickTackToeScreen = () => {
       </Score>
 
    return (
-      <BgLinearGradient theme={theme}>
+      <PageWrapper icon='menu' onPressTopLeftIcon={onPressTopLeftIcon}>
          <TopView>
             <PlayerScore
                transparent={showInModal === ModalContents.GameMenu}
@@ -132,7 +137,7 @@ const TickTackToeScreen = () => {
                </>
             }
          </Modal>
-      </BgLinearGradient>
+      </PageWrapper>
    )
 }
 

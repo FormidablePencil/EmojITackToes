@@ -10,21 +10,19 @@ const useLobby = () => {
   const hostUsername = useSelector((state: rootT) => state.multiplayer.socketIoData.host.username)
   const route = useRoute();
 
-
   useEffect(() => {
-    // console.log(socketIoData, 'socketIoData')
-    // console.log(route.name, 'kk')
-    // console.log(socketIoData, 'listening to socketIoData')
-    // console.log(hostUsername, guestUsername, route.name === 'findMatch')
+    routesController()
+  }, [guestUsername, hostUsername])
+
+  const routesController = () => {
+    if (!socketIoData.guest.username) return
     if (hostUsername && guestUsername && route.name === 'findMatch') {
-      // console.log('hitt1')
       navigation.navigate('game')
     } else if (!hostUsername && route.name === 'game'
       || !guestUsername && route.name === 'game') {
-      // console.log('hitt2')
       navigation.navigate('findMatch')
     }
-  }, [guestUsername, hostUsername])
+  }
 }
 
 export default useLobby

@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -6,9 +7,11 @@ import { reusableStyles } from '../styles/stylesglobal'
 import { BgLinearGradient } from './TickTackToeScreen';
 
 function MenuScreen() {
+  const navigation = useNavigation()
 
-  const onPressLocalMode = () => console.log('object');
-  const onPressMultiMode = () => console.log('object');
+  const onPressLocalMode = () => navigation.navigate('game')
+  const onPressMultiMode = () => navigation.navigate('findMatch')
+
 
   return (
     <BgLinearGradient>
@@ -24,10 +27,10 @@ function MenuScreen() {
 
         <View style={styles.menuSelection}>
           <TouchableOpacity style={reusableStyles.regBtn} onPress={onPressLocalMode}>
-            <Text style={reusableStyles.regText}>Local Multiplayer</Text>
+            <Text style={reusableStyles.regText}>Play</Text>
           </TouchableOpacity>
           <TouchableOpacity style={reusableStyles.regBtn} onPress={onPressMultiMode}>
-            <Text style={reusableStyles.regText}>Online Multiplayer</Text>
+            <Text style={reusableStyles.regText}>Play Online</Text>
           </TouchableOpacity>
         </View>
 

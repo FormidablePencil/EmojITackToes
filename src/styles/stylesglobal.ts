@@ -60,12 +60,13 @@ export const reusableStyles = StyleSheet.create({
     elevation: 5,
     borderRadius: 6,
     backgroundColor: 'rgb(77, 60, 204)',
-    width: 250,
+    width: 210,
     height: 60,
     margin: 15,
   },
   regText: {
     color: '#d1faf0',
+    fontFamily: 'LemonadaSemiBold',
   },
   totallyCenter: {
     justifyContent: 'center',

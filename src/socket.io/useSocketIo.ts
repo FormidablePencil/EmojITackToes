@@ -11,9 +11,7 @@ const useSocketIo = () => {
   const { username, socketIoData, enterLobby, error } = useSelector((state: rootT) => state.multiplayer)
   const dispatch = useDispatch()
 
-  // executes whether lobbyId changes
-  useEffect(() => {
-    // configurations
+  const connectToSocketIo = () => {
     socket = socketIoClient('http://10.0.0.7:4005', {
       transports: ['websocket'], jsonp: false
     });
@@ -23,32 +21,28 @@ const useSocketIo = () => {
     socket.on('multiplayer', msg => {
       console.log(msg, 'multiplayer')
     });
-    socket.on(socketIoData.lobbyId, payload => {
-      console.log('well')
+  }
 
+  const connectToLobby = () => {
+    socket.on(socketIoData.lobbyId, payload => {
       if (payload.action === 'match up')
         dispatch({ type: JOINED_LOBBY, payload: payload.lobbyData })
       else if (payload.action === 'move') {
-        dispatch({ type: UPATE_GAMEBOARD_MULTIPLAYER, payload: payload.boardgame })
+        console.log('what is going on')
+        dispatch({ type: UPATE_GAMEBOARD_MULTIPLAYER, payload: payload.move })
       }
-
-      // console.log(payload.gameRoom === socketIoData, 'response from lobby')
-      // console.log(payload.gameRoom, 'response from lobby')
-
-      // socket.emit('multiplayer',
-      //   `{
-      //   payloada: {
-      //     lobbyId: joinPayload.lobbyId
-      //   },
-      //   move: 'host player turn...'
-      //   }`)
     })
+  }
 
-    // cleanup
+  useEffect(() => {
+    connectToSocketIo()
     return () => socket.disconnect()
+  }, [])
 
+  useEffect(() => {
+    if (socketIoData.lobbyId)
+      connectToLobby()
   }, [socketIoData.lobbyId])
-
 }
 
 export default useSocketIo

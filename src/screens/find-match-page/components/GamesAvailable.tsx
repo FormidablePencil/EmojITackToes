@@ -2,9 +2,9 @@ import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
-import joinGame from '../../actions/multiplayer/joinGame';
-import { rootT } from '../../store';
-import { reusableStyles } from '../../styles/stylesglobal';
+import joinGame from '../../../actions/multiplayer/joinGame';
+import { rootT } from '../../../store';
+import { reusableStyles } from '../../../styles/stylesglobal';
 
 function GamesAvailable() {
   const dispatch = useDispatch()
@@ -23,7 +23,7 @@ function GamesAvailable() {
             style={reusableStyles.regBtn}
             onPress={() => onClickHandler(lobbyData.lobbyId)}
           >
-            <Text style={styles.text}>{lobbyData.host.username}</Text>
+            <Text style={reusableStyles.regText}>{lobbyData.host.username}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -33,17 +33,14 @@ function GamesAvailable() {
 
 
 const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: '#3925C8',
+    flex: 1,
+  },
   container: {
     alignItems: 'center',
-    backgroundColor: '#3925C8',
     padding: 30,
   },
-  scrollView: {
-    flex: 1
-  },
-  text: {
-    color: 'white',
-  }
 })
 
 

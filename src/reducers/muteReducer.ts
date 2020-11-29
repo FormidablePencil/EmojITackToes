@@ -1,6 +1,6 @@
 import { TOGGLE_MUTE } from "../actions/types"
 
-const initialState = false
+const initialState = true
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {

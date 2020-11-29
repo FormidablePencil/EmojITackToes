@@ -1,9 +1,13 @@
 import React from 'react'
-import { Row, GameContainer, HorizontalLine } from '../styles/stylesglobal'
+import { Row, GameContainer, HorizontalLine } from '../../styles/stylesglobal'
 import { Dimensions } from "react-native";
-import { sqTypes, BoardTypes } from './../TypesTypeScript/TypesAndInterface';
-import ColComp from './ColComp';
+import { sqTypes, BoardTypes } from '../../TypesTypeScript/TypesAndInterface';
+import ColComp from '../ColComp';
 import { useTheme } from 'react-native-paper';
+import { rootT } from '../../store';
+import { useSelector } from 'react-redux';
+import useCheckIfOnlineGame from '../../hooks/useCheckIfOnlineGame';
+import useGameControlCenter from './useGameControlCenter';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 
@@ -19,21 +23,9 @@ const Board = ({
    setPlayerOneTurn }: BoardTypes) => {
    const theme = useTheme()
 
-   const handleOnPressSq = (boxPressed, col) => {
-      if (gameOver) return
-      if (sq[col][boxPressed] === null) {
-         setSq({ ...sq, [col]: { ...sq[col], [boxPressed]: playerOneTurn ? sqTypes.p1 : sqTypes.p2 } })
-         setPlayerOneTurn(prev => !prev)
-         if (squaresFilled >= 8) {
-            setSquaresFilled(0)
-            setGameOver(true)
-            return
-         }
-         setSquaresFilled(prev => prev + 1)
-      } else {
-         alert('already pressed do nothing')
-      }
-   }
+   const { handleOnPressSq } = useGameControlCenter(
+      { gameOver, setSq, sq, playerOneTurn, sqTypes, setPlayerOneTurn, squaresFilled, setSquaresFilled, setGameOver }
+   )
 
    return (
       <GameContainer style={{ height: screenWidth }}>

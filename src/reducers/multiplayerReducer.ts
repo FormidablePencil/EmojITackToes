@@ -11,11 +11,14 @@ export interface multiplayerT {
     guest: {
       id: string, username: string
     }
+    initialTurnIsHost: boolean,
   }
-  enterLobby: false,
+  clientIsHost: boolean,
+  enterLobby: boolean,
   error: null,
   username: string,
-  gameboard: GameBoardInterface
+  gameboard: GameBoardInterface,
+  isClientTurn: boolean,
 }
 
 export const defaultSocketIdData = {
@@ -26,15 +29,17 @@ export const defaultSocketIdData = {
   guest: {
     id: '', username: ''
   },
-  gameboard: initialSqs
+  initialTurnIsHost: false,
 }
 
 const initialState: multiplayerT = {
+  clientIsHost: false,
   socketIoData: defaultSocketIdData,
   enterLobby: false,
   error: null,
   username: '',
-  gameboard: initialSqs
+  gameboard: initialSqs,
+  isClientTurn: false,
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -44,17 +49,27 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, username: payload }
 
     case LOBBY_HOSTED:
-      return { ...state, socketIoData: { ...defaultSocketIdData, ...payload } }
+      console.log(payload.initialTurnIsHost)
+      return {
+        ...state,
+        socketIoData: { ...defaultSocketIdData, ...payload },
+        clientIsHost: true,
+      }
 
     case JOINED_LOBBY:
     case MATCH_FOUND:
-      return { ...state, socketIoData: payload }
+      return {
+        ...state,
+        socketIoData: payload,
+        isClientTurn: clientGoesFirst({ clientIsHost: state.clientIsHost, initialTurnIsHost: payload.initialTurnIsHost }),
+      }
 
     case LEAVE_LOBBY:
-      return { ...state, socketIoData: defaultSocketIdData }
+      return { ...state, socketIoData: defaultSocketIdData, gameboard: initialSqs, clientIsHost: false }
 
     case UPATE_GAMEBOARD_MULTIPLAYER:
-      return { ...state, gameboard: payload }
+      console.log(payload, 'move?')
+      return { ...state, gameboard: { ...state.gameboard, [payload.col]: payload.boxPressed } }
 
     case ERROR_MULTIPLAYER:
       return { ...state, error: payload }
@@ -62,4 +77,10 @@ export default (state = initialState, { type, payload }) => {
     default:
       return state
   }
+}
+
+const clientGoesFirst = ({ clientIsHost, initialTurnIsHost }) => {
+  if (clientIsHost && initialTurnIsHost) return true
+  else if (!clientIsHost && !initialTurnIsHost) return true
+  else return false
 }
