@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Emogi Tack Toes",
+    "name": "Emoji Tack Toes",
     "slug": "TickTackToe",
     "privacy": "public",
     "platforms": [
@@ -10,7 +10,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/assets/images/icon.png",
     "splash": {
       "image": "./assets/icon2.png",
       "resizeMode": "contain",

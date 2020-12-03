@@ -30,12 +30,7 @@ const ScoresAndEmojiSecection = ({
     <ScoreContainer style={{ top: selectedPlayerToChooseCharacter === null ? -30 : 0 }}>
       <PlayerContainer>
         {selectedPlayerToChooseCharacter === null ?
-          <TextInput
-            editable={false}
-            style={{ textAlign: 'center', fontSize: 50 }}
-            onChangeText={(text) => onChangeHandler(text, 1)}
-            value={controlledInputs.playerCharacter[1]}
-          />
+          <Text style={{ textAlign: 'center', fontSize: 50 }}>{controlledInputs.playerCharacter[1]}</Text>
           :
           <TouchableRippleStyled
             style={{
@@ -83,13 +78,7 @@ const ScoresAndEmojiSecection = ({
 
       <PlayerContainer>
         {selectedPlayerToChooseCharacter === null ?
-
-          <TextInput
-            editable={false}
-            style={{ textAlign: 'center', fontSize: 50 }}
-            onChangeText={(text) => onChangeHandler(text, 2)}
-            value={controlledInputs.playerCharacter[2]}
-          />
+          <Text style={{ textAlign: 'center', fontSize: 50 }}>{controlledInputs.playerCharacter[2]}</Text>
           :
           <TouchableRippleStyled
             style={{

@@ -8,6 +8,11 @@ import { TickTackToeTheme } from './src/styles/theming';
 import StackNavigator from './src/navigators/StackNavigator'
 import { LogBox } from 'react-native'
 
+// local:
+// ~ fix only one turn working
+// ~ start up from the model open
+// ~ 
+
 LogBox.ignoreLogs([
   'Unrecognized WebSocket connection option(s) `localAddress`. Did you mean to put these under `headers`?',
 ])

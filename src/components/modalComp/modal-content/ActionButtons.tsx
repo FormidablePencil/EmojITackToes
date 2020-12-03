@@ -9,6 +9,8 @@ import { rootT } from '../../../store';
 
 function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPressHandler, onPress, score }) {
   const theme = useTheme()
+  const isOnlineGame = useCheckIfOnlineGame()
+
   return (
     <FlexContainer style={{ flex: 2, justifyContent: 'flex-start' }}>
       {!keyboardPresent &&
@@ -32,11 +34,12 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
           </View>
           <View style={{ flexDirection: 'row' }}>
             <Button
+              disabled={!isOnlineGame && (score.p1 === 0 && score.p2 === 0) ? true : false}
               color={theme.colors.primary}
               onPress={(() => onPressHandler(onPress.restartScore))}
-              style={{ top: -30, marginTop: 10, marginRight: 10 }}
+              style={{ top: -30, marginTop: 10, marginRight: 10, backgroundColor: theme.colors.primary }}
               labelStyle={{ color: 'white' }} mode='contained'>
-              <QuitOrRestartText />
+              <QuitOrRestartText score={score} />
             </Button>
             <Button
               color={theme.colors.primary}

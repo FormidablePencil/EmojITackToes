@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Text, useTheme } from 'react-native-paper'
 import { View, Dimensions } from 'react-native'
 import Board from '../../components/board'
@@ -18,6 +18,7 @@ import { rootT } from '../../store'
 import MenuModal from './components/MenuModal'
 import PlayerScores from './components/PlayerScores'
 import useCheckIfOnlineGame from '../../hooks/useCheckIfOnlineGame'
+import useReadyUp from '../../hooks/useReadyUp'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 export const initialSqs: GameBoardInterface = {
@@ -33,22 +34,15 @@ const TickTackToeScreen = () => {
    const defaultWonInfo = { playerWon: null, cols: [null], sqs: [null], direction: null }
    const [wonInfo, setWonInfo] = useState<WinnerSqsTypes>(defaultWonInfo)
    const [gameOver, setGameOver] = useState(false)
-   const [modalOpen, setModalOpen] = useState(false)
+   const [modalOpen, setModalOpen] = useState(true)
    const [squaresFilled, setSquaresFilled] = useState(0)
    const [playerOneTurn, setPlayerOneTurn] = useState(false)
-   const initialScores = { p1: 0, p2: 0 }
    const [showInModal, setShowInModal] = useState<ModalContents>(ModalContents.GameMenu)
+   const initialScores = { p1: 0, p2: 0 }
    const [score, setScore] = useState<ScoresTypes>(initialScores)
+   const initialRender = useRef(true)
    const gameboard = useSelector((state: rootT) => state.gameboard)
    const dispatch = useDispatch()
-   const ifOnlineGame = useCheckIfOnlineGame()
-
-   // useReadyUp()
-   const readyUp = useSelector((state: rootT) => state.multiplayer.readyUp)
-   const opposingPlayerReadyUp = useSelector((state: rootT) => state.multiplayer.opposingPlayerReadyUp)
-   useEffect(() => {
-      if (ifOnlineGame && readyUp && opposingPlayerReadyUp) startGame()
-   }, [readyUp, opposingPlayerReadyUp])
 
 
    const restartScore = () => {
@@ -56,8 +50,10 @@ const TickTackToeScreen = () => {
    }
 
    useEffect(() => {
-      setShowInModal(ModalContents.GameOver)
-      if (gameOver) setTimeout(() => { setModalOpen(true) }, 1000)
+      if (!initialRender.current) {
+         setShowInModal(ModalContents.GameOver)
+         if (gameOver) setTimeout(() => { setModalOpen(true) }, 1000)
+      } else initialRender.current = false
    }, [gameOver])
 
    const startGame = async () => {
@@ -70,6 +66,9 @@ const TickTackToeScreen = () => {
          setSquaresFilled(0)
       }, 300)
    }
+
+   useReadyUp({ startGame })
+
 
    useEffect(() => {
       const playerWon = gameLogic({ gameboard })
