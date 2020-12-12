@@ -1,7 +1,6 @@
-import { ERROR_MULTIPLAYER, LOBBY_HOSTED } from "../types";
+import { ERROR_MULTIPLAYER, LOBBY_HOSTED, TOGGLE_USERNAME_POPUP_TOOLTIP } from "../types";
 
 const hostGame = (username) => async dispatch => {
-  let type
   let url = 'http://10.0.0.7:4005/lobby/host'
   let data = {
     method: 'POST',
@@ -10,13 +9,12 @@ const hostGame = (username) => async dispatch => {
   }
 
   const hostRes = await fetch(url, data)
-  const hostPayload = await hostRes.json()
 
-  if (hostRes.status === 200)
-    type = LOBBY_HOSTED
-  else type = ERROR_MULTIPLAYER
-
-  dispatch({ type, payload: hostPayload })
+  if (hostRes.status === 200) {
+    const hostPayload = await hostRes.json()
+    dispatch({ type: LOBBY_HOSTED, payload: hostPayload })
+  } else if (hostRes.status === 400)
+    dispatch({ type: TOGGLE_USERNAME_POPUP_TOOLTIP })
 }
 
 export default hostGame

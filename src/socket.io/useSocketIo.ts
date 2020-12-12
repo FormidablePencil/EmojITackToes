@@ -20,7 +20,6 @@ const useSocketIo = () => {
 
     // listeners
     socket.on('multiplayer', msg => {
-      console.log(msg, 'multiplayer')
     });
   }
 
@@ -47,7 +46,7 @@ const useSocketIo = () => {
         case payload.action === 'character changed':
           dispatch({
             type: UPDATE_CHARACTER,
-            payload: { emoji: payload.emoji, player: clientIsHost ? 1 : 2 },
+            payload: { emoji: payload.emoji, player: clientIsHost ? 2 : 1 },
           })
           break;
 

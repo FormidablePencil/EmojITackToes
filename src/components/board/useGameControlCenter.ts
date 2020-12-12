@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { END_CLIENT_TURN, UPDATE_GAME_BOARD } from "../../actions/types"
+import { CLIENT_TURN, END_CLIENT_TURN, TOGGLE_PLAYERS_TURNS, UPDATE_GAME_BOARD } from "../../actions/types"
 import useCheckIfOnlineGame from "../../hooks/useCheckIfOnlineGame"
 import socketIoCommands from "../../socket.io/socketIoCommandCenter"
 import { socket } from "../../socket.io/useSocketIo"
@@ -25,7 +25,7 @@ const useGameControlCenter = (
    // }
 
 
-   const changeGameboard = ({ boxPressed, col }) => {
+   const changeGameboard = ({ boxPressed, col, playersTurn }) => {
       if (gameOver) return
       if (gameboard[col][boxPressed] === null) {
          dispatch({
@@ -33,20 +33,20 @@ const useGameControlCenter = (
             payload: {
                col: col,
                boxPressed: boxPressed,
-               player: !clientIsHost ? sqTypes.p1 : sqTypes.p2,
+               player: !playersTurn ? sqTypes.p1 : sqTypes.p2,
             },
-            // payload: 
-            // { ...gameboard, [col]: { ...gameboard[col], [boxPressed]: playerOneTurn ? sqTypes.p1 : sqTypes.p2 } }
          })
-         if (!ifOnlineGame) setPlayerOneTurn(prev => !prev)
+         // if (!ifOnlineGame) setPlayerOneTurn(prev => !prev)
          if (squaresFilled >= 8) {
             setSquaresFilled(0)
             setGameOver(true)
             return
          }
+         sendMoveMadeToOtherPlayer({ boxPressed, col })
          setSquaresFilled(prev => prev + 1)
+         dispatch({ type: TOGGLE_PLAYERS_TURNS })
       } else {
-         alert('already pressed do nothing')
+         // alert('already pressed do nothing')
       }
    }
 
@@ -54,16 +54,19 @@ const useGameControlCenter = (
       socketIoCommands.makeMove({ lobbyId: socketIoData.lobbyId, boxPressed, col })
 
    const makeMoveInGameBoard = ({ boxPressed, col }) => {
-      if (ifOnlineGame) {
-         if (ifOnlineGame && isClientTurn) {
-            changeGameboard({ boxPressed, col })
-            sendMoveMadeToOtherPlayer({ boxPressed, col })
-            dispatch({ type: END_CLIENT_TURN })
-         }
-      } else {
-         /* //! local mode */
-         changeGameboard({ boxPressed, col }) 
+      if (ifOnlineGame && isClientTurn) {
+         changeGameboard({ boxPressed, col, playersTurn: clientIsHost })
+         // dispatch({ type: END_CLIENT_TURN })
+      }else if (!ifOnlineGame) {
+         changeGameboard({ boxPressed, col, playersTurn: isClientTurn })
+
       }
+      // } else if (ifOnlineGame) {
+         // console.log("opponents turn")
+      // } else {
+         // changeGameboard({ boxPressed, col, playersTurn: isClientTurn })
+         // dispatch({ type: TOGGLE_PLAYERS_TURNS })
+      // }
    }
 
 

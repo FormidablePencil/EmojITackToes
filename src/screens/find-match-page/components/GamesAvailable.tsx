@@ -5,13 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import joinGame from '../../../actions/multiplayer/joinGame';
 import { rootT } from '../../../store';
 import { reusableStyles } from '../../../styles/stylesglobal';
-import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator'
+// import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator'
 
 function GamesAvailable() {
   const dispatch = useDispatch()
   const username = useSelector((state: rootT) => state.multiplayer.username)
   const allAvailableLobbies = useSelector((state: rootT) => state.allAvailableLobbies)
   const lobbyId = useSelector((state: rootT) => state.multiplayer.socketIoData.lobbyId)
+  const previouslyHostedLobbyId = useSelector((state: rootT) => state.multiplayer.previouslyHostedLobbyId)
+  
 
   const onClickHandler = (lobbyId) =>
     dispatch(joinGame({ username, lobbyId }))
@@ -20,7 +22,7 @@ function GamesAvailable() {
     <ScrollView style={styles.scrollView} scrollEnabled={true}>
       <View style={styles.container}>
         {allAvailableLobbies.map(lobbyData => {
-          if (lobbyData.lobbyId === lobbyId) return null
+          if (lobbyData.lobbyId === lobbyId || lobbyData.lobbyId === previouslyHostedLobbyId) return null
           return (
             <TouchableOpacity
               key={lobbyData._id}

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import asyncStorageMethods from "@bit/formidablepencil.react-native-reusables.async-storage-methods"
 import { rootT } from "../store"
-import { LOAD_LOCALLY_SAVED_ANIM_SETTINGS, LOAD_LOCALLY_SAVED_CHARACTERS, LOAD_LOCALLY_SAVED_MUTE, LOAD_LOCALLY_SAVED_USERNAME } from "../actions/types"
+import { LOAD_LOCALLY_SAVED_ANIM_SETTINGS, LOAD_LOCALLY_SAVED_CHARACTERS, LOAD_LOCALLY_SAVED_MUTE, LOAD_LOCALLY_SAVED_USERNAME, LOCALLY_STORED_DATA_LOADED } from "../actions/types"
 import getRandomFruitsName from 'random-fruits-name'
 
 
@@ -17,11 +17,16 @@ const useLocalStorage = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    handleAsyncStorage(lsDirNames.mute, LOAD_LOCALLY_SAVED_MUTE)
-    handleAsyncStorage(lsDirNames.playerTag, LOAD_LOCALLY_SAVED_USERNAME)
-    handleAsyncStorage(lsDirNames.animationSetting, LOAD_LOCALLY_SAVED_ANIM_SETTINGS)
-    handleAsyncStorage(lsDirNames.playerCharacterSettings, LOAD_LOCALLY_SAVED_CHARACTERS)
+    loadLocallyStoredData()
   }, [])
+
+  const loadLocallyStoredData = async () => {
+    await handleAsyncStorage(lsDirNames.mute, LOAD_LOCALLY_SAVED_MUTE)
+    await handleAsyncStorage(lsDirNames.playerTag, LOAD_LOCALLY_SAVED_USERNAME)
+    await handleAsyncStorage(lsDirNames.animationSetting, LOAD_LOCALLY_SAVED_ANIM_SETTINGS)
+    await handleAsyncStorage(lsDirNames.playerCharacterSettings, LOAD_LOCALLY_SAVED_CHARACTERS)
+    await dispatch({ type: LOCALLY_STORED_DATA_LOADED })
+  }
 
   const handleAsyncStorage = async (dirName, type) => {
     const locallyStored = await asyncStorageMethods.getLocallyStoredData(dirName)

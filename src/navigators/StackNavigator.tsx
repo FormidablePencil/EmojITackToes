@@ -8,23 +8,31 @@ import MenuScreen from '../screens/MenuScreen';
 import MuteSound from '../components/background-music/MuteSound';
 import useMusicBackground from '../hooks/useMusicBackground';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { useSelector } from 'react-redux';
+import { rootT } from '../store';
 
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
-  useSocketIo()
-  useMusicBackground()
+  const locallyStoredDataLoaded = useSelector((state: rootT) => state.locallyStoredDataLoaded)
   useLocalStorage()
-
   return (
     <NavigationContainer>
       <MuteSound />
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='menu' component={MenuScreen} />
-        <Stack.Screen name='findMatch' component={FindMatchScreen} />
-        <Stack.Screen name='game' component={TickTackToeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer >
+      {locallyStoredDataLoaded && <Routes />}
+    </NavigationContainer>
+  )
+}
+
+const Routes = () => {
+  useSocketIo()
+  useMusicBackground()
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='menu' component={MenuScreen} />
+      <Stack.Screen name='findMatch' component={FindMatchScreen} />
+      <Stack.Screen name='game' component={TickTackToeScreen} />
+    </Stack.Navigator>
   )
 }
 

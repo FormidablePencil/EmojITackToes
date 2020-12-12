@@ -1,15 +1,16 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useDispatch, useSelector } from 'react-redux'
 import hostGame from '../../../actions/multiplayer/hostGame'
-import { LEAVE_LOBBY } from '../../../actions/types'
+import leaveLobby from '../../../actions/multiplayer/leaveLobby'
 import { rootT } from '../../../store'
 import { reusableStyles } from '../../../styles/stylesglobal'
 
 const HostGameBtn = () => {
   const username = useSelector((state: rootT) => state.multiplayer.username)
   const host = useSelector((state: rootT) => state.multiplayer.socketIoData.host)
+  const lobbyId = useSelector((state: rootT) => state.multiplayer.socketIoData.lobbyId)
 
   const dispatch: any = useDispatch()
 
@@ -19,7 +20,7 @@ const HostGameBtn = () => {
       : await dispatch(hostGame(username))
   }
 
-  const cancelHosting = () => dispatch({ type: LEAVE_LOBBY })
+  const cancelHosting = () => dispatch(leaveLobby(lobbyId))
 
   return (
     <TouchableOpacity

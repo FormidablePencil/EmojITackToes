@@ -1,19 +1,32 @@
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity } from "react-native"
+import React, { useRef } from 'react'
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { useDispatch } from "react-redux"
 import getAllLobbies from "../../../actions/multiplayer/getAllLobbies"
-import { Feather } from '@expo/vector-icons'; 
+import { Feather } from '@expo/vector-icons';
+import * as Animatable from 'react-native-animatable';
 
 const RefreshLobbiesBtn = () => {
   const dispatch = useDispatch()
-  const onPressHandler = () => dispatch(getAllLobbies())
+  const refreshRef = useRef(null)
+
+  const onPressHandler = () => {
+    dispatch(getAllLobbies())
+    refreshRef.current.rotate()
+  }
 
   return (
     <TouchableOpacity style={styles.refreshBtn} onPress={onPressHandler}>
-      <Feather name="refresh-cw" size={32} color="white" />
+      <Animatable.View
+        ref={refreshRef}
+        useNativeDriver={true}
+      >
+        <Feather name="refresh-cw" size={32} color="white" />
+      </Animatable.View>
     </TouchableOpacity>
   )
 }
+
+Animatable.createAnimatableComponent
 
 const styles = StyleSheet.create({
   refreshBtn: {

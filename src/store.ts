@@ -8,6 +8,8 @@ import allAvailableLobbiesReducer, { lobbyDataT } from './reducers/allAvailableL
 import muteReducer from './reducers/muteReducer'
 import gameboardReducer from './reducers/gameboardReducer'
 import { GameBoardInterface } from './TypesTypeScript/TypesAndInterface'
+import miscReducer, { miscT } from './reducers/miscReducer'
+import locallyStoredDataLoadedReducer from './reducers/locallyStoredDataLoadedReducer'
 
 export interface rootT {
   gameboard: GameBoardInterface
@@ -17,6 +19,8 @@ export interface rootT {
   multiplayer: multiplayerT,
   allAvailableLobbies: lobbyDataT[],
   mute: boolean,
+  misc: miscT,
+  locallyStoredDataLoaded: boolean,
 }
 const rootReducer = combineReducers<rootT>({
   gameboard: gameboardReducer,
@@ -26,6 +30,8 @@ const rootReducer = combineReducers<rootT>({
   multiplayer: multiplayerReducer,
   allAvailableLobbies: allAvailableLobbiesReducer,
   mute: muteReducer,
+  misc: miscReducer,
+  locallyStoredDataLoaded: locallyStoredDataLoadedReducer,
 })
 
 const initialState = {}

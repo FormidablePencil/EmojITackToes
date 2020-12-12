@@ -68,6 +68,10 @@ export const reusableStyles = StyleSheet.create({
     color: '#d1faf0',
     fontFamily: 'LemonadaSemiBold',
   },
+  regDarkText: {
+    color: '#247AFF',
+    fontFamily: 'LemonadaSemiBold',
+  },
   totallyCenter: {
     justifyContent: 'center',
     alignItems: 'center',
