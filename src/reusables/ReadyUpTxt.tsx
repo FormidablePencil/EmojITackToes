@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { View, Text } from 'react-native'
+import React from 'react'
+import { Text } from 'react-native'
 import { useSelector } from 'react-redux'
 import useCheckIfOnlineGame from '../hooks/useCheckIfOnlineGame'
 import { rootT } from '../store'
@@ -18,11 +18,11 @@ export const ReadyUpTxt = () => {
 export const QuitOrRestartText = ({ score }) => {
   const isOnlineGame = useCheckIfOnlineGame()
   return (
-    <Text style={score.p1 === 0 && score.p2 === 0
+    <Text style={!isOnlineGame && score.p1 === 0 && score.p2 === 0
       ? { color: "#FF97E5", ...reusableStyles.smText }
       : { color: 'white', ...reusableStyles.smText }
     }>
-      { isOnlineGame ? 'Quit' : 'Restart'}
+      {isOnlineGame ? 'Quit' : 'Restart'}
     </Text >
   )
 }

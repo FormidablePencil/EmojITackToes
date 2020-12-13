@@ -1,5 +1,4 @@
 import socketIoCommands from "../../socket.io/socketIoCommandCenter";
-import { socket } from "../../socket.io/useSocketIo";
 import { ERROR_MULTIPLAYER, JOINED_LOBBY } from "../types";
 
 const joinGame = ({ username, lobbyId }) => async dispatch => {

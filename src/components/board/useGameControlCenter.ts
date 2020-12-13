@@ -42,7 +42,7 @@ const useGameControlCenter = (
             setGameOver(true)
             return
          }
-         sendMoveMadeToOtherPlayer({ boxPressed, col })
+         if (ifOnlineGame) sendMoveMadeToOtherPlayer({ boxPressed, col })
          setSquaresFilled(prev => prev + 1)
          dispatch({ type: TOGGLE_PLAYERS_TURNS })
       } else {
@@ -57,15 +57,15 @@ const useGameControlCenter = (
       if (ifOnlineGame && isClientTurn) {
          changeGameboard({ boxPressed, col, playersTurn: clientIsHost })
          // dispatch({ type: END_CLIENT_TURN })
-      }else if (!ifOnlineGame) {
+      } else if (!ifOnlineGame) {
          changeGameboard({ boxPressed, col, playersTurn: isClientTurn })
 
       }
       // } else if (ifOnlineGame) {
-         // console.log("opponents turn")
+      // console.log("opponents turn")
       // } else {
-         // changeGameboard({ boxPressed, col, playersTurn: isClientTurn })
-         // dispatch({ type: TOGGLE_PLAYERS_TURNS })
+      // changeGameboard({ boxPressed, col, playersTurn: isClientTurn })
+      // dispatch({ type: TOGGLE_PLAYERS_TURNS })
       // }
    }
 

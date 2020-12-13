@@ -4,7 +4,6 @@ import asyncStorageMethods from "@bit/formidablepencil.react-native-reusables.as
 import { LOAD_LOCALLY_SAVED_ANIM_SETTINGS, LOAD_LOCALLY_SAVED_CHARACTERS, LOAD_LOCALLY_SAVED_MUTE, LOAD_LOCALLY_SAVED_USERNAME, LOCALLY_STORED_DATA_LOADED } from "../actions/types"
 import getRandomFruitsName from 'random-fruits-name'
 
-
 const lsDirNames = {
   mute: 'mute',
   playerTag: 'playerTag',

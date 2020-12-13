@@ -1,15 +1,14 @@
-import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import socketIoClient from 'socket.io-client';
-import { CLIENT_TURN, JOINED_LOBBY, OPPOSING_PLAYER_READY_UP, READY_UP, UPDATE_CHARACTER, UPDATE_GAME_BOARD } from '../actions/types';
+import { CLIENT_TURN, JOINED_LOBBY, OPPOSING_PLAYER_READY_UP, UPDATE_CHARACTER, UPDATE_GAME_BOARD } from '../actions/types';
 import { rootT } from '../store';
 import { sqTypes } from '../TypesTypeScript/TypesAndInterface';
 
 export let socket
 
 const useSocketIo = () => {
-  const { username, socketIoData, enterLobby, error, clientIsHost } = useSelector((state: rootT) => state.multiplayer)
+  const { socketIoData, clientIsHost } = useSelector((state: rootT) => state.multiplayer)
   const dispatch = useDispatch()
 
   const connectToSocketIo = () => {

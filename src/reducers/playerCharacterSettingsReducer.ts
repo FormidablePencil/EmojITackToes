@@ -32,8 +32,8 @@ export default (state = initialState, { type, payload }) => {
          saveLocallyPlayerCharacterSettings(newState)
          return newState
 
-      // case LOAD_LOCALLY_SAVED_CHARACTERS:
-         // return payload
+      case LOAD_LOCALLY_SAVED_CHARACTERS:
+         return payload
 
       default:
          return state

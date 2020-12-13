@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TextInput, LayoutAnimation } from 'react-native'
+import { Text, LayoutAnimation } from 'react-native'
 import { ScoresCompTypes, Players } from "../../TypesTypeScript/TypesAndInterface";
 import styled from "styled-components";
 import { TouchableRipple, Button, useTheme } from "react-native-paper";
@@ -33,7 +33,7 @@ const ScoresAndEmojiSecection = ({
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear); //transition effect not working here
     if (selectedPlayerToChooseCharacter === Players.p1 || selectedPlayerToChooseCharacter === Players.p2) {
       setSelectedPlayerToChooseCharacter(null)
-    } else { console.log('sd'); setSelectedPlayerToChooseCharacter(Players.p1) }
+    } else { setSelectedPlayerToChooseCharacter(Players.p1) }
   }
 
   return (
