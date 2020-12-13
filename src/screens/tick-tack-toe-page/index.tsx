@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Text, useTheme } from 'react-native-paper'
-import { View, Dimensions } from 'react-native'
+import { Portal, Modal, Text, Button } from 'react-native-paper'
+import { View, Dimensions, LayoutAnimation } from 'react-native'
 import Board from '../../components/board'
-import { TopView, Score } from '../../styles/stylesglobal'
+import { reusableStyles } from '../../styles/stylesglobal'
 import { useDispatch, useSelector } from 'react-redux'
-import ModalContent from '../../components/modalComp/modal-content'
 import { ScoresTypes, ModalContents, GameBoardInterface, WinnerSqsTypes } from '../../TypesTypeScript/TypesAndInterface'
 import styled from 'styled-components'
 import { gameLogic } from '../../components/board/gameLogic'
@@ -13,12 +12,13 @@ import { LinearGradient } from 'expo-linear-gradient'
 import useLobby from '../../hooks/useLobby'
 import PageWrapper from '../../layouts/PageWrapper'
 import { useNavigation } from '@react-navigation/native'
-import { STATE_NEW_GAME } from '../../actions/types'
+import { LEAVE_LOBBY, STATE_NEW_GAME } from '../../actions/types'
 import { rootT } from '../../store'
 import MenuModal from './components/MenuModal'
 import PlayerScores from './components/PlayerScores'
 import useCheckIfOnlineGame from '../../hooks/useCheckIfOnlineGame'
 import useReadyUp from '../../hooks/useReadyUp'
+import socketIoCommands from '../../socket.io/socketIoCommandCenter'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 export const initialSqs: GameBoardInterface = {
@@ -29,7 +29,9 @@ export const initialSqs: GameBoardInterface = {
 
 const TickTackToeScreen = () => {
    useLobby()
-   const { playerCharacter } = useSelector((state: any) => state.playerCharacterSettings)
+   const { playerCharacter } = useSelector((state: rootT) => state.playerCharacterSettings)
+   const lobbyId = useSelector((state: rootT) => state.multiplayer.socketIoData.lobbyId)
+   const playerLeft = useSelector((state: rootT) => state.multiplayer.playerLeft)
    const navigation = useNavigation()
    const defaultWonInfo = { playerWon: null, cols: [null], sqs: [null], direction: null }
    const [wonInfo, setWonInfo] = useState<WinnerSqsTypes>(defaultWonInfo)
@@ -43,11 +45,38 @@ const TickTackToeScreen = () => {
    const initialRender = useRef(true)
    const gameboard = useSelector((state: rootT) => state.gameboard)
    const dispatch = useDispatch()
+   const ifOnlineGame = useCheckIfOnlineGame()
 
+   useEffect(() => {
+      // clear everything and notify opponent that player left.
+      return async () => {
+         if (ifOnlineGame) {
+            await socketIoCommands.quitGame(lobbyId)
 
-   const restartScore = () => {
-      setScore(initialScores)
-   }
+            dispatch({ type: LEAVE_LOBBY })
+         }
+      }
+   }, [])
+
+   useEffect(() => {
+      setSquaresFilled(prev => prev + 1)
+      const playerWon = gameLogic({ gameboard })
+      if (playerWon) setWonInfo(playerWon)
+      if (playerWon) {
+         setScore({ ...score, [playerWon.playerWon]: score[playerWon.playerWon] + 1 })
+         setTimeout(() => {
+            setGameOver(true)
+         }, 1000);
+         setGameOver(true)
+      }
+      if (squaresFilled === 8) {
+         setTimeout(() => {
+            setGameOver(true)
+         }, 1000);
+         setSquaresFilled(0)
+         return
+      }
+   }, [gameboard])
 
    useEffect(() => {
       if (!initialRender.current) {
@@ -69,21 +98,27 @@ const TickTackToeScreen = () => {
 
    useReadyUp({ startGame })
 
+   const onQuitHandler = () => {
+      navigation.navigate('findMatch')
+      if (ifOnlineGame)
+         setTimeout(() => {
+            dispatch({ type: LEAVE_LOBBY })
+         }, 1000);
+   }
 
-   useEffect(() => {
-      const playerWon = gameLogic({ gameboard })
-      if (playerWon) setWonInfo(playerWon)
-      if (playerWon) {
-         setScore({ ...score, [playerWon.playerWon]: score[playerWon.playerWon] + 1 })
-         setGameOver(true)
-      }
-   }, [gameboard])
+   const restartScore = () => {
+      setScore(initialScores)
+   }
 
-   const onPressTopRightIcon = () => navigation.navigate('menu')
+   const onPressTopRightIcon = () => {
+      if (!ifOnlineGame) navigation.navigate('menu')
+      else navigation.navigate('findMatch')
+   }
 
 
    return (
-      <PageWrapper icon='menu' onPressTopRightIcon={onPressTopRightIcon}>
+      <PageWrapper icon={!ifOnlineGame ? 'menu' : 'x-circle'} onPressTopRightIcon={onPressTopRightIcon}>
+         <PlayerLeftModal onQuitHandler={onQuitHandler} />
 
          <PlayerScores
             ModalContents={ModalContents}
@@ -106,9 +141,12 @@ const TickTackToeScreen = () => {
          <View style={{ flex: .4 }}></View>
 
          <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
-            {gameOver && showInModal === ModalContents.GameOver &&
-               <GameOverOverlay setShowInModal={setShowInModal} startGame={startGame} />
-            }
+            <GameOverOverlay
+               showInModal={showInModal}
+               gameOver={gameOver}
+               setShowInModal={setShowInModal}
+               startGame={startGame}
+            />
          </View>
 
          <MenuModal
@@ -125,6 +163,26 @@ const TickTackToeScreen = () => {
    )
 }
 
+const PlayerLeftModal = ({ onQuitHandler }) => {
+   const guestUsername = useSelector((state: rootT) => state.multiplayer.socketIoData.guest.username)
+   const hostUsername = useSelector((state: rootT) => state.multiplayer.socketIoData.host.username)
+   const clientIsHost = useSelector((state: rootT) => state.multiplayer.clientIsHost)
+   const playerLeft = useSelector((state: rootT) => state.multiplayer.playerLeft)
+   const ifOnlineGame = useCheckIfOnlineGame()
+
+   return (
+      <Portal>
+         <Modal
+            visible={ifOnlineGame ? playerLeft : false}
+            contentContainerStyle={{ backgroundColor: 'rgba(48, 57, 101, 0.201)', alignItems: 'center' }}>
+            <Text style={{ ...reusableStyles.lgText }}>
+               {clientIsHost ? hostUsername : guestUsername} left the game
+         </Text>
+            <Button onPress={onQuitHandler}>Quit</Button>
+         </Modal>
+      </Portal>
+   )
+}
 
 export const StandardText = styled<any>(Text)`
    color: ${props => props.transparent ? 'transparent' : 'white'};

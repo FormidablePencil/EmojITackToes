@@ -6,7 +6,7 @@ import EmojiSelector, { Categories } from "react-native-emoji-selector";
 import { useSelector, useDispatch } from 'react-redux';
 import { playerCharacterSettingsTypes } from '../../../reducers/playerCharacterSettingsReducer';
 import { ScoresTypes, ScoresCompTypes, Players, ModalContents } from '../../../TypesTypeScript/TypesAndInterface';
-import { WHOLE_NEW_PLAYER_CHARACTERS, REST_AUTH_DATA, READY_UP } from '../../../actions/types';
+import { WHOLE_NEW_PLAYER_CHARACTERS, REST_AUTH_DATA, READY_UP, LEAVE_LOBBY } from '../../../actions/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import ScoresAndEmojiSecection from '../ScoresAndEmojiSecection';
 import { useNavigation } from '@react-navigation/native'
@@ -69,7 +69,10 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
     switch (action) {
       case onPress.navFindMatch:
         navigation.navigate('findMatch')
-        // console.log('kkkk');
+        if (isOnlineGame)
+          setTimeout(() => {
+            dispatch({ type: LEAVE_LOBBY })
+          }, 1000)
         break
 
       case onPress.dismissKeyboard:

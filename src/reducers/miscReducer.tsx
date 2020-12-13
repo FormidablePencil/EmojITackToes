@@ -1,11 +1,13 @@
-import { TOGGLE_USERNAME_POPUP_TOOLTIP } from "../actions/types"
+import { CHAR_ANIM_OUT_FALSE, CHAR_ANIM_OUT_TOGGLE, CHAR_ANIM_OUT_TRUE, TOGGLE_USERNAME_POPUP_TOOLTIP } from "../actions/types"
 
 export interface miscT {
+  characterAnimateOut: boolean,
   usernamePopupToolTip: boolean
 }
 
 const initialState: miscT = {
-  usernamePopupToolTip: false
+  characterAnimateOut: false,
+  usernamePopupToolTip: false,
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -13,6 +15,12 @@ export default (state = initialState, { type, payload }) => {
 
     case TOGGLE_USERNAME_POPUP_TOOLTIP:
       return { ...state, usernamePopupToolTip: !state.usernamePopupToolTip }
+
+    case CHAR_ANIM_OUT_TRUE:
+      return { ...state, characterAnimateOut: true }
+
+    case CHAR_ANIM_OUT_FALSE:
+      return { ...state, characterAnimateOut: false }
 
     default:
       return state

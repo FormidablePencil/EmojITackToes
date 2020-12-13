@@ -28,21 +28,30 @@ const useLocalStorage = () => {
 
   const handleAsyncStorage = async (dirName, type) => {
     const locallyStored = await asyncStorageMethods.getLocallyStoredData(dirName)
+
+    /* player tag now will always be different */
+    if (dirName === lsDirNames.playerTag) return furtherAction(dirName, type)
+
     if (locallyStored) dispatch({ type, payload: locallyStored })
     else furtherAction(dirName, type)
   }
 
-  const furtherAction = (dirName, type) => {
+  const furtherAction = async (dirName, type) => {
     switch (true) {
       case dirName === lsDirNames.playerTag:
-        getRandomFruitsName()
-        dispatch({ type, payload: getRandomFruitsName() })
+        dispatch({ type, payload: generateRandomFruitName() })
         break;
 
       default:
         break;
     }
   }
+}
+
+const generateRandomFruitName = () => {
+  let randomFruitName = getRandomFruitsName('en', { maxWords: 1 })
+  if (randomFruitName.length > 12) generateRandomFruitName()
+  else return randomFruitName
 }
 
 const saveLocallyMute = async (data) => await asyncStorageMethods.storeToLocalStorage(lsDirNames.mute, data)

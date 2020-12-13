@@ -1,7 +1,7 @@
 import { LEAVE_LOBBY } from "../types"
 
 const leaveLobby = lobbyId => async dispatch => {
-  const url = 'http://10.0.0.7:4005/lobby'
+  const url = 'https://tick-tack-toes.herokuapp.com/lobby'
   const data = {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },

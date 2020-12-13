@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import socketIoClient from 'socket.io-client';
-import { CLIENT_TURN, JOINED_LOBBY, OPPOSING_PLAYER_READY_UP, UPDATE_CHARACTER, UPDATE_GAME_BOARD } from '../actions/types';
+import { CLIENT_TURN, JOINED_LOBBY, OPPOSING_PLAYER_READY_UP, PLAYER_LEFT_GAME, UPDATE_CHARACTER, UPDATE_GAME_BOARD } from '../actions/types';
 import { rootT } from '../store';
 import { sqTypes } from '../TypesTypeScript/TypesAndInterface';
 
@@ -12,7 +12,7 @@ const useSocketIo = () => {
   const dispatch = useDispatch()
 
   const connectToSocketIo = () => {
-    socket = socketIoClient('http://10.0.0.7:4005', {
+    socket = socketIoClient('https://tick-tack-toes.herokuapp.com/', {
       transports: ['websocket'], jsonp: false
     });
     socket.connect();
@@ -51,6 +51,10 @@ const useSocketIo = () => {
 
         case payload.action === 'ready up':
           dispatch({ type: OPPOSING_PLAYER_READY_UP })
+          break;
+
+        case payload.action === 'player left':
+          dispatch({ type: PLAYER_LEFT_GAME })
           break;
 
         default:

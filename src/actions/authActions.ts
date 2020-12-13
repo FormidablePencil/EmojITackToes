@@ -1,5 +1,5 @@
-import { REGISTERED, LOGGED_IN, SAVE_FETCHED_USER_DATA } from "./types"
-import { validateInputs, AuthValidationResponses } from "../logic/validateInputFormats"
+import { REGISTERED, LOGGED_IN } from "./types"
+import { validateInputs } from "../logic/validateInputFormats"
 import { ControlledInputsTypes } from '../components/authComponents/AuthsCompToRender'
 
 export enum AuthActionResponses {
@@ -46,7 +46,7 @@ export const registerAction = (controlledInputs: ControlledInputsTypes) => async
       email: controlledInputs.email
     })
   }
-  const fetchedData = await fetch('http://10.0.0.6:4003/auth/register', request)
+  const fetchedData = await fetch('https://tick-tack-toes.herokuapp.com/auth/register', request)
   const { accessToken, refreshToken, message, username, email } = await fetchedData.json()
   if (accessToken && refreshToken) {
     // console.log("logged in")
@@ -86,7 +86,7 @@ export const loginAction = (controlledInputs: ControlledInputsTypes) => async (d
       password: controlledInputs.password,
     })
   }
-  const fetchedData = await fetch('http://10.0.0.6:4003/auth/login', request)
+  const fetchedData = await fetch('https://tick-tack-toes.herokuapp.com/auth/login', request)
   const { accessToken, refreshToken, username, email, message } = await fetchedData.json()
 
   if (accessToken && refreshToken) {
@@ -109,7 +109,7 @@ export const refreshToken = (authData) => async (dispatch) => {
     },
     body: JSON.stringify({ token: authData.token })
   }
-  const fetchedData = await fetch('http://10.0.0.6:4003/auth/login', request)
+  const fetchedData = await fetch('https://tick-tack-toes.herokuapp.com/auth/login', request)
   const { userData, message } = await fetchedData.json()
   if (userData) {
     dispatch({ type: FETCHED_USER_DATA, payload: userData })

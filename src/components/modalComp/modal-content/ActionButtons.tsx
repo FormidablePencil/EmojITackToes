@@ -10,11 +10,14 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
   const theme = useTheme()
   const isOnlineGame = useCheckIfOnlineGame()
 
+  const restartQuitHandler = () =>
+    onPressHandler(isOnlineGame ? onPress.navFindMatch : onPress.restartScore)
+
   return (
     <FlexContainer style={{ flex: 2, justifyContent: 'flex-start' }}>
       {!keyboardPresent &&
         <>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row'}}>
             <Button
               style={{ top: -30, flex: 1, marginHorizontal: 10, maxWidth: 100 }}
               mode="contained"
@@ -33,11 +36,11 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
               mode="contained"
             >{selectedPlayerToChooseCharacter !== null && score.p2}</Button>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row'}}>
             <Button
               disabled={!isOnlineGame && (score.p1 === 0 && score.p2 === 0) ? true : false}
               color={theme.colors.primary}
-              onPress={(() => onPressHandler(onPress.restartScore))}
+              onPress={restartQuitHandler}
               style={{ top: -30, marginTop: 10, marginRight: 10, backgroundColor: theme.colors.primary, width: 100 }}
               labelStyle={{ color: 'white' }} mode='contained'>
               <QuitOrRestartText score={score} />

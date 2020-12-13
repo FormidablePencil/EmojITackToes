@@ -30,7 +30,7 @@ const socketIoCommands = {
   quitGame: (lobbyId) => {
     socket.emit('multiplayer', {
       lobbyData: {lobbyId},
-      action: 'ready up'
+      action: 'player left'
     })
   }
 }

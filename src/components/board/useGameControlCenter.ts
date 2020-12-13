@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { CLIENT_TURN, END_CLIENT_TURN, TOGGLE_PLAYERS_TURNS, UPDATE_GAME_BOARD } from "../../actions/types"
 import useCheckIfOnlineGame from "../../hooks/useCheckIfOnlineGame"
@@ -24,7 +25,6 @@ const useGameControlCenter = (
    //    return firstMove
    // }
 
-
    const changeGameboard = ({ boxPressed, col, playersTurn }) => {
       if (gameOver) return
       if (gameboard[col][boxPressed] === null) {
@@ -37,14 +37,9 @@ const useGameControlCenter = (
             },
          })
          // if (!ifOnlineGame) setPlayerOneTurn(prev => !prev)
-         if (squaresFilled >= 8) {
-            setSquaresFilled(0)
-            setGameOver(true)
-            return
-         }
          if (ifOnlineGame) sendMoveMadeToOtherPlayer({ boxPressed, col })
-         setSquaresFilled(prev => prev + 1)
          dispatch({ type: TOGGLE_PLAYERS_TURNS })
+
       } else {
          // alert('already pressed do nothing')
       }

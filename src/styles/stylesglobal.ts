@@ -68,6 +68,11 @@ export const reusableStyles = StyleSheet.create({
     color: '#d1faf0',
     fontFamily: 'LemonadaSemiBold',
   },
+  lgText: {
+    color: '#d1faf0',
+    fontFamily: 'LemonadaSemiBold',
+    fontSize: 20,
+  },
   regDarkText: {
     color: '#247AFF',
     fontFamily: 'LemonadaSemiBold',

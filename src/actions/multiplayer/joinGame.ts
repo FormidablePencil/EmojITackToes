@@ -4,7 +4,7 @@ import { ERROR_MULTIPLAYER, JOINED_LOBBY } from "../types";
 const joinGame = ({ username, lobbyId }) => async dispatch => {
   // console.log('joinGame');
   let type
-  let url = 'http://10.0.0.7:4005/lobby/join'
+  let url = 'https://tick-tack-toes.herokuapp.com/lobby/join'
   let data = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

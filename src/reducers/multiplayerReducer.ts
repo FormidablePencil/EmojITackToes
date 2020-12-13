@@ -2,7 +2,7 @@ import {
   ERROR_MULTIPLAYER, JOINED_LOBBY, LOBBY_HOSTED,
   LEAVE_LOBBY, UPDATE_USERNAME, MATCH_FOUND, CLIENT_TURN,
   END_CLIENT_TURN, READY_UP, ROUND_OVER, START_ROUND,
-  OPPOSING_PLAYER_READY_UP, STATE_NEW_GAME, LOAD_LOCALLY_SAVED_USERNAME, TOGGLE_PLAYERS_TURNS
+  OPPOSING_PLAYER_READY_UP, STATE_NEW_GAME, LOAD_LOCALLY_SAVED_USERNAME, TOGGLE_PLAYERS_TURNS, PLAYER_LEFT_GAME
 } from "../actions/types"
 import { saveLocallyUsername } from "../hooks/useLocalStorage"
 
@@ -25,6 +25,7 @@ export interface multiplayerT {
   readyUp: boolean,
   opposingPlayerReadyUp: boolean,
   previouslyHostedLobbyId: string,
+  playerLeft: boolean
 }
 
 export const defaultSocketIdData = {
@@ -48,12 +49,14 @@ const initialState: multiplayerT = {
   readyUp: false,
   opposingPlayerReadyUp: false,
   previouslyHostedLobbyId: '',
+  playerLeft: false
 }
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
 
     case UPDATE_USERNAME:
+      if (payload.length > 12) return state
       saveLocallyUsername(payload)
       return { ...state, username: payload }
 
@@ -71,6 +74,7 @@ export default (state = initialState, { type, payload }) => {
         socketIoData: payload,
         isClientTurn: clientGoesFirst({ clientIsHost: state.clientIsHost, initialTurnIsHost: payload.initialTurnIsHost }),
         readyUp: false,
+        playerLeft: false
       }
 
     case LEAVE_LOBBY:
@@ -78,7 +82,8 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         socketIoData: defaultSocketIdData,
         clientIsHost: false,
-        previouslyHostedLobbyId: state.socketIoData.lobbyId
+        previouslyHostedLobbyId: state.socketIoData.lobbyId,
+        playerLeft: false
       }
 
 
@@ -106,6 +111,9 @@ export default (state = initialState, { type, payload }) => {
 
     case LOAD_LOCALLY_SAVED_USERNAME:
       return { ...state, username: payload }
+
+    case PLAYER_LEFT_GAME:
+      return { ...state, playerLeft: true }
 
     default:
       return state

@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ModalContents } from "./../TypesTypeScript/TypesAndInterface"
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { TouchableRipple, withTheme, Text } from 'react-native-paper'
 import styled from 'styled-components'
 import { ReadyUpTxt } from '../reusables/ReadyUpTxt'
@@ -8,32 +8,59 @@ import useCheckIfOnlineGame from '../hooks/useCheckIfOnlineGame'
 import { useDispatch, useSelector } from 'react-redux'
 import socketIoCommands from '../socket.io/socketIoCommandCenter'
 import { rootT } from '../store'
-import { READY_UP } from '../actions/types'
+import { CHAR_ANIM_OUT_TRUE, READY_UP } from '../actions/types'
+import * as Animatable from 'react-native-animatable';
 
-const GameOverOverlay = ({ setShowInModal, startGame, theme }) => {
+const GameOverOverlay = ({ showInModal, setShowInModal, gameOver, startGame, theme }) => {
   const isOnlineGame = useCheckIfOnlineGame()
   const dispatch = useDispatch()
   const lobbyId = useSelector((state: rootT) => state.multiplayer.socketIoData.lobbyId)
+  const animatedRef = useRef(null)
+  const [display, setDisplay] = useState(false)
 
   enum Action {
     goToSelectCharacter,
     readyUp
   }
-  const onPressHandler = (action) => {
-    if (action === Action.goToSelectCharacter) {
-      setShowInModal(ModalContents.GameMenu)
-    } else if (action === Action.readyUp) {
-      if (isOnlineGame) {
-        socketIoCommands.readyUp(lobbyId)
-        dispatch({ type: READY_UP })
-      } else {
-        startGame()
+  const onPressHandler = async (action) => {
+    dispatch({ type: CHAR_ANIM_OUT_TRUE })
+    setTimeout(() => {
+      if (action === Action.goToSelectCharacter) {
+        setShowInModal(ModalContents.GameMenu)
+      } else if (action === Action.readyUp) {
+        if (isOnlineGame) {
+          socketIoCommands.readyUp(lobbyId)
+          dispatch({ type: READY_UP })
+        } else {
+          animatedRef.current.fadeOutUpBig().then(() => setDisplay(false))
+          startGame()
+        }
       }
-    }
+    }, 100);
   }
 
+  useEffect(() => {
+    if (isOnlineGame && gameOver && showInModal === ModalContents.GameOver) {
+      setDisplay(true)
+      animatedRef.current.fadeInDownBig()
+    } else if (isOnlineGame && !gameOver && showInModal !== ModalContents.GameOver) {
+      animatedRef.current.fadeOutUpBig().then(() => setTimeout(() => setDisplay(false), 500))
+    }
+
+    if (!isOnlineGame && gameOver) {
+      setTimeout(() => {
+        setDisplay(true)
+        animatedRef.current.fadeInDownBig()
+      }, 500);
+    } else if (!isOnlineGame && !gameOver) {
+      setDisplay(false)
+    }
+  }, [gameOver, showInModal])
+
   return (
-    <ContainerAligning>
+    <Animatable.View
+      useNativeDriver={true}
+      style={{ ...styles.containerAligning, display: display ? 'flex' : 'none' }} ref={animatedRef}>
       <JustifyCol>
         <BtnContainer>
           <TouchableRippleStyled
@@ -55,10 +82,17 @@ const GameOverOverlay = ({ setShowInModal, startGame, theme }) => {
           </TouchableRippleStyled>
         </BtnContainer>
       </JustifyCol>
-    </ContainerAligning>
+    </Animatable.View>
   )
 }
 
+const styles = StyleSheet.create({
+  containerAligning: {
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  }
+})
 const BtnContainer = styled(View)`
   flex-direction: row;
   justify-content: space-around;
@@ -81,12 +115,6 @@ const TextStyled = styled(Text)`
   color: white;
   text-align: center;
 `
-const ContainerAligning = styled(View)`
-/* background-color:red */
-  height: 100%;
-  align-items: center;
-  justify-content: space-around;
-`;
 const JustifyCol = styled(View)`
   align-items: flex-end;
   flex-direction: row;

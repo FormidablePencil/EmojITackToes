@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, LayoutAnimation } from 'react-native'
+import { Text, LayoutAnimation, StyleSheet, View } from 'react-native'
 import { ScoresCompTypes, Players } from "../../TypesTypeScript/TypesAndInterface";
 import styled from "styled-components";
 import { TouchableRipple, Button, useTheme } from "react-native-paper";
@@ -41,7 +41,9 @@ const ScoresAndEmojiSecection = ({
       <PlayerContainer>
         {selectedPlayerToChooseCharacter === null ?
           <>
-            {isGameOnline && <Text style={reusableStyles.regText}>{guestUsername}</Text>}
+            <View style={styles.containerUserText}>
+              {isGameOnline && <Text style={{ ...reusableStyles.regText, ...styles.usernameTxt }}>{guestUsername}</Text>}
+            </View>
             <Text style={{ textAlign: 'center', fontSize: 50 }}>
               {controlledInputs.playerCharacter[1]}
             </Text>
@@ -90,7 +92,9 @@ const ScoresAndEmojiSecection = ({
       <PlayerContainer>
         {selectedPlayerToChooseCharacter === null ?
           <>
-            {isGameOnline && <Text style={reusableStyles.regText}>{hostUsername}</Text>}
+            <View style={styles.containerUserText}>
+              {isGameOnline && <Text style={{ ...reusableStyles.regText, ...styles.usernameTxt }}>{hostUsername}</Text>}
+            </View>
             <Text style={{ textAlign: 'center', fontSize: 50 }}>{controlledInputs.playerCharacter[2]}</Text>
           </>
           :
@@ -128,19 +132,37 @@ const ScoresAndEmojiSecection = ({
   )
 }
 
+const styles = StyleSheet.create({
+  containerUserText: {
+    position: "absolute",
+    top: -20,
+    left: -40,
+    width: 140,
+    height: 10
+  },
+  usernameTxt: {
+    textAlign: "center"
+  }
+})
+
+
 const EmojiSelectorView = styled.View`
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  align-items: center;
-  justify-content: center;
+  /* position: absolute; */
+  /* left: 0;
+  right: 0; */
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+  /* align-items: center; */
+  /* justify-content: center; */
 `;
 const PlayerContainer = styled.View`
 `;
 const ScoreContainer = styled.View`
-  align-items: center; flex-direction: row; justify-content: space-around; width: 100%;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  flex: 1;
 `;
 
 const TouchableRippleStyled = styled(TouchableRipple)`

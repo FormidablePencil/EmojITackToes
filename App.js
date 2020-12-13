@@ -10,9 +10,7 @@ import { LogBox } from 'react-native'
 
 // local:
 // multiplayer:
-// ~ character select only overrides your player char on opponents device
-// ~ echo one's own character to opposition when first loaded
-// ~ only change one's own character on both devices
+// ~ game over overlay btn text is too small of one btn
 
 LogBox.ignoreLogs([
   'Unrecognized WebSocket connection option(s) `localAddress`. Did you mean to put these under `headers`?',

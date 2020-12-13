@@ -14,7 +14,7 @@ export const fetchUserDataAction = (authData) => async (dispatch) => {
       'Authorization': `Bearer ${authData.accessToken}`
     }
   }
-  const fetchedData = await fetch('http://10.0.0.6:4005/something', request)
+  const fetchedData = await fetch('https://tick-tack-toes.herokuapp.com/something', request)
   const { userData, message } = await fetchedData.json()
   if (userData) {
     dispatch({ type: FETCHED_USER_DATA, payload: userData })
