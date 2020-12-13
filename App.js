@@ -9,9 +9,10 @@ import StackNavigator from './src/navigators/StackNavigator'
 import { LogBox } from 'react-native'
 
 // local:
-// ~ sound not loading correctly. says mute but still plays
-// multiplayer
+// multiplayer:
 // ~ character select only overrides your player char on opponents device
+// ~ echo one's own character to opposition when first loaded
+// ~ only change one's own character on both devices
 
 LogBox.ignoreLogs([
   'Unrecognized WebSocket connection option(s) `localAddress`. Did you mean to put these under `headers`?',

@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import playerCharacterSettingsReducer from './reducers/playerCharacterSettingsReducer'
+import playerCharacterSettingsReducer, { playerCharacterSettingsTypes } from './reducers/playerCharacterSettingsReducer'
 import authDataReducer from './reducers/authDataReducer'
 import animationSettingReducer from './reducers/animationSettingReducer'
 import multiplayerReducer, { multiplayerT } from './reducers/multiplayerReducer'
@@ -13,7 +13,7 @@ import locallyStoredDataLoadedReducer from './reducers/locallyStoredDataLoadedRe
 
 export interface rootT {
   gameboard: GameBoardInterface
-  playerCharacterSettings: any
+  playerCharacterSettings: playerCharacterSettingsTypes
   authData: any
   animationSetting: any
   multiplayer: multiplayerT,

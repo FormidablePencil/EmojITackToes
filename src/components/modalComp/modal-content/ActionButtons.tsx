@@ -1,11 +1,10 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 import { Button, useTheme } from 'react-native-paper';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import useCheckIfOnlineGame from '../../../hooks/useCheckIfOnlineGame';
 import { ReadyUpTxt, QuitOrRestartText } from '../../../reusables/ReadyUpTxt';
-import { rootT } from '../../../store';
+import { reusableStyles } from '../../../styles/stylesglobal';
 
 function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPressHandler, onPress, score }) {
   const theme = useTheme()
@@ -17,9 +16,11 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
         <>
           <View style={{ flexDirection: 'row' }}>
             <Button
-              style={{ top: -30, flex: 1, marginHorizontal: 10 }}
+              style={{ top: -30, flex: 1, marginHorizontal: 10, maxWidth: 100 }}
               mode="contained"
-            >{selectedPlayerToChooseCharacter !== null && score.p1}</Button>
+            >
+              {selectedPlayerToChooseCharacter !== null && score.p1}
+            </Button>
             <Button
               color={theme.colors.primary}
               onPress={(() => onPressHandler(onPress.startGame))}
@@ -28,7 +29,7 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
               <ReadyUpTxt />
             </Button>
             <Button
-              style={{ top: -30, flex: 1, marginHorizontal: 10 }}
+              style={{ top: -30, flex: 1, marginHorizontal: 10, maxWidth: 100 }}
               mode="contained"
             >{selectedPlayerToChooseCharacter !== null && score.p2}</Button>
           </View>
@@ -37,7 +38,7 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
               disabled={!isOnlineGame && (score.p1 === 0 && score.p2 === 0) ? true : false}
               color={theme.colors.primary}
               onPress={(() => onPressHandler(onPress.restartScore))}
-              style={{ top: -30, marginTop: 10, marginRight: 10, backgroundColor: theme.colors.primary }}
+              style={{ top: -30, marginTop: 10, marginRight: 10, backgroundColor: theme.colors.primary, width: 100 }}
               labelStyle={{ color: 'white' }} mode='contained'>
               <QuitOrRestartText score={score} />
             </Button>
@@ -45,7 +46,11 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
               color={theme.colors.primary}
               onPress={(() => onPressHandler(onPress.animationSettings))}
               style={{ top: -30, marginTop: 10 }}
-              labelStyle={{ color: 'white' }} mode='contained'>animation</Button>
+              labelStyle={{ color: 'white' }} mode='contained'>
+              <Text style={reusableStyles.smText}>
+                animation
+              </Text>
+            </Button>
           </View>
         </>
       }

@@ -46,7 +46,7 @@ const useSocketIo = () => {
         case payload.action === 'character changed':
           dispatch({
             type: UPDATE_CHARACTER,
-            payload: { emoji: payload.emoji, player: clientIsHost ? 2 : 1 },
+            payload: { emoji: payload.emoji, player: clientIsHost ? 1 : 2 },
           })
           break;
 

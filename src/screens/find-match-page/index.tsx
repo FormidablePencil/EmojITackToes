@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, StyleSheet } from 'react-native'
 import GamesAvailable from './components/GamesAvailable';
 import useLobby from '../../hooks/useLobby';
 import RefreshLobbiesBtn from './components/RefreshLobbiesBtn';

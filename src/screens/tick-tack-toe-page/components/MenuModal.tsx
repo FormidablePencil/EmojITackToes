@@ -1,6 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
-import { Modal, Text, useTheme } from 'react-native-paper'
+import { Modal } from 'react-native-paper'
 import ModalContent from '../../../components/modalComp/modal-content'
 import AnimationOptions from '../../../components/AnimationOptions'
 

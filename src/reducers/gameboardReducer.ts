@@ -15,7 +15,6 @@ export default (state = initialSqs, { type, payload }) => {
       return initialSqs
 
     case UPDATE_GAME_BOARD:
-      console.log(payload, 'move?')
       return {
         ...state, [payload.col]: {
           ...state[payload.col],

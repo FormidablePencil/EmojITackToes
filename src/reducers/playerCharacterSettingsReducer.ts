@@ -1,4 +1,4 @@
-import { CHANGE_P1_CHARACTER, CHANGE_P2_CHARACTER, LOAD_LOCALLY_SAVED_CHARACTERS, UPDATE_CHARACTER, WHOLE_NEW_PLAYER_CHARACTERS } from "../actions/types"
+import { LOAD_LOCALLY_SAVED_CHARACTERS, UPDATE_CHARACTER, WHOLE_NEW_PLAYER_CHARACTERS } from "../actions/types"
 import { saveLocallyPlayerCharacterSettings } from "../hooks/useLocalStorage"
 
 export interface playerCharacterSettingsTypes {
@@ -21,6 +21,7 @@ export default (state = initialState, { type, payload }) => {
    switch (type) {
 
       case WHOLE_NEW_PLAYER_CHARACTERS:
+         saveLocallyPlayerCharacterSettings(payload)
          return payload
 
       case UPDATE_CHARACTER:
@@ -31,8 +32,8 @@ export default (state = initialState, { type, payload }) => {
          saveLocallyPlayerCharacterSettings(newState)
          return newState
 
-      case LOAD_LOCALLY_SAVED_CHARACTERS:
-         return payload
+      // case LOAD_LOCALLY_SAVED_CHARACTERS:
+         // return payload
 
       default:
          return state

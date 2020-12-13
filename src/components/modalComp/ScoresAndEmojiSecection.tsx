@@ -3,6 +3,10 @@ import { Text, TextInput, LayoutAnimation } from 'react-native'
 import { ScoresCompTypes, Players } from "../../TypesTypeScript/TypesAndInterface";
 import styled from "styled-components";
 import { TouchableRipple, Button, useTheme } from "react-native-paper";
+import { reusableStyles } from '../../styles/stylesglobal';
+import { useSelector } from 'react-redux';
+import { rootT } from '../../store';
+import useCheckIfOnlineGame from '../../hooks/useCheckIfOnlineGame';
 
 const ScoresAndEmojiSecection = ({
   controlledInputs,
@@ -15,6 +19,12 @@ const ScoresAndEmojiSecection = ({
   setSelectedPlayerToChooseCharacter
 }: ScoresCompTypes) => {
   const theme = useTheme()
+  const hostUsername = useSelector((state: rootT) => state.multiplayer.socketIoData.host.username)
+  const guestUsername = useSelector((state: rootT) => state.multiplayer.socketIoData.guest.username)
+  const clientIsHost = useSelector((state: rootT) => state.multiplayer.clientIsHost)
+  const isGameOnline = useCheckIfOnlineGame()
+
+
   const onChangeHandler = (text: string, whatPlayer: number) => {
     setControlledInputs({ ...controlledInputs, playerCharacter: { ...controlledInputs.playerCharacter, [whatPlayer]: text } })
   }
@@ -30,7 +40,12 @@ const ScoresAndEmojiSecection = ({
     <ScoreContainer style={{ top: selectedPlayerToChooseCharacter === null ? -30 : 0 }}>
       <PlayerContainer>
         {selectedPlayerToChooseCharacter === null ?
-          <Text style={{ textAlign: 'center', fontSize: 50 }}>{controlledInputs.playerCharacter[1]}</Text>
+          <>
+            {isGameOnline && <Text style={reusableStyles.regText}>{guestUsername}</Text>}
+            <Text style={{ textAlign: 'center', fontSize: 50 }}>
+              {controlledInputs.playerCharacter[1]}
+            </Text>
+          </>
           :
           <TouchableRippleStyled
             style={{
@@ -40,11 +55,7 @@ const ScoresAndEmojiSecection = ({
             }}
             onPress={() => setSelectedPlayerToChooseCharacter(Players.p1)}
           >
-            <Text
-              style={{ textAlign: 'center', fontSize: 50 }}
-            >
-              {controlledInputs.playerCharacter[1]}
-            </Text>
+            <Text style={{ textAlign: 'center', fontSize: 50 }}>{controlledInputs.playerCharacter[1]}</Text>
           </TouchableRippleStyled>
         }
         {selectedPlayerToChooseCharacter === null &&
@@ -78,7 +89,10 @@ const ScoresAndEmojiSecection = ({
 
       <PlayerContainer>
         {selectedPlayerToChooseCharacter === null ?
-          <Text style={{ textAlign: 'center', fontSize: 50 }}>{controlledInputs.playerCharacter[2]}</Text>
+          <>
+            {isGameOnline && <Text style={reusableStyles.regText}>{hostUsername}</Text>}
+            <Text style={{ textAlign: 'center', fontSize: 50 }}>{controlledInputs.playerCharacter[2]}</Text>
+          </>
           :
           <TouchableRippleStyled
             style={{

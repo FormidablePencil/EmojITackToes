@@ -1,7 +1,6 @@
-import { useEffect, useRef } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
 import asyncStorageMethods from "@bit/formidablepencil.react-native-reusables.async-storage-methods"
-import { rootT } from "../store"
 import { LOAD_LOCALLY_SAVED_ANIM_SETTINGS, LOAD_LOCALLY_SAVED_CHARACTERS, LOAD_LOCALLY_SAVED_MUTE, LOAD_LOCALLY_SAVED_USERNAME, LOCALLY_STORED_DATA_LOADED } from "../actions/types"
 import getRandomFruitsName from 'random-fruits-name'
 

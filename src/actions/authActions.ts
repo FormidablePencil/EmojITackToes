@@ -115,6 +115,5 @@ export const refreshToken = (authData) => async (dispatch) => {
     dispatch({ type: FETCHED_USER_DATA, payload: userData })
     return  AuthActionResponses.successfully_retrieved_user_data
   } else {
-    console.log(message)
   }
 }

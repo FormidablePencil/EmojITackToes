@@ -52,9 +52,9 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
 
   const onEmojiSelectHandler = (emoji) => {
     if (isOnlineGame)
-      if (clientIsHost && selectedPlayerToChooseCharacter === Players.p1
-        || !clientIsHost && selectedPlayerToChooseCharacter === Players.p2) {
-        socketIoCommands.characterSelected(emoji, clientIsHost ? 2 : 1, lobbyId)
+      if (!clientIsHost && selectedPlayerToChooseCharacter === Players.p1
+        || clientIsHost && selectedPlayerToChooseCharacter === Players.p2) {
+        socketIoCommands.characterSelected(emoji, clientIsHost ? 1 : 2, lobbyId)
       }
     setControlledInputs({
       ...controlledInputs,
@@ -79,6 +79,7 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
       case onPress.startGame:
         if (isOnlineGame) {
           socketIoCommands.readyUp(lobbyId)
+          dispatch({ type: WHOLE_NEW_PLAYER_CHARACTERS, payload: controlledInputs })
           dispatch({ type: READY_UP })
         } else {
           dispatch({ type: WHOLE_NEW_PLAYER_CHARACTERS, payload: controlledInputs })

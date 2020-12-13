@@ -19,7 +19,6 @@ export const gameLogic = ({ gameboard }) => {
             gameboard[1][`sq${square}`] === playerOne[num] &&
             gameboard[2][`sq${square}`] === playerOne[num]) {
             winnerSqs = { playerWon: `p${num + 1}`, cols: [0, 1, 2], sqs: [`sq${square}`], direction: WinningDirection.vertical }
-            console.log(winnerSqs)
             return winnerSqs
          }
       }

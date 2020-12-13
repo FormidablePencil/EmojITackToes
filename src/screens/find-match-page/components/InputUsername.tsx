@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { TextInput } from 'react-native-paper'
+import { View, Text, StyleSheet } from 'react-native'
+import { Colors, TextInput } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import { TOGGLE_USERNAME_POPUP_TOOLTIP, UPDATE_USERNAME } from '../../../actions/types'
 import { rootT } from '../../../store'
@@ -18,6 +18,7 @@ const InputUsername = () => {
       <View>
         <TextInput
           style={{ ...styles.textInput, width: reusableStyles.regBtn.width }}
+          theme={{ colors: { primary: Colors.purple900 } }}
           mode='outlined'
           value={username}
           onChangeText={value => onChangeTextHandler(value)}
@@ -37,7 +38,7 @@ const InputUsername = () => {
 
 const styles = StyleSheet.create({
   textInput: {
-    backgroundColor: 'purple',
+    backgroundColor: '#6D89FF',
     paddingTop: 10,
     paddingBottom: 10,
     alignSelf: 'center',

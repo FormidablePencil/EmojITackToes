@@ -26,10 +26,10 @@ function MenuScreen() {
 
 
         <View style={styles.menuSelection}>
-          <TouchableOpacity style={reusableStyles.regBtn} onPress={onPressLocalMode}>
+          <TouchableOpacity style={{ ...reusableStyles.regBtn }} onPress={onPressLocalMode}>
             <Text style={reusableStyles.regText}>Play</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={reusableStyles.regBtn} onPress={onPressMultiMode}>
+          <TouchableOpacity style={{ ...reusableStyles.regBtn }} onPress={onPressMultiMode}>
             <Text style={reusableStyles.regText}>Play Online</Text>
           </TouchableOpacity>
         </View>

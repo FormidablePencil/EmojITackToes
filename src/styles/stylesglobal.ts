@@ -72,6 +72,9 @@ export const reusableStyles = StyleSheet.create({
     color: '#247AFF',
     fontFamily: 'LemonadaSemiBold',
   },
+  smText: {
+    fontSize: 13
+  },
   totallyCenter: {
     justifyContent: 'center',
     alignItems: 'center',
