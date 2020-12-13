@@ -176,7 +176,7 @@ const PlayerLeftModal = ({ onQuitHandler }) => {
             visible={ifOnlineGame ? playerLeft : false}
             contentContainerStyle={{ backgroundColor: 'rgba(48, 57, 101, 0.201)', alignItems: 'center' }}>
             <Text style={{ ...reusableStyles.lgText }}>
-               {clientIsHost ? hostUsername : guestUsername} left the game
+               {clientIsHost ? guestUsername : hostUsername} left the game
          </Text>
             <Button onPress={onQuitHandler}>Quit</Button>
          </Modal>

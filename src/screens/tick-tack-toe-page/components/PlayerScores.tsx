@@ -20,14 +20,14 @@ function PlayerScores({
     <TopView>
       <PlayerScore
         transparent={showInModal === ModalContents.GameMenu}
+        active={clientIsHost && isClientTurn || !clientIsHost && !isClientTurn}
         score={score.p1}
-        active={!clientIsHost && isClientTurn || clientIsHost && !isClientTurn}
         playerCharacter={showInModal !== ModalContents.GameMenu && playerCharacter[1]}
         />
       <PlayerScore
         transparent={showInModal === ModalContents.GameMenu}
         score={score.p2}
-        active={clientIsHost && isClientTurn || !clientIsHost && !isClientTurn}
+        active={!clientIsHost && isClientTurn || clientIsHost && !isClientTurn}
         playerCharacter={showInModal !== ModalContents.GameMenu && playerCharacter[2]}
       />
     </TopView>

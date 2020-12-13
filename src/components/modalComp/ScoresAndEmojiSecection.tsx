@@ -42,7 +42,7 @@ const ScoresAndEmojiSecection = ({
         {selectedPlayerToChooseCharacter === null ?
           <>
             <View style={styles.containerUserText}>
-              {isGameOnline && <Text style={{ ...reusableStyles.regText, ...styles.usernameTxt }}>{guestUsername}</Text>}
+              {isGameOnline && <Text style={{ ...reusableStyles.regText, ...styles.usernameTxt }}>{hostUsername}</Text>}
             </View>
             <Text style={{ textAlign: 'center', fontSize: 50 }}>
               {controlledInputs.playerCharacter[1]}
@@ -93,7 +93,7 @@ const ScoresAndEmojiSecection = ({
         {selectedPlayerToChooseCharacter === null ?
           <>
             <View style={styles.containerUserText}>
-              {isGameOnline && <Text style={{ ...reusableStyles.regText, ...styles.usernameTxt }}>{hostUsername}</Text>}
+              {isGameOnline && <Text style={{ ...reusableStyles.regText, ...styles.usernameTxt }}>{guestUsername}</Text>}
             </View>
             <Text style={{ textAlign: 'center', fontSize: 50 }}>{controlledInputs.playerCharacter[2]}</Text>
           </>

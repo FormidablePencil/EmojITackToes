@@ -36,7 +36,7 @@ const useSocketIo = () => {
             payload: {
               col: payload.move.col,
               boxPressed: payload.move.boxPressed,
-              player: clientIsHost ? sqTypes.p1 : sqTypes.p2,
+              player: clientIsHost ? sqTypes.p2 : sqTypes.p1,
             },
           })
           dispatch({ type: CLIENT_TURN })
@@ -45,7 +45,7 @@ const useSocketIo = () => {
         case payload.action === 'character changed':
           dispatch({
             type: UPDATE_CHARACTER,
-            payload: { emoji: payload.emoji, player: clientIsHost ? 1 : 2 },
+            payload: { emoji: payload.emoji, player: clientIsHost ? 2 : 1 },
           })
           break;
 

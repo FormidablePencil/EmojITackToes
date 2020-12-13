@@ -33,13 +33,11 @@ const useGameControlCenter = (
             payload: {
                col: col,
                boxPressed: boxPressed,
-               player: !playersTurn ? sqTypes.p1 : sqTypes.p2,
+               player: playersTurn ? sqTypes.p2 : sqTypes.p1,
             },
          })
          // if (!ifOnlineGame) setPlayerOneTurn(prev => !prev)
          if (ifOnlineGame) sendMoveMadeToOtherPlayer({ boxPressed, col })
-         dispatch({ type: TOGGLE_PLAYERS_TURNS })
-
       } else {
          // alert('already pressed do nothing')
       }
@@ -50,11 +48,11 @@ const useGameControlCenter = (
 
    const makeMoveInGameBoard = ({ boxPressed, col }) => {
       if (ifOnlineGame && isClientTurn) {
-         changeGameboard({ boxPressed, col, playersTurn: clientIsHost })
-         // dispatch({ type: END_CLIENT_TURN })
+         changeGameboard({ boxPressed, col, playersTurn: !clientIsHost })
+         dispatch({ type: END_CLIENT_TURN })
       } else if (!ifOnlineGame) {
          changeGameboard({ boxPressed, col, playersTurn: isClientTurn })
-
+         dispatch({ type: TOGGLE_PLAYERS_TURNS })
       }
       // } else if (ifOnlineGame) {
       // console.log("opponents turn")

@@ -10,6 +10,7 @@ import socketIoCommands from '../socket.io/socketIoCommandCenter'
 import { rootT } from '../store'
 import { CHAR_ANIM_OUT_TRUE, READY_UP } from '../actions/types'
 import * as Animatable from 'react-native-animatable';
+import { reusableStyles } from '../styles/stylesglobal'
 
 const GameOverOverlay = ({ showInModal, setShowInModal, gameOver, startGame, theme }) => {
   const isOnlineGame = useCheckIfOnlineGame()
@@ -68,8 +69,8 @@ const GameOverOverlay = ({ showInModal, setShowInModal, gameOver, startGame, the
             onPress={() => onPressHandler(Action.goToSelectCharacter)}
           >
             <View style={{ flexDirection: 'column' }}>
-              <TextStyled>Select</TextStyled>
-              <TextStyled>character</TextStyled>
+              <TextStyled style={reusableStyles.smText}>Select</TextStyled>
+              <TextStyled style={reusableStyles.smText}>character</TextStyled>
             </View>
           </TouchableRippleStyled>
           <TouchableRippleStyled

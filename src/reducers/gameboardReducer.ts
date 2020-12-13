@@ -1,4 +1,4 @@
-import { LEAVE_LOBBY, STATE_NEW_GAME, UPDATE_GAME_BOARD } from "../actions/types"
+import { JOINED_LOBBY, LEAVE_LOBBY, MATCH_FOUND, STATE_NEW_GAME, UPDATE_GAME_BOARD } from "../actions/types"
 import { GameBoardInterface } from "../TypesTypeScript/TypesAndInterface"
 
 export const initialSqs: GameBoardInterface = {
@@ -12,6 +12,8 @@ export default (state = initialSqs, { type, payload }) => {
 
     case STATE_NEW_GAME:
     case LEAVE_LOBBY:
+    case JOINED_LOBBY:
+    case MATCH_FOUND:
       return initialSqs
 
     case UPDATE_GAME_BOARD:

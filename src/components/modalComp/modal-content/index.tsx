@@ -52,8 +52,8 @@ const ModalContent = ({ gameOver, startGame, score, restartScore, setShowInModal
 
   const onEmojiSelectHandler = (emoji) => {
     if (isOnlineGame)
-      if (!clientIsHost && selectedPlayerToChooseCharacter === Players.p1
-        || clientIsHost && selectedPlayerToChooseCharacter === Players.p2) {
+      if (clientIsHost && selectedPlayerToChooseCharacter === Players.p1
+        || !clientIsHost && selectedPlayerToChooseCharacter === Players.p2) {
         socketIoCommands.characterSelected(emoji, clientIsHost ? 1 : 2, lobbyId)
       }
     setControlledInputs({

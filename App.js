@@ -9,6 +9,7 @@ import StackNavigator from './src/navigators/StackNavigator'
 import { LogBox } from 'react-native'
 
 // local:
+// ~ player turn flipped
 // multiplayer:
 // ~ game over overlay btn text is too small of one btn
 
