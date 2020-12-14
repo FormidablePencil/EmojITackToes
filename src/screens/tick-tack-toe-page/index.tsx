@@ -67,7 +67,7 @@ const TickTackToeScreen = () => {
          }, 1000);
          setGameOver(true)
       }
-      if (squaresFilled === 8) {
+      if (squaresFilled === 9) {
          setTimeout(() => {
             setGameOver(true)
          }, 1000);
