@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import usePlayWiningAnimation from '../useHooks/usePlayWiningAnimation'
 import { sqTypes, ColCompTypes } from './../TypesTypeScript/TypesAndInterface'
 import * as Animatable from 'react-native-animatable';
@@ -10,6 +10,7 @@ import { useTheme } from 'react-native-paper';
 import usePlayOnPressAnimation from '../useHooks/usePlayOnPressAnimation';
 import { rootT } from '../store';
 import usePrevious from '../hooks/usePrevious';
+import { CHAR_ANIM_OUT_FALSE, START_NEW_GAME } from '../actions/types';
 
 
 const ColComp = ({
@@ -31,6 +32,7 @@ const ColComp = ({
   const prevSecondSq = usePrevious(second)
   const prevThirdSq = usePrevious(third)
   const theme = useTheme()
+  const dispatch = useDispatch()
 
   usePlayWiningAnimation({ wonInfo, col, sq0Ref, sq1Ref, sq2Ref, winningSqare, characterAnimateOut })
   const { executeAnimation } = usePlayOnPressAnimation({ sq0Ref, sq1Ref, sq2Ref })
@@ -40,12 +42,16 @@ const ColComp = ({
   }
 
   useEffect(() => {
-    if (gameOver) {
-      sq0Ref.current.bounce()
-      sq1Ref.current.bounce()
-      sq2Ref.current.bounce()
+    if (characterAnimateOut) {
+      sq0Ref.current.zoomOut()
+      sq1Ref.current.zoomOut()
+      sq2Ref.current.zoomOut()
+      dispatch({ type: CHAR_ANIM_OUT_FALSE })
+      setTimeout(() => {
+        dispatch({ type: START_NEW_GAME })
+      }, 1000);
     }
-  }, [gameOver])
+  }, [characterAnimateOut])
 
   useEffect(() => {
     let sqAnimExecute

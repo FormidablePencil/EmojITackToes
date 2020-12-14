@@ -8,7 +8,7 @@ import useCheckIfOnlineGame from '../hooks/useCheckIfOnlineGame'
 import { useDispatch, useSelector } from 'react-redux'
 import socketIoCommands from '../socket.io/socketIoCommandCenter'
 import { rootT } from '../store'
-import { CHAR_ANIM_OUT_TRUE, READY_UP } from '../actions/types'
+import { READY_UP } from '../actions/types'
 import * as Animatable from 'react-native-animatable';
 import { reusableStyles } from '../styles/stylesglobal'
 
@@ -24,7 +24,6 @@ const GameOverOverlay = ({ showInModal, setShowInModal, gameOver, startGame, the
     readyUp
   }
   const onPressHandler = async (action) => {
-    dispatch({ type: CHAR_ANIM_OUT_TRUE })
     setTimeout(() => {
       if (action === Action.goToSelectCharacter) {
         setShowInModal(ModalContents.GameMenu)
