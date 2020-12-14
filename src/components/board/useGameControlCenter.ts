@@ -1,31 +1,18 @@
-import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { CLIENT_TURN, END_CLIENT_TURN, TOGGLE_PLAYERS_TURNS, UPDATE_GAME_BOARD } from "../../actions/types"
+import { END_CLIENT_TURN, TOGGLE_PLAYERS_TURNS, UPDATE_GAME_BOARD } from "../../actions/types"
 import useCheckIfOnlineGame from "../../hooks/useCheckIfOnlineGame"
 import socketIoCommands from "../../socket.io/socketIoCommandCenter"
-import { socket } from "../../socket.io/useSocketIo"
 import { rootT } from "../../store"
 
-const useGameControlCenter = (
-   { gameOver, playerOneTurn, sqTypes, setPlayerOneTurn, squaresFilled, setSquaresFilled, setGameOver }) => {
+const useGameControlCenter = ({ gameOver, sqTypes }) => {
    const socketIoData = useSelector((state: rootT) => state.multiplayer.socketIoData)
-   const username = useSelector((state: rootT) => state.multiplayer.username)
    const clientIsHost = useSelector((state: rootT) => state.multiplayer.clientIsHost)
    const isClientTurn = useSelector((state: rootT) => state.multiplayer.isClientTurn)
    const gameboard = useSelector((state: rootT) => state.gameboard)
    const ifOnlineGame = useCheckIfOnlineGame()
    const dispatch = useDispatch()
 
-   // const isVeryFirstMove = () => {
-   //    const columnsInBoard = 3
-   //    let firstMove = true
-   //    for (let index = 0; index < columnsInBoard; index++) {
-   //       if (gameboard[index]) return firstMove = false
-   //    }
-   //    return firstMove
-   // }
-
-   const changeGameboard = ({ boxPressed, col, playersTurn }) => {
+   const changeGameboard = ({ boxPressed, col, playersTurn, mode }) => {
       if (gameOver) return
       if (gameboard[col][boxPressed] === null) {
          dispatch({
@@ -36,10 +23,8 @@ const useGameControlCenter = (
                player: playersTurn ? sqTypes.p2 : sqTypes.p1,
             },
          })
-         // if (!ifOnlineGame) setPlayerOneTurn(prev => !prev)
+         dispatch({ type: mode === 'multiplayer' ? END_CLIENT_TURN : TOGGLE_PLAYERS_TURNS })
          if (ifOnlineGame) sendMoveMadeToOtherPlayer({ boxPressed, col })
-      } else {
-         // alert('already pressed do nothing')
       }
    }
 
@@ -48,21 +33,11 @@ const useGameControlCenter = (
 
    const makeMoveInGameBoard = ({ boxPressed, col }) => {
       if (ifOnlineGame && isClientTurn) {
-         changeGameboard({ boxPressed, col, playersTurn: !clientIsHost })
-         dispatch({ type: END_CLIENT_TURN })
+         changeGameboard({ boxPressed, col, playersTurn: !clientIsHost, mode: 'multiplayer' })
       } else if (!ifOnlineGame) {
-         changeGameboard({ boxPressed, col, playersTurn: isClientTurn })
-         dispatch({ type: TOGGLE_PLAYERS_TURNS })
+         changeGameboard({ boxPressed, col, playersTurn: isClientTurn, mode: 'single' })
       }
-      // } else if (ifOnlineGame) {
-      // console.log("opponents turn")
-      // } else {
-      // changeGameboard({ boxPressed, col, playersTurn: isClientTurn })
-      // dispatch({ type: TOGGLE_PLAYERS_TURNS })
-      // }
    }
-
-
 
    const handleOnPressSq = (boxPressed, col) => {
       makeMoveInGameBoard({ boxPressed, col })

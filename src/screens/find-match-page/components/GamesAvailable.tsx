@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import joinGame from '../../../actions/multiplayer/joinGame';
 import { rootT } from '../../../store';
 import { reusableStyles } from '../../../styles/stylesglobal';
-// import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator'
 
 function GamesAvailable() {
   const dispatch = useDispatch()

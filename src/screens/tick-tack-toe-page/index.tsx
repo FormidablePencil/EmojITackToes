@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Portal, Modal, Text, Button } from 'react-native-paper'
-import { View, Dimensions, LayoutAnimation } from 'react-native'
+import { View } from 'react-native'
 import Board from '../../components/board'
 import { reusableStyles } from '../../styles/stylesglobal'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,7 +20,6 @@ import useCheckIfOnlineGame from '../../hooks/useCheckIfOnlineGame'
 import useReadyUp from '../../hooks/useReadyUp'
 import socketIoCommands from '../../socket.io/socketIoCommandCenter'
 
-const SCREEN_HEIGHT = Dimensions.get('window').height
 export const initialSqs: GameBoardInterface = {
    0: { sq0: null, sq1: null, sq2: null, },
    1: { sq0: null, sq1: null, sq2: null, },
@@ -31,14 +30,13 @@ const TickTackToeScreen = () => {
    useLobby()
    const { playerCharacter } = useSelector((state: rootT) => state.playerCharacterSettings)
    const lobbyId = useSelector((state: rootT) => state.multiplayer.socketIoData.lobbyId)
-   const playerLeft = useSelector((state: rootT) => state.multiplayer.playerLeft)
    const navigation = useNavigation()
    const defaultWonInfo = { playerWon: null, cols: [null], sqs: [null], direction: null }
    const [wonInfo, setWonInfo] = useState<WinnerSqsTypes>(defaultWonInfo)
    const [gameOver, setGameOver] = useState(false)
    const [modalOpen, setModalOpen] = useState(true)
    const [squaresFilled, setSquaresFilled] = useState(0)
-   const [playerOneTurn, setPlayerOneTurn] = useState(false)
+   const [playerOneTurn] = useState(false)
    const [showInModal, setShowInModal] = useState<ModalContents>(ModalContents.GameMenu)
    const initialScores = { p1: 0, p2: 0 }
    const [score, setScore] = useState<ScoresTypes>(initialScores)
@@ -50,9 +48,9 @@ const TickTackToeScreen = () => {
    useEffect(() => {
       // clear everything and notify opponent that player left.
       return async () => {
+         dispatch({ type: STATE_NEW_GAME })
          if (ifOnlineGame) {
             await socketIoCommands.quitGame(lobbyId)
-
             dispatch({ type: LEAVE_LOBBY })
          }
       }
@@ -128,15 +126,7 @@ const TickTackToeScreen = () => {
             playerCharacter={playerCharacter}
          />
 
-         <Board
-            wonInfo={wonInfo}
-            playerOneTurn={playerOneTurn}
-            setPlayerOneTurn={setPlayerOneTurn}
-            gameOver={gameOver}
-            setGameOver={setGameOver}
-            squaresFilled={squaresFilled}
-            setSquaresFilled={setSquaresFilled}
-         />
+         <Board wonInfo={wonInfo} gameOver={gameOver} />
 
          <View style={{ flex: .4 }}></View>
 
@@ -190,49 +180,15 @@ export const StandardText = styled<any>(Text)`
    justify-content: center;
    align-items: center;
 `;
-
-const PlayerWinnerHeaderStyled = styled(Text)`
-   textShadowColor: 'rgba(0, 0, 0, 0.75)';
-   textShadowOffset: {
-                  width: -1px;
-      height: 1px;
-   };
-   textShadowRadius: 10px;
-   elevation: 10;
-   font-size: 30px;
-   color: white;
-   position: absolute;
-   align-self: center;
-   z-index: 30;
-`;
-const PlayerWinnerHeaderContainer = styled(View)`
-   /* background-color: #3BC0A5; */
-   background-color: ${props => props.theme.colors.accent};
-   height: 100px;
-   width: 100%;
-   margin: 20px 0px;
-   align-items: center;
-   justify-content: center;
-`;
 export const TextPlayer = styled<any>(Text)`
    color: ${props => props.transparent ? 'transparent' : 'white'};
    font-size: 30px;
 `;
-
 export const BgLinearGradient = ({ children }: any, ...props) =>
    <LinearGradient
-      {...props}
-      colors={['#492C9A', '#456DAB']}
-      start={[.1, .5]}
-      style={{
-         justifyContent: 'space-around',
-         /* background-color: ${props => props.theme.colors.background}; */
-         flex: 1,
-      }}
-   >
-      {children}</LinearGradient>
+      {...props} colors={['#492C9A', '#456DAB']} start={[.1, .5]}
+      style={{ justifyContent: 'space-around', flex: 1, }}
+   >{children}</LinearGradient>
 
-// export const BgLinearGradient = styled<any>(LinearGradient)`
-// `;
 
 export default TickTackToeScreen

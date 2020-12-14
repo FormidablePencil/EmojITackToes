@@ -1,4 +1,4 @@
-import { playerCharacterSettingsTypes } from "../../reducers/playerCharacterSettingsReducer";
+import { playerCharacterSettingsTypes } from "../reducers/playerCharacterSettingsReducer";
 
 export interface ScoresTypes { p1: number; p2: number }
 export enum Players { p1, p2 }
@@ -8,11 +8,8 @@ export interface ScoresCompTypes {
   setSelectedPlayerToChooseCharacter
   selectedPlayerToChooseCharacter: Players
   controlledInputs: playerCharacterSettingsTypes
-  setControlledInputs
   score: ScoresTypes
   changingEmoji
-  setShowEmojiSelector
-  setChangingEmoji
 }
 
 export enum sqTypes {

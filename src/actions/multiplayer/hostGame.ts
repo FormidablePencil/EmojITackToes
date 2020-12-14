@@ -1,4 +1,4 @@
-import { ERROR_MULTIPLAYER, LOBBY_HOSTED, TOGGLE_USERNAME_POPUP_TOOLTIP } from "../types";
+import { LOBBY_HOSTED, TOGGLE_USERNAME_POPUP_TOOLTIP } from "../types";
 
 const hostGame = (username) => async dispatch => {
   let url = 'https://tick-tack-toes.herokuapp.com/lobby/host'

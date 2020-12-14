@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Animated, StyleSheet, TouchableOpacity } from 'react-native'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 export const Col = styled(View)`
   flex-direction: row;
@@ -63,6 +63,9 @@ export const reusableStyles = StyleSheet.create({
     width: 210,
     height: 60,
     margin: 15,
+  },
+  regBtnWidth: {
+    width: 150,
   },
   regText: {
     color: '#d1faf0',

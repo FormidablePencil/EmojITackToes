@@ -8,10 +8,9 @@ import { TickTackToeTheme } from './src/styles/theming';
 import StackNavigator from './src/navigators/StackNavigator'
 import { LogBox } from 'react-native'
 
+// * overriding works in single player
 // local:
-// ~ player turn flipped
 // multiplayer:
-// ~ game over overlay btn text is too small of one btn
 
 LogBox.ignoreLogs([
   'Unrecognized WebSocket connection option(s) `localAddress`. Did you mean to put these under `headers`?',

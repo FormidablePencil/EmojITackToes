@@ -6,25 +6,15 @@ import ColComp from '../ColComp';
 import { useTheme } from 'react-native-paper';
 import { rootT } from '../../store';
 import { useSelector } from 'react-redux';
-import useCheckIfOnlineGame from '../../hooks/useCheckIfOnlineGame';
 import useGameControlCenter from './useGameControlCenter';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 
-const Board = ({
-   wonInfo,
-   gameOver,
-   setGameOver,
-   squaresFilled,
-   setSquaresFilled,
-   playerOneTurn,
-   setPlayerOneTurn }: BoardTypes) => {
+const Board = ({ wonInfo, gameOver }: BoardTypes) => {
    const theme = useTheme()
    const gameboard = useSelector((state: rootT) => state.gameboard)
-   
-   const { handleOnPressSq } = useGameControlCenter(
-      { gameOver, playerOneTurn, sqTypes, setPlayerOneTurn, squaresFilled, setSquaresFilled, setGameOver }
-   )
+
+   const { handleOnPressSq } = useGameControlCenter({ gameOver, sqTypes })
 
    return (
       <GameContainer style={{ height: screenWidth }}>

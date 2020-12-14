@@ -10,24 +10,15 @@ import useCheckIfOnlineGame from '../../hooks/useCheckIfOnlineGame';
 
 const ScoresAndEmojiSecection = ({
   controlledInputs,
-  setControlledInputs,
   score,
   changingEmoji,
-  setShowEmojiSelector,
-  setChangingEmoji,
   selectedPlayerToChooseCharacter,
   setSelectedPlayerToChooseCharacter
 }: ScoresCompTypes) => {
   const theme = useTheme()
   const hostUsername = useSelector((state: rootT) => state.multiplayer.socketIoData.host.username)
   const guestUsername = useSelector((state: rootT) => state.multiplayer.socketIoData.guest.username)
-  const clientIsHost = useSelector((state: rootT) => state.multiplayer.clientIsHost)
   const isGameOnline = useCheckIfOnlineGame()
-
-
-  const onChangeHandler = (text: string, whatPlayer: number) => {
-    setControlledInputs({ ...controlledInputs, playerCharacter: { ...controlledInputs.playerCharacter, [whatPlayer]: text } })
-  }
 
   const showEmojiSelectorBtnOnPress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear); //transition effect not working here
@@ -147,13 +138,6 @@ const styles = StyleSheet.create({
 
 
 const EmojiSelectorView = styled.View`
-  /* position: absolute; */
-  /* left: 0;
-  right: 0; */
-  /* margin-left: auto; */
-  /* margin-right: auto; */
-  /* align-items: center; */
-  /* justify-content: center; */
 `;
 const PlayerContainer = styled.View`
 `;

@@ -27,7 +27,7 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
             <Button
               color={theme.colors.primary}
               onPress={(() => onPressHandler(onPress.startGame))}
-              style={{ width: 150, top: -30 }}
+              style={{ width: 150, top: -30, ...reusableStyles.regBtnWidth }}
               labelStyle={{ color: 'white' }} mode='contained'>
               <ReadyUpTxt />
             </Button>
@@ -41,14 +41,14 @@ function ActionButtons({ selectedPlayerToChooseCharacter, keyboardPresent, onPre
               disabled={!isOnlineGame && (score.p1 === 0 && score.p2 === 0) ? true : false}
               color={theme.colors.primary}
               onPress={restartQuitHandler}
-              style={{ top: -30, marginTop: 10, marginRight: 10, backgroundColor: theme.colors.primary, width: 100 }}
+              style={{ top: -30, marginTop: 10, marginRight: 10, backgroundColor: theme.colors.primary, ...reusableStyles.regBtnWidth }}
               labelStyle={{ color: 'white' }} mode='contained'>
               <QuitOrRestartText score={score} />
             </Button>
             <Button
               color={theme.colors.primary}
               onPress={(() => onPressHandler(onPress.animationSettings))}
-              style={{ top: -30, marginTop: 10 }}
+              style={{ top: -30, marginTop: 10, ...reusableStyles.regBtnWidth }}
               labelStyle={{ color: 'white' }} mode='contained'>
               <Text style={reusableStyles.smText}>
                 animation

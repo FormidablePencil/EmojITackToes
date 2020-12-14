@@ -48,12 +48,14 @@ const GameOverOverlay = ({ showInModal, setShowInModal, gameOver, startGame, the
       animatedRef.current.fadeOutUpBig().then(() => setTimeout(() => setDisplay(false), 500))
     }
 
-    if (!isOnlineGame && gameOver) {
+    if (!isOnlineGame && gameOver && showInModal === ModalContents.GameOver) {
       setTimeout(() => {
         setDisplay(true)
         animatedRef.current.fadeInDownBig()
       }, 500);
     } else if (!isOnlineGame && !gameOver) {
+      setDisplay(false)
+    } else if (showInModal === ModalContents.GameMenu) {
       setDisplay(false)
     }
   }, [gameOver, showInModal])

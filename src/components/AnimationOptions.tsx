@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ImageBackground } from 'react-native'
+import { View, ImageBackground } from 'react-native'
 import { useTheme, Button } from 'react-native-paper'
 import { AlignAllContainer, ModalContainerLinearGradient } from './modalComp/modal-content'
 import { ModalContents } from '../TypesTypeScript/TypesAndInterface'
@@ -7,6 +7,7 @@ import { Animations } from '../reducers/animationSettingReducer'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useSelector, useDispatch } from 'react-redux'
 import { SET_ANIMATION_SETTING } from '../actions/types'
+import { reusableStyles } from '../styles/stylesglobal'
 
 const AnimationOptions = ({ setShowInModal, startGame }) => {
   const theme = useTheme()
@@ -48,12 +49,12 @@ const AnimationOptions = ({ setShowInModal, startGame }) => {
               color={theme.colors.primary}
               onPress={(() => setShowInModal(ModalContents.GameMenu))}
               style={{ margin: 20 }}
-              labelStyle={{ color: 'white' }} mode='contained'>Back</Button>
-            <Button
+              labelStyle={{ color: 'white', ...reusableStyles.regBtnWidth }} mode='contained'>Back</Button>
+            {/* <Button
               color={theme.colors.primary}
               onPress={(() => startGame(ModalContents.GameMenu))}
               style={{ margin: 20 }}
-              labelStyle={{ color: 'white' }} mode='contained'>Start</Button>
+              labelStyle={{ color: 'white' }} mode='contained'>Start</Button> */}
           </View>
 
         </ModalContainerLinearGradient>
