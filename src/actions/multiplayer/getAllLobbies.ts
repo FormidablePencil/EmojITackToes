@@ -1,7 +1,7 @@
 import { ERROR_MULTIPLAYER, QUERIED_ALL_AVAILABLE_LOBBIES } from "../types"
 
 const getAllLobbies = () => async dispatch => {
-  let url = 'https://tick-tack-toes.herokuapp.com/lobby/available'
+  let url = 'https://emojitacktoes-server.wm.r.appspot.com/lobby/available'
   const resAllLobbies = await fetch(url)
   // console.log(resAllLobbies, 'resAllLobbies')
   const dataAllLobbies = await resAllLobbies.json()

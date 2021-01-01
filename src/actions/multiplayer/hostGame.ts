@@ -1,7 +1,7 @@
 import { LOBBY_HOSTED, TOGGLE_USERNAME_POPUP_TOOLTIP } from "../types";
 
 const hostGame = (username) => async dispatch => {
-  let url = 'https://tick-tack-toes.herokuapp.com/lobby/host'
+  let url = 'https://emojitacktoes-server.wm.r.appspot.com/lobby/host'
   let data = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
