@@ -30,7 +30,7 @@
     },
     "android": {
       "package": "com.emoji.emojitacktoes",
-      "versionCode": 1
+      "versionCode": 2
     }
   }
 }
