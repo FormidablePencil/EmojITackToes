@@ -12,8 +12,6 @@ Demo video: https://youtu.be/RHMmuPUvPyU
 
 ### Client
 
-Client code repo at: https://github.com/FormidablePencil/EmojITackToes
-
 - Expo <img src="https://i.ibb.co/M73yQZt/expoLogo.png" width="20" title="">
 - React Native <img src="https://i.ibb.co/nb965ST/react-Logo.png" width="20" title="">
 - TypeScript <img src="https://i.ibb.co/RBfMh8f/typescript.png" width="20" title="">
