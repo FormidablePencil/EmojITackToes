@@ -1,38 +1,35 @@
-# Emoji Tack Toes
+# Online multiplayer Emoji-Tack-Toes
 
-Emoji-Tack-Toes was a fun little idea worth manifesting into existence. It's self-explanatory, nothing more and nothing less. Check it out in the play store: https://play.google.com/store/apps/details?id=com.emoji.emojitacktoes.
+You can find app in the App Store at: https://play.google.com/store/apps/details?id=com.emoji.emojitacktoes
 
 ## Demo
 
 Demo video: https://youtu.be/RHMmuPUvPyU
 
-<img src="https://i.ibb.co/N79YKzM/Screenshot-20200629-225639-Emogi-Tack-Toes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/Dzz7d3B/Screenshot-20200629-225621-Emogi-Tack-Toes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/xh3dnx3/Screenshot-20200629-225606-Emogi-Tack-Toes.jpg" width="200" title="app image">
+<img src="https://i.ibb.co/k0KpMYM/emojitacktoes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/X871FxR/emoji-Tack-Toes.jpg" width="200" title="app image">.<img src="https://i.ibb.co/JFXRK8Q/emojitacktoes4.jpg" width="200" title="app image">
 
 ## Technologies utilized
 
-### Fontend
+### Client
 
-- Expo <img src="https://i.ibb.co/DpkVZxY/expo.png" width="20" title="expo">
-- React Native <img src="https://i.ibb.co/0pNL1RX/react-Native-Logo.png" width="20" title="react native">
-- TypeScript <img src="https://gist.githubusercontent.com/FormidablePencil/08767773b974a5e26f84ddb558cda01f/raw/441a3b040130c35e3892eb3c8c4fe273cf0347dd/typescript.svg" width="20" title="typescript">
-- React-native-paper <img src="https://i.ibb.co/wW3rbJh/paper-logo.png" width="20" title="React-native-paper">
-- Styled components <img src="https://i.ibb.co/1z3NJM3/styled-Components.png" width="20" title="hover text">
-- Bit <img src="https://gist.githubusercontent.com/FormidablePencil/98f22385ae764b37fdd34ff6cd38ac90/raw/4940572e7ba49a15060e3ca65b80629facfa7928/bit.svg" width="20" title="Styled components">
-- Redux <img src="https://i.ibb.co/nDCsZTK/5848309bcef1014c0b5e4a9a.png" width="20" title="Redux">
+Client code repo at: https://github.com/FormidablePencil/EmojITackToes
+
+- Expo <img src="https://i.ibb.co/M73yQZt/expoLogo.png" width="20" title="">
+- React Native <img src="https://i.ibb.co/nb965ST/react-Logo.png" width="20" title="">
+- TypeScript <img src="https://i.ibb.co/RBfMh8f/typescript.png" width="20" title="">
+- React-native-paper <img src="https://i.ibb.co/dBvnQ2q/paper.png" width="20" title="">
+- Styled components <img src="https://i.ibb.co/GdtGT3Y/styled-Components.png" width="20" title="">
+- Bit <img src="https://i.ibb.co/gZX3hH4/bit.png" width="20" title="">
+- Redux <img src="https://i.ibb.co/dbQkwZM/redux.png" width="20" title="">
+
+### Server
+
+Server code repo at: https://github.com/FormidablePencil/EmojiTackToes-server
+
+- Mongo <img src="https://i.ibb.co/mqJXvJq/mongodb.png" width="20" title="">
+- Express <img src="https://i.ibb.co/CJfJN1D/express-Logo.png" width="20" title="">
+- Jwt <img src="https://i.ibb.co/Z2RKDKJ/jwt.png" width="20" title="">
 
 ## Download
 
 - Download from google play store: https://play.google.com/store/apps/details?id=com.emoji.emojitacktoes
-
-## NOTES
-
-**Features built**
-
-- Large selection of many different kinds of emojis to play as
-- Large selection of how the emoji will appear onto the board animations
-
-**Bugs and todos**
-
-- React-native-emoji-selector library has a bug where a few emojis overlapping one another and are off centered. Another bug is that some emojis are not supported on some devices so in place them is a while box
-- Save scores and emojis selected locally on the device
-- Add multiplayer mode with 2 devices on one game
