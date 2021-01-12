@@ -1,6 +1,6 @@
 # Online multiplayer Emoji-Tack-Toes
 
-You can find app in the App Store at: https://play.google.com/store/apps/details?id=com.emoji.emojitacktoes
+You can find the app in the App Store at: https://play.google.com/store/apps/details?id=com.emoji.emojitacktoes
 
 ## Demo
 
@@ -30,4 +30,4 @@ Server code repo at: https://github.com/FormidablePencil/EmojiTackToes-server
 
 ## Download
 
-- Download from google play store: https://play.google.com/store/apps/details?id=com.emoji.emojitacktoes
+- Get it from the google play store: https://play.google.com/store/apps/details?id=com.emoji.emojitacktoes
