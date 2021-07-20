@@ -9,7 +9,7 @@
     "version": "0.0.1"
   },
   "dependencies": {
-    "react-native": "0.62.2"
+    "react-native": "0.62.3"
   },
   "devDependencies": {},
   "peerDependencies": {
